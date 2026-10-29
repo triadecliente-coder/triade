@@ -25,3 +25,4 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1);
 }
 console.log('[db:setup] Tabelas criadas com sucesso! Recarregue o sistema (Ctrl + Shift + R).');
+
