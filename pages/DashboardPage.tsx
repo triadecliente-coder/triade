@@ -874,7 +874,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({
     if (currentUser?.profile === UserProfile.Financeiro) return 'financeiro';
     if (currentUser?.profile === UserProfile.Supervisor) return 'supervisor';
 
-    const saved = localStorage.getItem('transcunha_dashboard_view_mode');
+    const saved = localStorage.getItem('triade_dashboard_view_mode');
     if (saved && ['geral', 'fiscal', 'financeiro', 'supervisor'].includes(saved)) {
       return saved as DashboardViewMode;
     }
@@ -1120,7 +1120,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({
                     type="button"
                     onClick={() => {
                       setViewMode(mode.id);
-                      localStorage.setItem('transcunha_dashboard_view_mode', mode.id);
+                      localStorage.setItem('triade_dashboard_view_mode', mode.id);
                       setIsViewSelectorOpen(false);
                     }}
                     className={`w-full flex items-start gap-3 p-2.5 rounded-xl text-left transition-all duration-150 group ${

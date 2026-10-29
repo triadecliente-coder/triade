@@ -247,7 +247,7 @@ const SystemMonitorPage: React.FC<SystemMonitorPageProps> = ({ currentUser, prof
         )}
 
         <p className="mt-8 text-center text-xs text-gray-400 uppercase tracking-widest">
-            Transcunha Logística - Painel de Controle de Infraestrutura
+            Tríade Logística - Painel de Controle de Infraestrutura
         </p>
       </div>
     </div>

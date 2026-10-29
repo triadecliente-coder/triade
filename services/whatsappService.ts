@@ -10,12 +10,12 @@ import type {
   WhatsAppChatMessage
 } from '../types/whatsapp';
 
-const STORAGE_INSTANCE_KEY = 'transcunha_wa_instance_local';
-const STORAGE_TEMPLATES_KEY = 'transcunha_wa_templates_local';
-const STORAGE_QUEUE_KEY = 'transcunha_wa_queue_local';
-const STORAGE_GATEWAY_CONFIG_KEY = 'transcunha_wa_gateway_config';
-const STORAGE_CHATS_KEY = 'transcunha_wa_chats_local';
-const STORAGE_CHAT_MSGS_KEY = 'transcunha_wa_chat_messages_local';
+const STORAGE_INSTANCE_KEY = 'triade_wa_instance_local';
+const STORAGE_TEMPLATES_KEY = 'triade_wa_templates_local';
+const STORAGE_QUEUE_KEY = 'triade_wa_queue_local';
+const STORAGE_GATEWAY_CONFIG_KEY = 'triade_wa_gateway_config';
+const STORAGE_CHATS_KEY = 'triade_wa_chats_local';
+const STORAGE_CHAT_MSGS_KEY = 'triade_wa_chat_messages_local';
 
 export interface WhatsAppGatewayConfig {
   url: string;
@@ -26,7 +26,7 @@ export interface WhatsAppGatewayConfig {
 export const CLOUD_GATEWAY_DEFAULT: WhatsAppGatewayConfig = {
   url: 'https://evolution-api-production-e3eb.up.railway.app',
   apiKey: '5a3deafd8aedc279c2aff7ff40c17b508d36fb18d108c6c332d7ff224ec205cd',
-  instanceName: 'transcunha_oficial'
+  instanceName: 'triade_oficial'
 };
 
 /**
@@ -46,8 +46,8 @@ export function getGatewayConfig(): WhatsAppGatewayConfig {
       const isHttpOnHttps = isHttps && parsed.url && parsed.url.startsWith('http:');
       const isOldKey = parsed.apiKey === 'c1f7333c96962458559ec3b861d0046b4a479d23a51e897c6f4d9129475509bc';
 
-      if (parsed.instanceName === 'transcunha_matriz') {
-        parsed.instanceName = 'transcunha_oficial';
+      if (parsed.instanceName === 'triade_matriz') {
+        parsed.instanceName = 'triade_oficial';
         localStorage.setItem(STORAGE_GATEWAY_CONFIG_KEY, JSON.stringify(parsed));
       }
 
@@ -83,7 +83,7 @@ export function saveGatewayConfig(config: WhatsAppGatewayConfig): void {
   const sanitized: WhatsAppGatewayConfig = {
     url: (config.url || '').trim().replace(/\/+$/, ''),
     apiKey: (config.apiKey || '').trim(),
-    instanceName: (config.instanceName || '').trim() || 'transcunha_oficial'
+    instanceName: (config.instanceName || '').trim() || 'triade_oficial'
   };
   localStorage.setItem(STORAGE_GATEWAY_CONFIG_KEY, JSON.stringify(sanitized));
 }
@@ -210,7 +210,7 @@ export const DEFAULT_WHATSAPP_TEMPLATES: WhatsAppTemplate[] = [
     name: 'Aviso de Oferta / Nova Carga',
     trigger_event: 'shipment.created',
     description: 'Mensagem enviada quando uma nova oportunidade de frete na rota é aberta.',
-    body_text: '🚛 *Transcunha Logística - Oportunidade de Carga*\n\nOlá, *{{nome_motorista}}*! Temos uma nova carga disponível para você:\n\n📍 *Origem:* {{origem}}\n🎯 *Destino:* {{destino}}\n📦 *Mercadoria:* {{mercadoria}}\n⚖️ *Peso:* {{peso}}\n💰 *Valor do Frete:* R$ {{valor_frete}}\n\nInteressado? Responda a esta mensagem para confirmar!',
+    body_text: '🚛 *Tríade Logística - Oportunidade de Carga*\n\nOlá, *{{nome_motorista}}*! Temos uma nova carga disponível para você:\n\n📍 *Origem:* {{origem}}\n🎯 *Destino:* {{destino}}\n📦 *Mercadoria:* {{mercadoria}}\n⚖️ *Peso:* {{peso}}\n💰 *Valor do Frete:* R$ {{valor_frete}}\n\nInteressado? Responda a esta mensagem para confirmar!',
     available_tags: [
       { tag: '{{nome_motorista}}', label: 'Nome do Motorista', example: 'Carlos', description: 'Nome do motorista' },
       { tag: '{{origem}}', label: 'Origem', example: 'Santos - SP', description: 'Origem' },
@@ -443,7 +443,7 @@ export async function testGatewayHealth(config?: WhatsAppGatewayConfig): Promise
       if (isLocal) {
         return {
           success: true,
-          message: 'Modo Nuvem Integrado Transcunha ativo (Disparos operacionais 24h funcionando normalmente).',
+          message: 'Modo Nuvem Integrado Tríade ativo (Disparos operacionais 24h funcionando normalmente).',
           version: 'Cloud 24h',
           isLocalhostFallback: true
         };
@@ -457,7 +457,7 @@ export async function testGatewayHealth(config?: WhatsAppGatewayConfig): Promise
     if (isLocal) {
       return {
         success: true,
-        message: 'Modo Nuvem Integrado Transcunha ativo (Disparos operacionais 24h funcionando sem depender de Docker local).',
+        message: 'Modo Nuvem Integrado Tríade ativo (Disparos operacionais 24h funcionando sem depender de Docker local).',
         version: 'Cloud 24h',
         isLocalhostFallback: true
       };
@@ -649,7 +649,7 @@ export async function fetchRealGatewayQRCode(forceNew: boolean = false): Promise
 
   const updated: WhatsAppInstance = {
     ...current,
-    instance_key: cfg.instanceName || 'transcunha_oficial',
+    instance_key: cfg.instanceName || 'triade_oficial',
     status: 'disconnected',
     phone_number: undefined,
     qr_code_base64: undefined,
@@ -688,7 +688,7 @@ export async function checkGatewayConnectionStatus(): Promise<{ status: 'connect
       return { 
         status: 'connected', 
         phone: '553598721970', 
-        profileName: 'Transcunha Transporte', 
+        profileName: 'Tríade Transporte', 
         battery: 100 
       };
     } else if (state === 'connecting' || state === 'qrcode' || state === 'close') {
@@ -724,7 +724,7 @@ export async function syncWhatsAppInstanceFromGateway(): Promise<WhatsAppInstanc
     }
 
     let phone: string | undefined;
-    let profileName = current.name || 'Transcunha Transporte';
+    let profileName = current.name || 'Tríade Transporte';
 
     // 2. Se estiver conectado (open), confirma e salva
     if (state === 'open' || state === 'connected') {
@@ -759,7 +759,7 @@ export async function syncWhatsAppInstanceFromGateway(): Promise<WhatsAppInstanc
 
       const updated: WhatsAppInstance = {
         ...current,
-        name: profileName || current.name || 'Transcunha Transporte',
+        name: profileName || current.name || 'Tríade Transporte',
         phone_number: phone,
         instance_key: cfg.instanceName,
         status: 'connected',
@@ -820,7 +820,7 @@ export async function getWhatsAppInstance(): Promise<WhatsAppInstance> {
   if (local) {
     try {
       localParsed = JSON.parse(local);
-      // Se o cache for de uma instância diferente (ex: legado transcunha_matriz), invalida
+      // Se o cache for de uma instância diferente (ex: legado triade_matriz), invalida
       if (localParsed?.instance_key && localParsed.instance_key !== cfg.instanceName) {
         localParsed = null;
         localStorage.removeItem(STORAGE_INSTANCE_KEY);
@@ -855,7 +855,7 @@ export async function getWhatsAppInstance(): Promise<WhatsAppInstance> {
 
   const defaultInstance: WhatsAppInstance = {
     id: '30a60d31-18b2-44db-a31f-ee97f599023a',
-    name: 'Transcunha Transporte',
+    name: 'Tríade Transporte',
     instance_key: cfg.instanceName,
     status: 'disconnected',
     phone_number: undefined,
@@ -876,7 +876,7 @@ export async function getWhatsAppInstance(): Promise<WhatsAppInstance> {
 // REALTIME HUB & BROADCAST DO WHATSAPP (SINCRONIZAÇÃO INSTANTÂNEA MULTI-USUÁRIOS)
 // =========================================================================
 
-const WA_REALTIME_CHANNEL_NAME = 'transcunha_whatsapp_realtime_hub';
+const WA_REALTIME_CHANNEL_NAME = 'triade_whatsapp_realtime_hub';
 let waRealtimeChannelInstance: ReturnType<typeof supabase.channel> | null = null;
 const waRealtimeSubscribers = new Set<WhatsAppRealtimeEventHandler>();
 
@@ -922,7 +922,7 @@ function initWARealtimeChannel(): ReturnType<typeof supabase.channel> {
               media_filename: row.media_filename,
               timestamp: row.sent_at || row.created_at || new Date().toISOString(),
               status: row.status || 'sent',
-              sender_name: row.recipient_name || 'Transcunha Logística'
+              sender_name: row.recipient_name || 'Tríade Logística'
             };
             notifyLocalSubscribers('chat_message_sent', { message: chatMsg });
           }
@@ -975,7 +975,7 @@ export async function broadcastWhatsAppEvent(event: string, payload: any): Promi
   // Notifica outras abas e componentes da mesma instância de navegador
   if (typeof window !== 'undefined') {
     try {
-      window.dispatchEvent(new CustomEvent('transcunha:whatsapp_realtime', {
+      window.dispatchEvent(new CustomEvent('triade:whatsapp_realtime', {
         detail: { event, payload }
       }));
     } catch { /* ignore */ }
@@ -1005,13 +1005,13 @@ export function subscribeToWhatsAppRealtime(handler: WhatsAppRealtimeEventHandle
   };
 
   if (typeof window !== 'undefined') {
-    window.addEventListener('transcunha:whatsapp_realtime', handleLocalEvent);
+    window.addEventListener('triade:whatsapp_realtime', handleLocalEvent);
   }
 
   return () => {
     waRealtimeSubscribers.delete(handler);
     if (typeof window !== 'undefined') {
-      window.removeEventListener('transcunha:whatsapp_realtime', handleLocalEvent);
+      window.removeEventListener('triade:whatsapp_realtime', handleLocalEvent);
     }
   };
 }
@@ -1019,8 +1019,8 @@ export function subscribeToWhatsAppRealtime(handler: WhatsAppRealtimeEventHandle
 export async function saveWhatsAppInstance(instance: WhatsAppInstance): Promise<WhatsAppInstance> {
   const dbPayload = {
     id: (instance.id && instance.id.includes('-')) ? instance.id : '30a60d31-18b2-44db-a31f-ee97f599023a',
-    name: instance.name || 'Transcunha Transporte',
-    instance_key: instance.instance_key || 'transcunha_oficial',
+    name: instance.name || 'Tríade Transporte',
+    instance_key: instance.instance_key || 'triade_oficial',
     phone_number: instance.phone_number || null,
     status: instance.status || 'disconnected',
     qr_code_base64: instance.qr_code_base64 || null,
@@ -1102,14 +1102,14 @@ export function clearWhatsAppHistoryData(): void {
       const keysToRemove: string[] = [];
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
-        if (key && (key.startsWith(STORAGE_CHAT_MSGS_KEY) || key.startsWith('transcunha_wa_chat_messages_local'))) {
+        if (key && (key.startsWith(STORAGE_CHAT_MSGS_KEY) || key.startsWith('triade_wa_chat_messages_local'))) {
           keysToRemove.push(key);
         }
       }
       keysToRemove.forEach(k => localStorage.removeItem(k));
 
-      window.dispatchEvent(new CustomEvent('transcunha:whatsapp_disconnected'));
-      window.dispatchEvent(new CustomEvent('transcunha:whatsapp_history_synced', {
+      window.dispatchEvent(new CustomEvent('triade:whatsapp_disconnected'));
+      window.dispatchEvent(new CustomEvent('triade:whatsapp_history_synced', {
         detail: { chatsCount: 0, messagesCount: 0 }
       }));
       broadcastWhatsAppEvent('chats_cleared', {});
@@ -1370,11 +1370,11 @@ export async function enqueueWhatsAppMessage(params: {
  * Ativa o modo de WhatsApp Sempre Conectado / Nuvem Simulada
  * Garante que todos os disparos operacionais ocorram sem travar a interface
  */
-export async function activateAlwaysOnlineMode(phoneNumber?: string, companyName: string = 'Transcunha Transporte'): Promise<WhatsAppInstance> {
+export async function activateAlwaysOnlineMode(phoneNumber?: string, companyName: string = 'Tríade Transporte'): Promise<WhatsAppInstance> {
   const current = await getWhatsAppInstance();
   const updated: WhatsAppInstance = {
     ...current,
-    name: companyName || 'Transcunha Transporte',
+    name: companyName || 'Tríade Transporte',
     status: 'connected',
     phone_number: phoneNumber ? sanitizePhoneNumber(phoneNumber) : (current.phone_number || '553598721970'),
     battery_level: 100,
@@ -1467,7 +1467,7 @@ export async function enqueueAndDispatchMessage(params: {
     console.warn('[Evolution API] Gateway não respondeu, usando modo ativo integrado:', err);
   }
 
-  // Se o gateway físico não estiver respondendo, mas a instância estiver conectada no Transcunha,
+  // Se o gateway físico não estiver respondendo, mas a instância estiver conectada no Tríade,
   // processamos o envio com sucesso operacional para não travar fluxos e registrar no Supabase
   if (!dispatchedSuccessfully && inst.status === 'connected') {
     newItem.status = 'sent';
@@ -1849,7 +1849,7 @@ export async function syncAllWhatsAppConversationsAndHistory(options: { limit?: 
             media_filename: parsedContent.mediaFilename,
             timestamp: ts,
             status: isFromMe ? 'read' : 'delivered',
-            sender_name: isFromMe ? 'Transcunha Logística' : (r.pushName || displayName)
+            sender_name: isFromMe ? 'Tríade Logística' : (r.pushName || displayName)
           };
 
           // Agrupa mensagens pelo telefone/JID
@@ -1908,7 +1908,7 @@ export async function syncAllWhatsAppConversationsAndHistory(options: { limit?: 
     }
 
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('transcunha:whatsapp_history_synced', {
+      window.dispatchEvent(new CustomEvent('triade:whatsapp_history_synced', {
         detail: { chatsCount: sortedChats.length, messagesCount: totalMessagesImported }
       }));
     }
@@ -2071,7 +2071,7 @@ export async function getWhatsAppChatMessages(remoteJidOrPhone: string): Promise
           media_filename: item.media_filename,
           timestamp: item.sent_at || item.created_at,
           status: item.status,
-          sender_name: item.recipient_name || 'Transcunha Logística'
+          sender_name: item.recipient_name || 'Tríade Logística'
         });
       }
     });
@@ -2123,7 +2123,7 @@ export async function getWhatsAppChatMessages(remoteJidOrPhone: string): Promise
                 media_size: parsed.mediaSize,
                 timestamp: ts,
                 status: isFromMe ? 'read' : 'delivered',
-                sender_name: isFromMe ? 'Transcunha Logística' : (msg.pushName || 'Contato')
+                sender_name: isFromMe ? 'Tríade Logística' : (msg.pushName || 'Contato')
               });
             });
           }
@@ -2174,7 +2174,7 @@ export async function getWhatsAppChatMessages(remoteJidOrPhone: string): Promise
               media_size: parsed.mediaSize,
               timestamp: ts,
               status: isFromMe ? 'read' : 'delivered',
-              sender_name: isFromMe ? 'Transcunha Logística' : (msg.pushName || 'Contato')
+              sender_name: isFromMe ? 'Tríade Logística' : (msg.pushName || 'Contato')
             });
           }
         });
@@ -2237,7 +2237,7 @@ export async function sendDirectChatMessage(params: {
 }): Promise<WhatsAppChatMessage> {
   const cleanPhone = sanitizePhoneNumber(params.recipientPhone);
   const cfg = getGatewayConfig();
-  const effectiveSenderName = params.senderName || 'Transcunha Logística';
+  const effectiveSenderName = params.senderName || 'Tríade Logística';
 
   const finalMessageType: WhatsAppMessageType = params.messageType || (
     params.mediaUrl?.startsWith('data:audio') || params.mediaUrl?.match(/\.(mp3|ogg|wav|m4a|aac)$/i)

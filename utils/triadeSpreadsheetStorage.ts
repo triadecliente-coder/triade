@@ -1,7 +1,7 @@
-import { TranscunhaSpreadsheetRow } from './transcunhaSpreadsheetParser';
+import { TriadeSpreadsheetRow } from './triadeSpreadsheetParser';
 import { supabase } from '../supabase';
 
-const DB_NAME = 'transcunha_storage_db';
+const DB_NAME = 'triade_storage_db';
 const DB_VERSION = 3;
 const STORE_NAME = 'spreadsheet_store';
 
@@ -15,13 +15,13 @@ const KEY_LAST_SAVED = 'last_saved_timestamp';
 const KEY_ROW_COUNT = 'total_saved_row_count';
 const KEY_SHEET_ROWS_PREFIX = 'spreadsheet_sheet_rows_';
 
-export const KEY_USER_DELETED = 'transcunha_spreadsheet_user_deleted';
+export const KEY_USER_DELETED = 'triade_spreadsheet_user_deleted';
 
-const CLOUD_BACKUP_PATH = 'spreadsheet_backups/transcunha_master_spreadsheet.json';
+const CLOUD_BACKUP_PATH = 'spreadsheet_backups/triade_master_spreadsheet.json';
 let cloudBackupDebounceTimer: any = null;
 
 // Cache em memória para leitura síncrona instantânea
-let inMemoryRowsCache: TranscunhaSpreadsheetRow[] | null = null;
+let inMemoryRowsCache: TriadeSpreadsheetRow[] | null = null;
 let inMemoryActiveSheet: string | null = null;
 let inMemorySheetNames: string[] | null = null;
 let inMemoryRawBuffer: ArrayBuffer | null = null;
@@ -58,7 +58,7 @@ function openDB(): Promise<IDBDatabase> {
  * Envia cópia de segurança assíncrona para o Supabase Storage (Nuvem)
  * Garante que mesmo formatando o computador ou trocando de dispositivo, os 16.819 dados existam.
  */
-export function scheduleCloudSpreadsheetBackup(rows: TranscunhaSpreadsheetRow[]): void {
+export function scheduleCloudSpreadsheetBackup(rows: TriadeSpreadsheetRow[]): void {
   if (!rows || rows.length < 500) return;
   if (cloudBackupDebounceTimer) clearTimeout(cloudBackupDebounceTimer);
 
@@ -66,13 +66,13 @@ export function scheduleCloudSpreadsheetBackup(rows: TranscunhaSpreadsheetRow[])
     try {
       const jsonStr = JSON.stringify(rows);
       const blob = new Blob([jsonStr], { type: 'application/json' });
-      const file = new File([blob], 'transcunha_master_spreadsheet.json', { type: 'application/json' });
+      const file = new File([blob], 'triade_master_spreadsheet.json', { type: 'application/json' });
       await supabase.storage
         .from('shipment_attachments')
         .upload(CLOUD_BACKUP_PATH, file, { upsert: true });
-      console.log(`[Transcunha Storage] ✅ Backup em nuvem sincronizado no Supabase (${rows.length} linhas)!`);
+      console.log(`[Tríade Storage] ✅ Backup em nuvem sincronizado no Supabase (${rows.length} linhas)!`);
     } catch (err) {
-      console.warn('[Transcunha Storage] Aviso ao enviar backup para nuvem:', err);
+      console.warn('[Tríade Storage] Aviso ao enviar backup para nuvem:', err);
     }
   }, 2500);
 }
@@ -100,7 +100,7 @@ export async function saveRawWorkbookBuffer(buffer: ArrayBuffer): Promise<boolea
       };
     });
   } catch (err) {
-    console.warn('[Transcunha Storage] Erro ao persistir buffer bruto do Excel:', err);
+    console.warn('[Tríade Storage] Erro ao persistir buffer bruto do Excel:', err);
     return false;
   }
 }
@@ -146,7 +146,7 @@ export async function loadRawWorkbookBuffer(): Promise<ArrayBuffer | null> {
  * os 16.819 registros master continuam protegidos e nunca são sobrescritos acidentalmente.
  */
 export async function saveSpreadsheetRowsToIndexedDB(
-  rows: TranscunhaSpreadsheetRow[],
+  rows: TriadeSpreadsheetRow[],
   sheetName?: string
 ): Promise<boolean> {
   if (!Array.isArray(rows) || rows.length === 0) return false;
@@ -213,7 +213,7 @@ export async function saveSpreadsheetRowsToIndexedDB(
  */
 export async function loadSpreadsheetRowsFromIndexedDB(
   preferredSheet?: string
-): Promise<TranscunhaSpreadsheetRow[] | null> {
+): Promise<TriadeSpreadsheetRow[] | null> {
   // SE O USUÁRIO EXCLUIU A PLANILHA, NÃO RESTAURA NADA!
   if (typeof window !== 'undefined') {
     try {
@@ -232,7 +232,7 @@ export async function loadSpreadsheetRowsFromIndexedDB(
   // Nível 2: IndexedDB Local com prioridade para o Master Dataset
   try {
     const db = await openDB();
-    const rows = await new Promise<TranscunhaSpreadsheetRow[] | null>((resolve) => {
+    const rows = await new Promise<TriadeSpreadsheetRow[] | null>((resolve) => {
       const tx = db.transaction(STORE_NAME, 'readonly');
       const store = tx.objectStore(STORE_NAME);
 
@@ -305,14 +305,14 @@ export async function loadSpreadsheetRowsFromIndexedDB(
       const text = await data.text();
       const parsed = JSON.parse(text);
       if (Array.isArray(parsed) && parsed.length >= 1000) {
-        console.log(`[Transcunha Storage] 🚀 Restaurados ${parsed.length} registros diretamente do Supabase Cloud Backup!`);
+        console.log(`[Tríade Storage] 🚀 Restaurados ${parsed.length} registros diretamente do Supabase Cloud Backup!`);
         inMemoryRowsCache = parsed;
         saveSpreadsheetRowsToIndexedDB(parsed).catch(() => {});
         return parsed;
       }
     }
   } catch (cloudErr) {
-    console.warn('[Transcunha Storage] Sem dados ou offline para restauração via nuvem:', cloudErr);
+    console.warn('[Tríade Storage] Sem dados ou offline para restauração via nuvem:', cloudErr);
   }
 
   return null;
@@ -382,12 +382,12 @@ export async function clearSpreadsheetStorage(): Promise<void> {
 
       // 2. Limpa todas as chaves do localStorage onde os 540 registros antigos podiam estar presos
       const keys = [
-        'transcunha_control_spreadsheet_rows_v2',
-        'transcunha_control_spreadsheet_sheets_v2',
-        'transcunha_control_spreadsheet_active_sheet_v2',
-        'transcunha_spreadsheet_rows',
-        'transcunha_spreadsheet_sheets',
-        'transcunha_spreadsheet_active_sheet'
+        'triade_control_spreadsheet_rows_v2',
+        'triade_control_spreadsheet_sheets_v2',
+        'triade_control_spreadsheet_active_sheet_v2',
+        'triade_spreadsheet_rows',
+        'triade_spreadsheet_sheets',
+        'triade_spreadsheet_active_sheet'
       ];
       keys.forEach(k => localStorage.removeItem(k));
     } catch {}
@@ -412,7 +412,7 @@ export async function clearSpreadsheetStorage(): Promise<void> {
   try {
     // Sobrescreve o backup da nuvem com array vazio para impedir restauração de dados antigos
     const emptyBlob = new Blob([JSON.stringify([])], { type: 'application/json' });
-    const emptyFile = new File([emptyBlob], 'transcunha_master_spreadsheet.json', { type: 'application/json' });
+    const emptyFile = new File([emptyBlob], 'triade_master_spreadsheet.json', { type: 'application/json' });
     await supabase.storage
       .from('shipment_attachments')
       .upload(CLOUD_BACKUP_PATH, emptyFile, { upsert: true });
@@ -422,6 +422,6 @@ export async function clearSpreadsheetStorage(): Promise<void> {
 /**
  * Leitura síncrona do cache em memória para uso na inicialização do useState
  */
-export function getSpreadsheetRowsMemoryCache(): TranscunhaSpreadsheetRow[] | null {
+export function getSpreadsheetRowsMemoryCache(): TriadeSpreadsheetRow[] | null {
   return inMemoryRowsCache;
 }

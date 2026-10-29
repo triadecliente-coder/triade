@@ -114,7 +114,7 @@ const PAGE_NAMES: Record<Page, string> = {
   'apresentacao': 'Apresentação Comercial',
   'apresentacao-comercial': 'Apresentação Comercial (Completa)',
   'site': 'Website Institucional',
-  'website': 'Website Institucional (transcunhaoficial.com.br)',
+  'website': 'Website Institucional (triadeoficial.com.br)',
 };
 
 const CATEGORIES = [

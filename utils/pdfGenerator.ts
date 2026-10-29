@@ -3,12 +3,13 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Shipment, Cargo, Client, Product, Vehicle } from "../types";
 import { findExpedidorRecebedorByName } from "./locationStorage";
+import { TRIADE_PDF_LOGO_DATA_URI, DEFAULT_LOGO_ASPECT_RATIO, isDefaultBrandLogo } from "./brandLogo";
 
 export const getStoredCompanyLogo = (): string | null => {
   if (typeof window === 'undefined') return null;
   return (
-    localStorage.getItem('transcunha_companyLogo') ||
-    localStorage.getItem('trancunha_companyLogo') ||
+    localStorage.getItem('triade_companyLogo') ||
+    localStorage.getItem('triade_companyLogo') ||
     null
   );
 };
@@ -24,7 +25,8 @@ export const addPdfLogo = (
     align?: 'left' | 'right' | 'center';
   }
 ): boolean => {
-  const effectiveLogo = logo || getStoredCompanyLogo();
+  const rawLogo = logo || getStoredCompanyLogo();
+  const effectiveLogo = isDefaultBrandLogo(rawLogo) ? TRIADE_PDF_LOGO_DATA_URI : (rawLogo as string);
   if (!effectiveLogo) return false;
 
   const w = options?.width ?? 35;
@@ -45,7 +47,16 @@ export const addPdfLogo = (
   }
 
   try {
-    doc.addImage(effectiveLogo, 'PNG', x, y, w, h);
+    if (isDefaultBrandLogo(rawLogo)) {
+      const fitRatio = Math.min(w / DEFAULT_LOGO_ASPECT_RATIO, h);
+      const drawH = fitRatio;
+      const drawW = fitRatio * DEFAULT_LOGO_ASPECT_RATIO;
+      const drawX = options?.align === 'left' ? x : options?.align === 'center' ? x + (w - drawW) / 2 : x + (w - drawW);
+      const drawY = y + (h - drawH) / 2;
+      doc.addImage(effectiveLogo, 'PNG', drawX, drawY, drawW, drawH);
+    } else {
+      doc.addImage(effectiveLogo, 'PNG', x, y, w, h);
+    }
     return true;
   } catch (e) {
     console.warn("Could not add company logo to PDF", e);
@@ -57,7 +68,7 @@ export const addPdfLogo = (
  * Informações cadastrais e endereço da Filial Goiás (Catalão/GO)
  */
 export const COMPANY_GOIAS_INFO = {
-  name: 'TRANSCUNHA TRANSPORTES E LOGISTICA GOIAS',
+  name: 'TRÍADE TRANSPORTES E LOGISTICA GOIAS',
   cnpj: '36.203.306/0004-35',
   ie: '204719070',
   address: 'RUA 26, 365, VILA MARGON',
@@ -73,7 +84,7 @@ export const COMPANY_GOIAS_INFO = {
  * Informações cadastrais e endereço da Matriz Minas Gerais (Pratápolis/MG)
  */
 export const COMPANY_MINAS_INFO = {
-  name: 'TRANSCUNHA TRANSPORTES E LOGISTICA LTDA',
+  name: 'TRÍADE TRANSPORTES E LOGISTICA LTDA',
   cnpj: '36.203.306/0001-92',
   ie: '36577990000',
   address: 'R PADRE LICINIO, 105, CENTRO',
@@ -91,7 +102,7 @@ export const COMPANY_MINAS_INFO = {
  * Informações cadastrais e endereço da Filial São Paulo (Ipaussu/SP)
  */
 export const COMPANY_SP_INFO = {
-  name: 'TRANSCUNHA TRANSPORTES E LOGISTICA FILIAL SP',
+  name: 'TRÍADE TRANSPORTES E LOGISTICA FILIAL SP',
   cnpj: '36.203.306/0002-73',
   ie: '357033425116',
   address: 'RUA JOAO OLIMPIO DA SILVA, 20, JARDIM COCAJA II',
@@ -426,7 +437,7 @@ export const generateConsubeLoadingOrderPDF = (
   const effectiveLogo = companyLogo || getStoredCompanyLogo();
   if (effectiveLogo) {
     try {
-      doc.addImage(effectiveLogo, 'PNG', margin + 4, currentY + 3, leftColWidth - 8, headerHeight - 6);
+      addPdfLogo(doc, companyLogo, { x: margin + 4, y: currentY + 3, width: leftColWidth - 8, height: headerHeight - 6, align: 'center' });
     } catch {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(8.5);
@@ -678,7 +689,7 @@ export const generateConsubeLoadingOrderPDF = (
   doc.setFontSize(7);
   doc.text(driverName, margin + 47.5, currentY + 20, { align: 'center' });
 
-  // Assinatura da Transcunha
+  // Assinatura da Tríade
   doc.line(margin + 105, currentY + 12, margin + 180, currentY + 12);
   doc.setFontSize(7.5);
   doc.text(companyInfo.name, margin + 142.5, currentY + 16, { align: 'center' });
@@ -688,7 +699,7 @@ export const generateConsubeLoadingOrderPDF = (
   // Rodapé com data/hora e nota de controle
   doc.setFontSize(6.5);
   doc.setTextColor(140, 140, 140);
-  doc.text(`Documento emitido via Sistema Transcunha Logística em ${new Date().toLocaleString('pt-BR')} - Modelo Consube`, margin + contentWidth / 2, 287, { align: 'center' });
+  doc.text(`Documento emitido via Sistema Tríade Logística em ${new Date().toLocaleString('pt-BR')} - Modelo Consube`, margin + contentWidth / 2, 287, { align: 'center' });
 
   // Salvar PDF
   doc.save(`OC_CONSUBE_${cleanOcNum}_${horsePlate}.pdf`);
@@ -717,8 +728,8 @@ export const generateLoadingOrderPDF = (
   const mainVehicle = vehicles.find((v) => normalizePlate(v.plate) === normalizePlate(shipment.horsePlate));
 
   // Brand Colors
-  const primaryBlue: [number, number, number] = [11, 102, 228]; // #0B66E4 Transcunha Vivid Electric Blue
-  const accentBlue: [number, number, number] = [2, 132, 199];  // #0284C7 Transcunha Sky Accent
+  const primaryBlue: [number, number, number] = [1, 27, 53]; // #011B35 Tríade Midnight Navy
+  const accentBlue: [number, number, number] = [236, 41, 7];  // #EC2907 Tríade Fiery Vermilion
   const secondaryGray: [number, number, number] = [100, 116, 139]; // #64748B
 
   // Constants
@@ -734,7 +745,7 @@ export const generateLoadingOrderPDF = (
   const effectiveLogo = companyLogo || getStoredCompanyLogo();
   if (effectiveLogo) {
       try {
-          doc.addImage(effectiveLogo, 'PNG', margin, 5, 35, 20); 
+          addPdfLogo(doc, companyLogo, { x: margin, y: 4, width: 35, height: 19, align: 'left' });
       } catch (e) {
           console.warn("Could not add company logo to PDF", e);
       }

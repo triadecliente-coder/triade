@@ -115,7 +115,7 @@ export const WhatsAppDashboard: React.FC<WhatsAppDashboardProps> = ({ currentUse
           <div className="flex items-center gap-2.5 flex-wrap">
             <button
               type="button"
-              onClick={() => window.dispatchEvent(new CustomEvent('transcunha:open_whatsapp_chat'))}
+              onClick={() => window.dispatchEvent(new CustomEvent('triade:open_whatsapp_chat'))}
               className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-lg shadow-emerald-950/40 flex items-center gap-2 cursor-pointer transition-all border border-emerald-400/30"
               title="Abrir Janela Flutuante Global de Conversas"
             >
@@ -244,7 +244,7 @@ export const WhatsAppDashboard: React.FC<WhatsAppDashboardProps> = ({ currentUse
         <WhatsAppChatPanel 
           mode="embedded" 
           currentUser={currentUser}
-          onOpenFloating={() => window.dispatchEvent(new CustomEvent('transcunha:open_whatsapp_chat'))}
+          onOpenFloating={() => window.dispatchEvent(new CustomEvent('triade:open_whatsapp_chat'))}
         />
       )}
 

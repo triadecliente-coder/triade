@@ -181,7 +181,7 @@ export const WhatsAppConnectionCard: React.FC<WhatsAppConnectionCardProps> = ({
       ...gatewayConfig,
       url: (gatewayConfig.url || '').trim().replace(/\/+$/, ''),
       apiKey: (gatewayConfig.apiKey || '').trim(),
-      instanceName: (gatewayConfig.instanceName || '').trim() || 'transcunha_oficial'
+      instanceName: (gatewayConfig.instanceName || '').trim() || 'triade_oficial'
     };
     setGatewayConfigState(sanitized);
     try {
@@ -197,7 +197,7 @@ export const WhatsAppConnectionCard: React.FC<WhatsAppConnectionCardProps> = ({
       ...gatewayConfig,
       url: (gatewayConfig.url || '').trim().replace(/\/+$/, ''),
       apiKey: (gatewayConfig.apiKey || '').trim(),
-      instanceName: (gatewayConfig.instanceName || '').trim() || 'transcunha_oficial'
+      instanceName: (gatewayConfig.instanceName || '').trim() || 'triade_oficial'
     };
     saveGatewayConfig(sanitized);
     setGatewayConfigState(sanitized);
@@ -235,7 +235,7 @@ export const WhatsAppConnectionCard: React.FC<WhatsAppConnectionCardProps> = ({
       // 2. Dispara sincronização em segundo plano do histórico completo de conversas
       await syncAllWhatsAppConversationsAndHistory({ limit: 150 }).catch(() => null);
     } catch {
-      const fallback = await activateAlwaysOnlineMode('553598721970', 'Transcunha Transporte');
+      const fallback = await activateAlwaysOnlineMode('553598721970', 'Tríade Transporte');
       onInstanceUpdated(fallback);
     } finally {
       setSyncing(false);
@@ -270,7 +270,7 @@ export const WhatsAppConnectionCard: React.FC<WhatsAppConnectionCardProps> = ({
                   <Smartphone className="w-5 h-5" />
                 </span>
                 <h3 className="text-lg font-black text-slate-900 dark:text-white">
-                  {instance.name || 'WhatsApp Operacional Transcunha'}
+                  {instance.name || 'WhatsApp Operacional Tríade'}
                 </h3>
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
@@ -697,7 +697,7 @@ export const WhatsAppConnectionCard: React.FC<WhatsAppConnectionCardProps> = ({
                       type="text"
                       value={gatewayConfig.instanceName}
                       onChange={(e) => setGatewayConfigState({ ...gatewayConfig, instanceName: e.target.value })}
-                      placeholder="Ex: transcunha_oficial"
+                      placeholder="Ex: triade_oficial"
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-bold focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -710,7 +710,7 @@ export const WhatsAppConnectionCard: React.FC<WhatsAppConnectionCardProps> = ({
                       const cloudDefault = {
                         url: 'https://evolution-api-production-e3eb.up.railway.app',
                         apiKey: '5a3deafd8aedc279c2aff7ff40c17b508d36fb18d108c6c332d7ff224ec205cd',
-                        instanceName: 'transcunha_oficial'
+                        instanceName: 'triade_oficial'
                       };
                       setGatewayConfigState(cloudDefault);
                       saveGatewayConfig(cloudDefault);
@@ -771,7 +771,7 @@ export const WhatsAppConnectionCard: React.FC<WhatsAppConnectionCardProps> = ({
                   </div>
 
                   <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                    <p className="font-bold text-slate-900 dark:text-white mb-1">Passo 4: Gerar Domínio e Colar no Transcunha</p>
+                    <p className="font-bold text-slate-900 dark:text-white mb-1">Passo 4: Gerar Domínio e Colar no Tríade</p>
                     <p className="text-slate-500 dark:text-slate-400">Em <strong>Settings</strong> &gt; <strong>Networking</strong>, clique em <strong>Generate Domain</strong> e cole o link na aba "1. URL do Servidor".</p>
                   </div>
                 </div>
@@ -787,7 +787,7 @@ export const WhatsAppConnectionCard: React.FC<WhatsAppConnectionCardProps> = ({
                     Modo Sempre Ativo (Disparos e Notificações Integradas)
                   </h4>
                   <p className="text-xs leading-relaxed">
-                    Com este modo, o Transcunha assume a instância como conectada de forma permanente no Supabase. Todos os avisos de ofertas de frete, ordens de carregamento, comprovantes de adiantamento e recibos de quitação são registrados e processados com sucesso no banco de dados, sem depender de nenhum servidor físico ou Docker local.
+                    Com este modo, o Tríade assume a instância como conectada de forma permanente no Supabase. Todos os avisos de ofertas de frete, ordens de carregamento, comprovantes de adiantamento e recibos de quitação são registrados e processados com sucesso no banco de dados, sem depender de nenhum servidor físico ou Docker local.
                   </p>
                 </div>
 

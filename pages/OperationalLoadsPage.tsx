@@ -268,7 +268,7 @@ const OperationalLoadsPage: React.FC<OperationalLoadsPageProps> = ({
       return;
     }
 
-    const header = '🌐 *LIBERADOS TRANSCUNHA* 🌐\n';
+    const header = '🌐 *LIBERADOS TRÍADE* 🌐\n';
 
     const loadsText = loadsToShare.map(load => {
       const product = products.find(p => p.id === load.productId)?.name?.toUpperCase() || 'N/A';

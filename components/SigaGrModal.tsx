@@ -237,9 +237,9 @@ export const SigaGrModal: React.FC<SigaGrModalProps> = ({
       }
     };
 
-    window.addEventListener('transcunha:siga_changed', handleSigaChanged);
+    window.addEventListener('triade:siga_changed', handleSigaChanged);
     return () => {
-      window.removeEventListener('transcunha:siga_changed', handleSigaChanged);
+      window.removeEventListener('triade:siga_changed', handleSigaChanged);
     };
   }, [isOpen, selectedRecord]);
 
@@ -392,7 +392,7 @@ export const SigaGrModal: React.FC<SigaGrModalProps> = ({
 
       const input: SigaCreateAnalysisInput = {
         product_name: productName,
-        requester_email: requesterEmail || config.requesterEmail || config.email || 'operacao@transcunha.com.br',
+        requester_email: requesterEmail || config.requesterEmail || config.email || 'operacao@triade.com.br',
         driver_personal_document: formatCpf(driverCpf),
         vehicle_type: vehicleType,
         truck_license_plate: cleanPlate(truckPlate),
@@ -881,7 +881,7 @@ export const SigaGrModal: React.FC<SigaGrModalProps> = ({
                         type="email"
                         value={requesterEmail}
                         onChange={(e) => setRequesterEmail(e.target.value)}
-                        placeholder="embarcador@transcunha.com.br"
+                        placeholder="embarcador@triade.com.br"
                         required
                         className="w-full text-xs rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 py-2.5 px-3 focus:ring-2 focus:ring-blue-500"
                       />
@@ -1914,7 +1914,7 @@ export const SigaGrModal: React.FC<SigaGrModalProps> = ({
                     type="email"
                     value={config.requesterEmail || ''}
                     onChange={(e) => setConfig({ ...config, requesterEmail: e.target.value })}
-                    placeholder="embarcador@transcunha.com.br"
+                    placeholder="embarcador@triade.com.br"
                     className="w-full text-xs rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 py-2.5 px-3 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>

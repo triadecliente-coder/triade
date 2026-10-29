@@ -47,8 +47,8 @@ interface FinancialPageProps {
   stays?: StayRecord[];
 }
 
-const STORAGE_TRANSACTIONS_KEY = 'transcunha_financial_transactions';
-const STORAGE_ACCOUNTS_KEY = 'transcunha_financial_bank_accounts';
+const STORAGE_TRANSACTIONS_KEY = 'triade_financial_transactions';
+const STORAGE_ACCOUNTS_KEY = 'triade_financial_bank_accounts';
 
 const INITIAL_BANK_ACCOUNTS: BankAccount[] = [];
 
@@ -178,7 +178,7 @@ export const FinancialPage: React.FC<FinancialPageProps> = ({
         paymentDate: new Date(now.getFullYear(), now.getMonth(), 5).toISOString().split('T')[0],
         status: FinancialTransactionStatus.Pago,
         category: 'Despesas com Pessoal / Salários',
-        supplierOrClientName: 'Colaboradores Transcunha',
+        supplierOrClientName: 'Colaboradores Tríade',
         documentNumber: 'FOLHA-01',
         costCenter: 'Operacional',
         createdAt: new Date().toISOString()

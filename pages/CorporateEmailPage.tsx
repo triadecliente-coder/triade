@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { resolveBrandLogo } from '../utils/brandLogo';
 import type { 
   User, 
   CorporateEmailAccount, 
@@ -271,7 +272,7 @@ export const CorporateEmailPage: React.FC<CorporateEmailPageProps> = ({
       return;
     }
 
-    const domain = serverConfig.domain || 'transcunhaoficial.com.br';
+    const domain = serverConfig.domain || 'triadeoficial.com.br';
     const fullEmail = `${cleanPrefix}@${domain}`;
     const selectedUser = users.find(u => u.id === formUserId);
 
@@ -367,7 +368,7 @@ export const CorporateEmailPage: React.FC<CorporateEmailPageProps> = ({
               <span className="p-2 bg-blue-600 text-white rounded-xl shadow-md shadow-blue-600/30">
                 <Mail className="w-5 h-5 sm:w-6 sm:h-6" />
               </span>
-              <span>E-mail Corporativo Transcunha</span>
+              <span>E-mail Corporativo Tríade</span>
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
               Gerenciamento de contas @{serverConfig.domain}, senhas, cotas, servidores SMTP/IMAP e assinaturas oficiais
@@ -483,7 +484,7 @@ export const CorporateEmailPage: React.FC<CorporateEmailPageProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 py-2 px-3 bg-white hover:bg-blue-50 text-blue-700 rounded-xl text-xs font-bold text-center transition-all shadow-sm flex items-center justify-center gap-1.5"
-                title="Abrir Webmail Transcunha em nova aba"
+                title="Abrir Webmail Tríade em nova aba"
               >
                 <Mail className="w-3.5 h-3.5" />
                 <span>Abrir Webmail</span>
@@ -561,7 +562,7 @@ export const CorporateEmailPage: React.FC<CorporateEmailPageProps> = ({
                 <span>Provedor Detectado: Microsoft 365 / Outlook (@{serverConfig.domain})</span>
               </div>
               <p className="text-xs text-slate-600 dark:text-slate-300">
-                Os servidores de e-mail oficiais do domínio <strong>{serverConfig.domain || 'transcunhaoficial.com.br'}</strong> estão configurados no <strong>Microsoft 365 / Exchange</strong> (<code className="text-blue-600">outlook.office.com</code>). O acesso às caixas postais corporativas é feito diretamente pelo Outlook.
+                Os servidores de e-mail oficiais do domínio <strong>{serverConfig.domain || 'triadeoficial.com.br'}</strong> estão configurados no <strong>Microsoft 365 / Exchange</strong> (<code className="text-blue-600">outlook.office.com</code>). O acesso às caixas postais corporativas é feito diretamente pelo Outlook.
               </p>
             </div>
             <a
@@ -902,7 +903,7 @@ export const CorporateEmailPage: React.FC<CorporateEmailPageProps> = ({
                     onChange={(e) => handleApplyPreset(e.target.value as CorporateEmailServerConfig['providerPreset'])}
                     className="px-3 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
                   >
-                    <option value="cpanel">cPanel / Servidor Próprio (Transcunha)</option>
+                    <option value="cpanel">cPanel / Servidor Próprio (Tríade)</option>
                     <option value="google_workspace">Google Workspace (Gmail)</option>
                     <option value="microsoft_365">Microsoft 365 (Outlook)</option>
                     <option value="zoho">Zoho Mail</option>
@@ -924,7 +925,7 @@ export const CorporateEmailPage: React.FC<CorporateEmailPageProps> = ({
                       type="text"
                       value={configForm.domain}
                       onChange={(e) => setConfigForm({ ...configForm, domain: e.target.value })}
-                      placeholder="transcunhaoficial.com.br"
+                      placeholder="triadeoficial.com.br"
                       className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm text-slate-800 dark:text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/40"
                       required
                     />
@@ -938,7 +939,7 @@ export const CorporateEmailPage: React.FC<CorporateEmailPageProps> = ({
                       type="url"
                       value={configForm.webmailUrl}
                       onChange={(e) => setConfigForm({ ...configForm, webmailUrl: e.target.value })}
-                      placeholder="https://webmail.transcunhaoficial.com.br"
+                      placeholder="https://webmail.triadeoficial.com.br"
                       className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm text-slate-800 dark:text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/40"
                       required
                     />
@@ -961,7 +962,7 @@ export const CorporateEmailPage: React.FC<CorporateEmailPageProps> = ({
                         type="text"
                         value={configForm.smtpHost}
                         onChange={(e) => setConfigForm({ ...configForm, smtpHost: e.target.value })}
-                        placeholder="mail.transcunhaoficial.com.br ou smtp.office365.com"
+                        placeholder="mail.triadeoficial.com.br ou smtp.office365.com"
                         className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-mono text-slate-800 dark:text-slate-100"
                         required
                       />
@@ -1014,7 +1015,7 @@ export const CorporateEmailPage: React.FC<CorporateEmailPageProps> = ({
                         type="text"
                         value={configForm.imapHost}
                         onChange={(e) => setConfigForm({ ...configForm, imapHost: e.target.value })}
-                        placeholder="mail.transcunhaoficial.com.br ou outlook.office365.com"
+                        placeholder="mail.triadeoficial.com.br ou outlook.office365.com"
                         className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-mono text-slate-800 dark:text-slate-100"
                         required
                       />
@@ -1110,7 +1111,7 @@ export const CorporateEmailPage: React.FC<CorporateEmailPageProps> = ({
                 <div>
                   <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
                     <Sparkles className="w-5 h-5 text-amber-500" />
-                    Assinatura de E-mail Padronizada Transcunha
+                    Assinatura de E-mail Padronizada Tríade
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                     Gere assinaturas profissionais formatadas para colar no Outlook, Gmail ou Webmail corporativo.
@@ -1169,32 +1170,32 @@ export const CorporateEmailPage: React.FC<CorporateEmailPageProps> = ({
                   Pré-visualização da Assinatura:
                 </span>
                 <div className="p-6 bg-slate-50 dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-start gap-4">
-                  {companyLogo ? (
+                  {true ? (
                     <img 
-                      src={companyLogo} 
-                      alt="Logo Transcunha" 
+                      src={resolveBrandLogo(companyLogo, 'light')} 
+                      alt="Logo Tríade" 
                       className="h-16 max-w-[140px] object-contain rounded shrink-0 bg-white p-1 border border-slate-200"
                     />
                   ) : (
                     <div className="h-16 w-32 bg-blue-600 rounded-lg flex items-center justify-center font-black text-white text-sm shrink-0">
-                      TRANSCUNHA
+                      TRÍADE
                     </div>
                   )}
 
-                  <div className="border-l-4 border-blue-600 pl-4 space-y-1">
+                  <div className="border-l-4 border-primary pl-4 space-y-1">
                     <div className="text-base font-black text-slate-900 dark:text-white">
                       {selectedSignatureAccount.displayName}
                     </div>
                     <div className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
-                      {selectedSignatureAccount.department} — Transcunha Logística
+                      {selectedSignatureAccount.department} — Tríade Logística
                     </div>
                     <div className="text-xs text-slate-600 dark:text-slate-300 pt-1 space-y-0.5">
                       <p><strong>E-mail:</strong> <a href={`mailto:${selectedSignatureAccount.email}`} className="text-blue-600 hover:underline">{selectedSignatureAccount.email}</a></p>
                       <p><strong>Telefone / WhatsApp:</strong> {signatureExtraWhatsapp} | {signatureExtraPhone}</p>
-                      <p><strong>Website:</strong> <a href="https://transcunhaoficial.com.br" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">www.transcunhaoficial.com.br</a></p>
+                      <p><strong>Website:</strong> <a href="https://triadeoficial.com.br" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">www.triadeoficial.com.br</a></p>
                     </div>
                     <p className="text-[11px] text-slate-400 italic pt-1">
-                      Transcunha Logística & Transportes — Excelência, Segurança e Eficiência no Transporte Rodoviário.
+                      Tríade Logística & Transportes — Excelência, Segurança e Eficiência no Transporte Rodoviário.
                     </p>
                   </div>
                 </div>
@@ -1215,7 +1216,7 @@ export const CorporateEmailPage: React.FC<CorporateEmailPageProps> = ({
 
                 <button
                   onClick={() => {
-                    const text = `${selectedSignatureAccount.displayName}\n${selectedSignatureAccount.department} — Transcunha Logística\nE-mail: ${selectedSignatureAccount.email}\nWhatsApp: ${signatureExtraWhatsapp} | Fixo: ${signatureExtraPhone}\nWebsite: www.transcunhaoficial.com.br`;
+                    const text = `${selectedSignatureAccount.displayName}\n${selectedSignatureAccount.department} — Tríade Logística\nE-mail: ${selectedSignatureAccount.email}\nWhatsApp: ${signatureExtraWhatsapp} | Fixo: ${signatureExtraPhone}\nWebsite: www.triadeoficial.com.br`;
                     handleCopyText(text, 'signature_text');
                   }}
                   className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-600/30 transition-all cursor-pointer flex items-center gap-2"
@@ -1288,7 +1289,7 @@ export const CorporateEmailPage: React.FC<CorporateEmailPageProps> = ({
                     type="text"
                     value={composeSubject}
                     onChange={(e) => setComposeSubject(e.target.value)}
-                    placeholder="[Transcunha Logística] Notificação Oficial / Teste de Conectividade"
+                    placeholder="[Tríade Logística] Notificação Oficial / Teste de Conectividade"
                     className="w-full px-3 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
                     required
                   />
@@ -1302,7 +1303,7 @@ export const CorporateEmailPage: React.FC<CorporateEmailPageProps> = ({
                     rows={5}
                     value={composeBody}
                     onChange={(e) => setComposeBody(e.target.value)}
-                    placeholder="Olá! Esta é uma mensagem de teste enviada a partir do painel de E-mail Corporativo da Transcunha Logística..."
+                    placeholder="Olá! Esta é uma mensagem de teste enviada a partir do painel de E-mail Corporativo da Tríade Logística..."
                     className="w-full px-3 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40 resize-none"
                   />
                 </div>
@@ -1522,7 +1523,7 @@ export const CorporateEmailPage: React.FC<CorporateEmailPageProps> = ({
                   </label>
                   <input
                     type="email"
-                    placeholder="outro.email@transcunhaoficial.com.br"
+                    placeholder="outro.email@triadeoficial.com.br"
                     value={formForwardTo}
                     onChange={(e) => setFormForwardTo(e.target.value)}
                     className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
@@ -1537,7 +1538,7 @@ export const CorporateEmailPage: React.FC<CorporateEmailPageProps> = ({
                 </label>
                 <input
                   type="text"
-                  placeholder="ex: vendas@transcunhaoficial.com.br, orcamento@transcunhaoficial.com.br"
+                  placeholder="ex: vendas@triadeoficial.com.br, orcamento@triadeoficial.com.br"
                   value={formAliases}
                   onChange={(e) => setFormAliases(e.target.value)}
                   className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40"

@@ -10,12 +10,12 @@ import type { StayRecord } from '../../utils/toolStorage';
 import { fetchProducts, fetchOwners, fetchVehicles } from '../../lib/db';
 import type { ShipmentControlItem } from '../../utils/financialCalculations';
 import { 
-  TranscunhaSpreadsheetRow, 
+  TriadeSpreadsheetRow, 
   parseNumberPtBr, 
   formatDatePtBr, 
   parseShipmentDate,
   formatCteAndHours
-} from '../../utils/transcunhaSpreadsheetParser';
+} from '../../utils/triadeSpreadsheetParser';
 import { 
   Search, 
   Download, 
@@ -81,7 +81,7 @@ interface ControlShipmentsTabProps {
   onNavigateToFiscal?: () => void;
 }
 
-export interface TranscunhaBranchInfo {
+export interface TriadeBranchInfo {
   cnpj: string;
   name: string;
   unitName: string;
@@ -90,10 +90,10 @@ export interface TranscunhaBranchInfo {
   uf: 'MG' | 'SP' | 'GO' | 'PR';
 }
 
-export const TRANSCUNHA_BRANCH_INFO: Record<string, TranscunhaBranchInfo> = {
+export const TRIADE_BRANCH_INFO: Record<string, TriadeBranchInfo> = {
   matriz: {
     cnpj: '36.203.306/0001-92',
-    name: 'TRANSCUNHA TRANSPORTES E LOGISTICA LTDA',
+    name: 'TRÍADE TRANSPORTES E LOGISTICA LTDA',
     unitName: 'MATRIZ',
     displayValue: '36.203.306/0001-92 - MATRIZ',
     isMatriz: true,
@@ -101,7 +101,7 @@ export const TRANSCUNHA_BRANCH_INFO: Record<string, TranscunhaBranchInfo> = {
   },
   sp: {
     cnpj: '36.203.306/0002-73',
-    name: 'TRANSCUNHA TRANSPORTES E LOGISTICA FILIAL SP',
+    name: 'TRÍADE TRANSPORTES E LOGISTICA FILIAL SP',
     unitName: 'FILIAL SP',
     displayValue: '36.203.306/0002-73 - FILIAL SP',
     isMatriz: false,
@@ -109,7 +109,7 @@ export const TRANSCUNHA_BRANCH_INFO: Record<string, TranscunhaBranchInfo> = {
   },
   go: {
     cnpj: '36.203.306/0004-35',
-    name: 'TRANSCUNHA TRANSPORTES E LOGISTICA GOIAS',
+    name: 'TRÍADE TRANSPORTES E LOGISTICA GOIAS',
     unitName: 'FILIAL GO',
     displayValue: '36.203.306/0004-35 - FILIAL GO',
     isMatriz: false,
@@ -117,7 +117,7 @@ export const TRANSCUNHA_BRANCH_INFO: Record<string, TranscunhaBranchInfo> = {
   },
   pr: {
     cnpj: '36.203.306/0003-54',
-    name: 'TRANSCUNHA TRANSPORTES E LOGISTICA PR',
+    name: 'TRÍADE TRANSPORTES E LOGISTICA PR',
     unitName: 'FILIAL PR',
     displayValue: '36.203.306/0003-54 - FILIAL PR',
     isMatriz: false,
@@ -126,7 +126,7 @@ export const TRANSCUNHA_BRANCH_INFO: Record<string, TranscunhaBranchInfo> = {
 };
 
 /**
- * Extrai a UF de origem da carga/embarque para fins de enquadramento da Filial Transcunha
+ * Extrai a UF de origem da carga/embarque para fins de enquadramento da Filial Tríade
  */
 export function extractCargoOriginUf(
   cargo?: Cargo | null,
@@ -188,36 +188,36 @@ export function extractCargoOriginUf(
 }
 
 /**
- * Identifica a Filial Transcunha e o CNPJ emissor de cada embarque conforme a regra oficial:
+ * Identifica a Filial Tríade e o CNPJ emissor de cada embarque conforme a regra oficial:
  * - Carga com UF MG -> "Matriz" (36.203.306/0001-92 - MATRIZ)
  * - Carga com UF GO -> "Filial GO" (36.203.306/0004-35 - FILIAL GO)
  * - Carga com UF SP -> "Filial SP" (36.203.306/0002-73 - FILIAL SP)
  * - Carga das demais UFs -> "Matriz" (36.203.306/0001-92 - MATRIZ)
  */
-export function resolveTranscunhaBranch(
+export function resolveTriadeBranch(
   s: Shipment,
   cargo?: Cargo | null,
   userMap?: Map<string, User>,
   branchesList?: Branch[]
-): TranscunhaBranchInfo {
+): TriadeBranchInfo {
   const uf = extractCargoOriginUf(cargo, s);
 
   if (uf === 'GO') {
-    return TRANSCUNHA_BRANCH_INFO.go;
+    return TRIADE_BRANCH_INFO.go;
   }
   if (uf === 'SP') {
-    return TRANSCUNHA_BRANCH_INFO.sp;
+    return TRIADE_BRANCH_INFO.sp;
   }
   if (uf === 'MG') {
-    return TRANSCUNHA_BRANCH_INFO.matriz;
+    return TRIADE_BRANCH_INFO.matriz;
   }
 
   // Demais UFs (PR, MT, MS, BA, etc. ou indefinidas) pertencem à Matriz conforme regra
-  return TRANSCUNHA_BRANCH_INFO.matriz;
+  return TRIADE_BRANCH_INFO.matriz;
 }
 
 /**
- * Determina a quantidade de eixos do veículo do embarque conforme a regra operacional da Transcunha:
+ * Determina a quantidade de eixos do veículo do embarque conforme a regra operacional da Tríade:
  * - Rodotrem / Rodotrem (3x3): Basculante - 9 eixos
  * - LS Simples: Basculante - 5 eixos
  * - LS Trucada: Basculante - 6 eixos
@@ -403,7 +403,7 @@ export function getBalanceLiberationDateTime(s: Shipment): string {
 }
 
 export interface SpreadsheetColDef {
-  key: keyof TranscunhaSpreadsheetRow;
+  key: keyof TriadeSpreadsheetRow;
   label: string;
   tooltip?: string;
   category: string;
@@ -450,7 +450,7 @@ export const SPREADSHEET_COLUMNS: SpreadsheetColDef[] = [
   { key: 'tipoCarga', label: 'TIPO', category: 'Carga, Pedido & Logística', categoryColor: 'bg-cyan-700', type: 'text', width: 'min-w-[80px] max-w-[105px]', align: 'center' },
 
   // 4. Cadastros & Controles
-  { key: 'transportadora', label: 'TRANSPORTADORA', tooltip: 'Transportadora & CNPJ da Filial Transcunha emissora', category: 'Cadastros & Controles', categoryColor: 'bg-slate-700', type: 'text', width: 'min-w-[145px] max-w-[170px]', align: 'center' },
+  { key: 'transportadora', label: 'TRANSPORTADORA', tooltip: 'Transportadora & CNPJ da Filial Tríade emissora', category: 'Cadastros & Controles', categoryColor: 'bg-slate-700', type: 'text', width: 'min-w-[145px] max-w-[170px]', align: 'center' },
   { key: 'cadastro', label: 'CADASTRO', category: 'Cadastros & Controles', categoryColor: 'bg-slate-700', type: 'select', options: ['LIBERADO', 'BLOQUEADO', 'PENDENTE'], width: 'min-w-[80px] max-w-[90px]', align: 'center' },
   { key: 'matrizFilial', label: 'MATRIZ FILIAL', category: 'Cadastros & Controles', categoryColor: 'bg-slate-700', type: 'select', options: ['MATRIZ', 'FILIAL'], width: 'min-w-[80px] max-w-[90px]', align: 'center' },
   { key: 'liberacao', label: 'LIBERAÇÃO', category: 'Cadastros & Controles', categoryColor: 'bg-slate-700', type: 'text', width: 'min-w-[80px] max-w-[90px]', align: 'center' },
@@ -612,7 +612,7 @@ export const ControlShipmentsTab: React.FC<ControlShipmentsTabProps> = ({
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
   // Ordenação: CT-e decrescente por padrão (linhas organizadas pelo número de CTE)
-  const [sortConfig, setSortConfig] = useState<{ key: keyof TranscunhaSpreadsheetRow; direction: 'asc' | 'desc' } | null>({
+  const [sortConfig, setSortConfig] = useState<{ key: keyof TriadeSpreadsheetRow; direction: 'asc' | 'desc' } | null>({
     key: 'cteHoras',
     direction: 'desc'
   });
@@ -695,7 +695,7 @@ export const ControlShipmentsTab: React.FC<ControlShipmentsTabProps> = ({
   // Formas de pagamento do cliente personalizadas por embarque (Pix, Boleto, Transferência Bancária)
   const [clientPaymentMethodOverrides, setClientPaymentMethodOverrides] = useState<Record<string, string>>(() => {
     try {
-      const saved = localStorage.getItem('transcunha_control_client_payment_methods');
+      const saved = localStorage.getItem('triade_control_client_payment_methods');
       return saved ? JSON.parse(saved) : {};
     } catch {
       return {};
@@ -706,7 +706,7 @@ export const ControlShipmentsTab: React.FC<ControlShipmentsTabProps> = ({
     setClientPaymentMethodOverrides(prev => {
       const next = { ...prev, [shipmentId]: method };
       try {
-        localStorage.setItem('transcunha_control_client_payment_methods', JSON.stringify(next));
+        localStorage.setItem('triade_control_client_payment_methods', JSON.stringify(next));
       } catch {}
       return next;
     });
@@ -939,7 +939,7 @@ export const ControlShipmentsTab: React.FC<ControlShipmentsTabProps> = ({
     return 'CLIENTE GERAL';
   }, []);
 
-  const mappedRows = useMemo<TranscunhaSpreadsheetRow[]>(() => {
+  const mappedRows = useMemo<TriadeSpreadsheetRow[]>(() => {
     return shipmentsFiltered.map((s, index) => {
       const cargo = s.cargoId ? cargoMap.get(s.cargoId) : undefined;
       const clientObj = cargo?.clientId ? clientObjMap.get(cargo.clientId) : undefined;
@@ -994,7 +994,7 @@ export const ControlShipmentsTab: React.FC<ControlShipmentsTabProps> = ({
 
       const dateStr = s.scheduledDate ? formatDatePtBr(s.scheduledDate) : formatDatePtBr(s.createdAt);
       const opExp = calculateShipmentExpenses(s, cargo, undefined, stays);
-      const tcBranch = resolveTranscunhaBranch(s, cargo, fullUserMap, branches);
+      const tcBranch = resolveTriadeBranch(s, cargo, fullUserMap, branches);
       const realCte = getShipmentCte(s);
       const cteNum = (realCte && realCte !== '-') ? realCte : (s.cteNumber || (s.documents as any)?.cte_number || s.id);
       
@@ -1487,7 +1487,7 @@ export const ControlShipmentsTab: React.FC<ControlShipmentsTabProps> = ({
 
   // Avaliação temporal para contemplar emissão do CT-e e data de embarque
   const isRowInPeriod = useCallback((
-    row: TranscunhaSpreadsheetRow, 
+    row: TriadeSpreadsheetRow, 
     bounds: { start: number | null; end: number | null }, 
     basis: 'smart' | 'emission' | 'boarding'
   ): boolean => {
@@ -1683,7 +1683,7 @@ export const ControlShipmentsTab: React.FC<ControlShipmentsTabProps> = ({
           continue;
         }
 
-        // Tratamento dedicado para TRANSPORTADORA / CNPJ FILIAL TRANSCUNHA
+        // Tratamento dedicado para TRANSPORTADORA / CNPJ FILIAL TRÍADE
         if (colKey === 'transportadora') {
           const cellStr = String(rawCell || '').trim();
           const cellDigits = cellStr.replace(/\D/g, '');
@@ -1838,7 +1838,7 @@ export const ControlShipmentsTab: React.FC<ControlShipmentsTabProps> = ({
     setSearchTerm('');
   };
 
-  const handleSort = (key: keyof TranscunhaSpreadsheetRow) => {
+  const handleSort = (key: keyof TriadeSpreadsheetRow) => {
     setSortConfig(current => {
       if (current?.key === key) {
         return {
@@ -3185,7 +3185,7 @@ export const ControlShipmentsTab: React.FC<ControlShipmentsTabProps> = ({
                           : (isDark ? 'bg-emerald-800 text-yellow-300 border-emerald-600' : 'bg-[#005c00] text-yellow-300 border-green-800');
 
                         cellContent = (
-                          <div className="flex flex-col items-center justify-center text-center py-0.5 leading-tight select-text" title={`Transportadora: Transcunha\nCNPJ: ${cnpjStr}\nUnidade: ${branchTag}`}>
+                          <div className="flex flex-col items-center justify-center text-center py-0.5 leading-tight select-text" title={`Transportadora: Tríade\nCNPJ: ${cnpjStr}\nUnidade: ${branchTag}`}>
                             <span className={`font-mono font-black text-[10px] tracking-tight ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
                               {cnpjStr}
                             </span>
@@ -3196,11 +3196,11 @@ export const ControlShipmentsTab: React.FC<ControlShipmentsTabProps> = ({
                         );
                       } else if (!isDark) {
                         const normStr = String(raw || '').toUpperCase().trim();
-                        const isTranscunha = normStr.includes('TRANSCUNHA');
+                        const isTriade = normStr.includes('TRÍADE') || normStr.includes('TRIADE');
                         const isRafael = normStr.includes('AGENCIA') || normStr.includes('RAFAEL');
                         const isFilialSp = normStr.includes('FILIAL SP');
 
-                        if (isTranscunha) {
+                        if (isTriade) {
                           cellContent = (
                             <span className="bg-[#005c00] text-yellow-300 font-black px-1.5 py-0.5 rounded inline-block shadow-xs border border-green-800">
                               {display}
@@ -3802,7 +3802,7 @@ export const ControlShipmentsTab: React.FC<ControlShipmentsTabProps> = ({
               <option value="PENDENTE" className="bg-slate-900 text-slate-100 dark:bg-slate-900 dark:text-slate-100">Pendente</option>
             </select>
 
-            {/* Filtro Rápido por CNPJ da Filial Transcunha */}
+            {/* Filtro Rápido por CNPJ da Filial Tríade */}
             <select
               value={columnFilters['transportadora']?.[0] || 'all'}
               onChange={(e) => {
@@ -3817,7 +3817,7 @@ export const ControlShipmentsTab: React.FC<ControlShipmentsTabProps> = ({
                 });
               }}
               className="px-3 py-1.5 rounded-xl text-xs border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 outline-none cursor-pointer focus:border-indigo-500 font-medium"
-              title="Filtrar embarques pelo CNPJ da Filial Transcunha (disponível também na coluna TRANSPORTADORA)"
+              title="Filtrar embarques pelo CNPJ da Filial Tríade (disponível também na coluna TRANSPORTADORA)"
             >
               <option value="all" className="bg-slate-900 text-slate-100 dark:bg-slate-900 dark:text-slate-100">CNPJ Filial: Todos</option>
               <option value="36.203.306/0001-92 - MATRIZ" className="bg-slate-900 text-slate-100 dark:bg-slate-900 dark:text-slate-100">36.203.306/0001-92 - Matriz (MG e Demais UFs)</option>

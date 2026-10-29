@@ -3,7 +3,7 @@ import { supabase } from '../supabase';
 import type { DriverLocation } from '../types';
 
 const CHANNEL_NAME = 'driver_locations_monitor';
-const LAST_LOCATIONS_KEY = 'transcunha_last_driver_locations';
+const LAST_LOCATIONS_KEY = 'triade_last_driver_locations';
 
 export interface ExtendedDriverLocation extends DriverLocation {
   isAppActive?: boolean;

@@ -281,13 +281,13 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
               </div>
             </div>
 
-            {/* Campo & Configuração: E-mail Corporativo (@transcunhaoficial.com.br) - Apenas para Usuários Internos */}
+            {/* Campo & Configuração: E-mail Corporativo (@triadeoficial.com.br) - Apenas para Usuários Internos */}
             {showCorporateFeatures && (
               <div className="p-4 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5 uppercase tracking-wider">
                     <Mail className="w-4 h-4 text-blue-600" />
-                    E-mail Corporativo (@transcunhaoficial.com.br)
+                    E-mail Corporativo (@triadeoficial.com.br)
                   </label>
                   <span className="text-[10px] text-slate-500 font-medium">Administração Integrada</span>
                 </div>
@@ -305,7 +305,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
                       value={user.corporateEmail || ''}
                       onChange={handleChange}
                       type="text"
-                      placeholder="colaborador@transcunhaoficial.com.br"
+                      placeholder="colaborador@triadeoficial.com.br"
                       className="p-2 w-full text-xs font-mono border rounded dark:bg-gray-700 dark:border-gray-600"
                     />
                   </div>
@@ -863,8 +863,8 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
                 <button 
                   type="button" 
                   onClick={() => {
-                    setUser(prev => ({ ...prev, password: 'transcunha2026', requirePasswordChange: true }));
-                    showToast('Senha resetada para "transcunha2026". Atenção: A alteração só será gravada ao clicar em "SALVAR".', 'info', 6000);
+                    setUser(prev => ({ ...prev, password: 'triade2026', requirePasswordChange: true }));
+                    showToast('Senha resetada para "triade2026". Atenção: A alteração só será gravada ao clicar em "SALVAR".', 'info', 6000);
                   }} 
                   className="py-2 px-3 sm:px-4 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors font-medium text-xs sm:text-sm flex items-center gap-1.5 shadow-sm"
                 >

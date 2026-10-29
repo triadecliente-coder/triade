@@ -12,12 +12,12 @@ const SUPABASE_KEY = (
   import.meta.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 ) as string | undefined;
 
-console.log('[TRANSCUNHA] Supabase URL:', SUPABASE_URL);
-console.log('[TRANSCUNHA] Supabase Key exists:', !!SUPABASE_KEY);
+console.log('[TRÍADE] Supabase URL:', SUPABASE_URL);
+console.log('[TRÍADE] Supabase Key exists:', !!SUPABASE_KEY);
 
 if (!SUPABASE_URL || !SUPABASE_KEY) {
   throw new Error(
-    '[TRANSCUNHA] Variáveis de ambiente do Supabase não encontradas!\n' +
+    '[TRÍADE] Variáveis de ambiente do Supabase não encontradas!\n' +
     'Configure as seguintes variáveis no seu painel ou arquivo .env:\n' +
     '  • VITE_SUPABASE_URL (ou NEXT_PUBLIC_SUPABASE_URL)\n' +
     '  • VITE_SUPABASE_PUBLISHABLE_KEY (ou NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)'

@@ -11,6 +11,7 @@ import { calculateAdvanceAndBalance, ADVANCE_ELIGIBLE_STATUSES } from './utils/f
 import { INITIAL_PERMISSIONS, can, isDemoUser } from './auth';
 import { useToast } from './hooks/useToast';
 import { getExpedidoresRecebedores, saveExpedidorRecebedor, deleteExpedidorRecebedor, syncLocationsFromCargos } from './utils/locationStorage';
+import { DEFAULT_LOGO_LIGHT, DEFAULT_FAVICON, isDefaultBrandLogo } from './utils/brandLogo';
 
 // Lazy-loaded Page Imports (Code Splitting for Optimal Performance)
 const DashboardPage = React.lazy(() => import('./pages/DashboardPage'));
@@ -180,10 +181,10 @@ interface NewShipmentRequestData extends Omit<Shipment, 'id' | 'orderId' | 'stat
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
     try {
-      localStorage.removeItem('trancunha_currentUser');
-      localStorage.removeItem('trancunha_user_email');
+      localStorage.removeItem('triade_currentUser');
+      localStorage.removeItem('triade_user_email');
     } catch {}
-    const saved = sessionStorage.getItem('trancunha_currentUser');
+    const saved = sessionStorage.getItem('triade_currentUser');
     try {
       return saved ? JSON.parse(saved) : null;
     } catch {
@@ -208,7 +209,7 @@ const App: React.FC = () => {
 
   // Theme Mode ('dark' or 'light')
   const [themeMode, setThemeMode] = useState<'dark' | 'light'>(() => {
-    const saved = localStorage.getItem('trancunha_theme_mode');
+    const saved = localStorage.getItem('triade_theme_mode');
     if (saved === 'dark' || saved === 'light') return saved;
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
     return 'dark';
@@ -216,7 +217,7 @@ const App: React.FC = () => {
 
   const handleThemeModeChange = (mode: 'dark' | 'light') => {
     setThemeMode(mode);
-    localStorage.setItem('trancunha_theme_mode', mode);
+    localStorage.setItem('triade_theme_mode', mode);
     if (mode === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
@@ -320,9 +321,9 @@ const App: React.FC = () => {
       setGlobalWhatsAppInitialName(detail.name);
       setIsGlobalWhatsAppFloatingOpen(true);
     };
-    window.addEventListener('transcunha:open_whatsapp_chat', handleOpenFloating);
+    window.addEventListener('triade:open_whatsapp_chat', handleOpenFloating);
     return () => {
-      window.removeEventListener('transcunha:open_whatsapp_chat', handleOpenFloating);
+      window.removeEventListener('triade:open_whatsapp_chat', handleOpenFloating);
     };
   }, []);
 
@@ -347,7 +348,7 @@ const App: React.FC = () => {
       const cleanName = (driver.name || '').trim().toLowerCase();
 
       // Checar cache local
-      const cached = cleanCpf ? localStorage.getItem(`transcunha_driver_atua_${cleanCpf}`) : null;
+      const cached = cleanCpf ? localStorage.getItem(`triade_driver_atua_${cleanCpf}`) : null;
       if (cached && cached.trim()) {
         hasChanges = true;
         return { ...driver, codigoAtua: cached.trim() };
@@ -371,7 +372,7 @@ const App: React.FC = () => {
           (matchedShipment.documents as any)?.codigoAtua
         ).trim();
         if (cleanCpf) {
-          try { localStorage.setItem(`transcunha_driver_atua_${cleanCpf}`, foundCode); } catch {}
+          try { localStorage.setItem(`triade_driver_atua_${cleanCpf}`, foundCode); } catch {}
         }
         hasChanges = true;
         return { ...driver, codigoAtua: foundCode };
@@ -519,11 +520,11 @@ const App: React.FC = () => {
   // Persistência da sessão (apenas enquanto a janela/navegador estiver aberta)
   useEffect(() => {
     if (currentUser) {
-      sessionStorage.setItem('trancunha_currentUser', JSON.stringify(currentUser));
-      sessionStorage.setItem('trancunha_user_email', currentUser.email);
+      sessionStorage.setItem('triade_currentUser', JSON.stringify(currentUser));
+      sessionStorage.setItem('triade_user_email', currentUser.email);
     } else {
-      sessionStorage.removeItem('trancunha_currentUser');
-      sessionStorage.removeItem('trancunha_user_email');
+      sessionStorage.removeItem('triade_currentUser');
+      sessionStorage.removeItem('triade_user_email');
     }
   }, [currentUser]);
 
@@ -532,11 +533,11 @@ const App: React.FC = () => {
   // UI Effects (Branding & Theme)
   useEffect(() => {
     if (companyLogo) {
-      localStorage.setItem('trancunha_companyLogo', companyLogo);
+      localStorage.setItem('triade_companyLogo', companyLogo);
       const link = (document.querySelector("link[rel*='icon']") as HTMLLinkElement) || document.createElement('link');
       link.type = 'image/x-icon';
       link.rel = 'shortcut icon';
-      link.href = companyLogo;
+      link.href = isDefaultBrandLogo(companyLogo) ? DEFAULT_FAVICON : companyLogo;
       if (!document.querySelector("link[rel*='icon']")) {
         document.getElementsByTagName('head')[0].appendChild(link);
       }
@@ -574,7 +575,7 @@ const App: React.FC = () => {
   const lastPendingCountRef = useRef(0);
   useEffect(() => {
     if (!currentUser || !freightOffers) {
-      document.title = "Transcunha Logística";
+      document.title = "Tríade Logística";
       return;
     }
 
@@ -589,7 +590,7 @@ const App: React.FC = () => {
       (currentUser.profile as string) === 'Demo';
 
     if (!isAllowedProfile) {
-      document.title = "Transcunha Logística";
+      document.title = "Tríade Logística";
       lastPendingCountRef.current = 0;
       return;
     }
@@ -635,9 +636,9 @@ const App: React.FC = () => {
 
     // Update document title with a bell emoji and count
     if (pendingCount > 0) {
-      document.title = `🔔 (${pendingCount}) Transcunha Logística`;
+      document.title = `🔔 (${pendingCount}) Tríade Logística`;
     } else {
-      document.title = "Transcunha Logística";
+      document.title = "Tríade Logística";
     }
 
     // Play notification sound
@@ -662,14 +663,14 @@ const App: React.FC = () => {
   useEffect(() => {
     try {
       if (themeImage) {
-        localStorage.setItem('transcunha_themeImage', themeImage);
+        localStorage.setItem('triade_themeImage', themeImage);
         document.body.style.backgroundImage = `url("${themeImage.replace(/"/g, '\\"')}")`;
         document.body.style.backgroundSize = 'cover';
         document.body.style.backgroundPosition = 'center';
         document.body.style.backgroundAttachment = 'fixed';
       } else {
-        localStorage.removeItem('trancunha_themeImage');
-        localStorage.removeItem('transcunha_themeImage');
+        localStorage.removeItem('triade_themeImage');
+        localStorage.removeItem('triade_themeImage');
         document.body.style.backgroundImage = '';
       }
     } catch (e) {
@@ -683,10 +684,10 @@ const App: React.FC = () => {
   useEffect(() => {
     try {
       if (companyLogo) {
-        localStorage.setItem('transcunha_companyLogo', companyLogo);
+        localStorage.setItem('triade_companyLogo', companyLogo);
       } else {
-        localStorage.removeItem('trancunha_companyLogo');
-        localStorage.removeItem('transcunha_companyLogo');
+        localStorage.removeItem('triade_companyLogo');
+        localStorage.removeItem('triade_companyLogo');
       }
     } catch (e) {
       console.warn('[App] Não foi possível salvar logo no localStorage:', e);
@@ -698,14 +699,14 @@ const App: React.FC = () => {
     console.log('[Auth] Iniciando verificação de sessão...');
 
     try {
-      const savedUserEmail = sessionStorage.getItem('trancunha_user_email');
+      const savedUserEmail = sessionStorage.getItem('triade_user_email');
 
       if (savedUserEmail) {
         console.log('[Auth] Recuperando perfil para:', savedUserEmail);
 
         // Verifica se o usuário salvo na sessão já é um motorista
         let savedUser: User | null = null;
-        try { savedUser = JSON.parse(sessionStorage.getItem('trancunha_currentUser') || 'null'); } catch { savedUser = null; }
+        try { savedUser = JSON.parse(sessionStorage.getItem('triade_currentUser') || 'null'); } catch { savedUser = null; }
         const isMotoristaSession = savedUser?.profile === UserProfile.Motorista;
 
         if (isMotoristaSession) {
@@ -842,10 +843,10 @@ const App: React.FC = () => {
 
   // --- AUTH HANDLERS ---
   const handleLogin = (user: User) => {
-    sessionStorage.setItem('trancunha_user_email', user.email);
-    sessionStorage.setItem('trancunha_currentUser', JSON.stringify(user));
-    localStorage.removeItem('trancunha_user_email');
-    localStorage.removeItem('trancunha_currentUser');
+    sessionStorage.setItem('triade_user_email', user.email);
+    sessionStorage.setItem('triade_currentUser', JSON.stringify(user));
+    localStorage.removeItem('triade_user_email');
+    localStorage.removeItem('triade_currentUser');
     setCurrentUser(user);
     if (user.profile !== UserProfile.Motorista) {
       setUsers(prev => prev.some(u => u.id === user.id) ? prev : [user, ...prev]);
@@ -859,10 +860,10 @@ const App: React.FC = () => {
 
   const handleLogout = () => {
     supabase.auth.signOut().catch(() => {});
-    sessionStorage.removeItem('trancunha_user_email');
-    sessionStorage.removeItem('trancunha_currentUser');
-    localStorage.removeItem('trancunha_user_email');
-    localStorage.removeItem('trancunha_currentUser');
+    sessionStorage.removeItem('triade_user_email');
+    sessionStorage.removeItem('triade_currentUser');
+    localStorage.removeItem('triade_user_email');
+    localStorage.removeItem('triade_currentUser');
     setCurrentUser(null);
     setCurrentPage('dashboard');
   };
@@ -950,7 +951,7 @@ const App: React.FC = () => {
       showToast('Usuário em modo demonstração possui acesso apenas de visualização.', 'warning');
       return;
     }
-    setCompanyLogo(logo || null);
+    setCompanyLogo(logo || DEFAULT_LOGO_LIGHT);
     try {
       await saveAppSettings({ company_logo: logo || null });
     } catch (err) {
@@ -1570,7 +1571,7 @@ const App: React.FC = () => {
     // 1. Verificar se o motorista já possui Código do ATUA informado no cadastro do motorista, no formulário de criação, em embarques anteriores ou em cache local
     const atuaFromDriver = driverToUse?.codigoAtua ? String(driverToUse.codigoAtua).trim() : '';
     const atuaFromForm = data.codigoAtua ? String(data.codigoAtua).trim() : '';
-    const atuaFromCache = driverCpfClean ? (localStorage.getItem(`transcunha_driver_atua_${driverCpfClean}`) || '').trim() : '';
+    const atuaFromCache = driverCpfClean ? (localStorage.getItem(`triade_driver_atua_${driverCpfClean}`) || '').trim() : '';
 
     let atuaFromShipments = '';
     if (!atuaFromDriver && !atuaFromForm && !atuaFromCache) {
@@ -1602,7 +1603,7 @@ const App: React.FC = () => {
 
     // Salvar em cache imediato caso tenhamos o código resolvido e o CPF
     if (driverCpfClean && resolvedCodigoAtua) {
-      try { localStorage.setItem(`transcunha_driver_atua_${driverCpfClean}`, resolvedCodigoAtua); } catch {}
+      try { localStorage.setItem(`triade_driver_atua_${driverCpfClean}`, resolvedCodigoAtua); } catch {}
     }
 
     const relatedCargo = findCargoById(cargos, data.cargoId);
@@ -2781,7 +2782,7 @@ const App: React.FC = () => {
           const cleanCpf = originalShipment.driverCpf.replace(/\D/g, '');
           if (cleanCpf) {
             try {
-              localStorage.setItem(`transcunha_driver_atua_${cleanCpf}`, cleanAtua);
+              localStorage.setItem(`triade_driver_atua_${cleanCpf}`, cleanAtua);
             } catch { }
           }
         }
@@ -4591,7 +4592,7 @@ const App: React.FC = () => {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', gap: '16px', background: '#f9fafb' }}>
         <div style={{ width: '48px', height: '48px', border: '4px solid #e5e7eb', borderTopColor: '#3b82f6', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-        <p style={{ color: '#6b7280', fontSize: '18px', fontWeight: 500 }}>Carregando Transcunha Logística...</p>
+        <p style={{ color: '#6b7280', fontSize: '18px', fontWeight: 500 }}>Carregando Tríade Logística...</p>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
@@ -4618,7 +4619,7 @@ const App: React.FC = () => {
   }
 
   const isInstitutionalHost = typeof window !== 'undefined' && 
-    (window.location.hostname.includes('transcunhaoficial.com.br') || window.location.hostname.includes('transcunhaoficial'));
+    (window.location.hostname.includes('triadeoficial.com.br') || window.location.hostname.includes('triadeoficial'));
 
   if (
     location.pathname === '/site' || 

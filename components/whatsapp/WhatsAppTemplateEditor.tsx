@@ -381,7 +381,7 @@ export const WhatsAppTemplateEditor: React.FC<WhatsAppTemplateEditorProps> = ({
               TC
             </div>
             <div>
-              <p className="text-xs font-bold text-slate-100 leading-tight">Transcunha Logística</p>
+              <p className="text-xs font-bold text-slate-100 leading-tight">Tríade Logística</p>
               <p className="text-[10px] text-emerald-400 font-semibold">Conta Comercial Oficial</p>
             </div>
           </div>
@@ -398,7 +398,7 @@ export const WhatsAppTemplateEditor: React.FC<WhatsAppTemplateEditorProps> = ({
                   </div>
                   <div className="overflow-hidden">
                     <p className="text-[11px] font-bold text-white truncate">
-                      {currentTemplate.default_filename || 'Documento_Transcunha.pdf'}
+                      {currentTemplate.default_filename || 'Documento_Triade.pdf'}
                     </p>
                     <p className="text-[9px] text-emerald-300">Documento em anexo • PDF</p>
                   </div>

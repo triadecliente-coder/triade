@@ -3,6 +3,7 @@ import { supabase } from '../supabase';
 import { User, UserProfile, DriverClassification, VehicleSetType, VehicleBodyType } from '../types';
 import type { ProfilePermissions } from '../types';
 import { formatCPF, formatPhone } from '../utils/formatters';
+import { resolveBrandLogo } from '../utils/brandLogo';
 import {
   UserPlus, ArrowLeft, Eye, EyeOff, CheckCircle2,
   ShieldCheck, Activity, Clock, Smartphone, Mail, Lock,
@@ -207,11 +208,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
         };
 
         console.log('[LoginPage] Login motorista bem-sucedido:', userProfile.name);
-        sessionStorage.setItem('trancunha_user_email', userProfile.email);
-        sessionStorage.setItem('trancunha_currentUser', JSON.stringify(userProfile));
+        sessionStorage.setItem('triade_user_email', userProfile.email);
+        sessionStorage.setItem('triade_currentUser', JSON.stringify(userProfile));
         try {
-          localStorage.removeItem('trancunha_user_email');
-          localStorage.removeItem('trancunha_currentUser');
+          localStorage.removeItem('triade_user_email');
+          localStorage.removeItem('triade_currentUser');
         } catch { }
         onLogin(userProfile);
 
@@ -274,11 +275,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
               auth_id: authUser.id,
             }).then(() => { }, () => { });
 
-            sessionStorage.setItem('trancunha_user_email', authProfile.email);
-            sessionStorage.setItem('trancunha_currentUser', JSON.stringify(authProfile));
+            sessionStorage.setItem('triade_user_email', authProfile.email);
+            sessionStorage.setItem('triade_currentUser', JSON.stringify(authProfile));
             try {
-              localStorage.removeItem('trancunha_user_email');
-              localStorage.removeItem('trancunha_currentUser');
+              localStorage.removeItem('triade_user_email');
+              localStorage.removeItem('triade_currentUser');
             } catch { }
             onLogin(authProfile);
             return;
@@ -311,11 +312,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
         }
 
         console.log('[LoginPage] Login bem-sucedido:', userProfile.name);
-        sessionStorage.setItem('trancunha_user_email', userProfile.email);
-        sessionStorage.setItem('trancunha_currentUser', JSON.stringify(userProfile));
+        sessionStorage.setItem('triade_user_email', userProfile.email);
+        sessionStorage.setItem('triade_currentUser', JSON.stringify(userProfile));
         try {
-          localStorage.removeItem('trancunha_user_email');
-          localStorage.removeItem('trancunha_currentUser');
+          localStorage.removeItem('triade_user_email');
+          localStorage.removeItem('triade_currentUser');
         } catch { }
         onLogin(userProfile);
       }
@@ -540,11 +541,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
       };
 
       setSuccessMessage('Cadastro realizado com sucesso! Entrando...');
-      sessionStorage.setItem('trancunha_user_email', formattedCpf);
-      sessionStorage.setItem('trancunha_currentUser', JSON.stringify(userProfile));
+      sessionStorage.setItem('triade_user_email', formattedCpf);
+      sessionStorage.setItem('triade_currentUser', JSON.stringify(userProfile));
       try {
-        localStorage.removeItem('trancunha_user_email');
-        localStorage.removeItem('trancunha_currentUser');
+        localStorage.removeItem('triade_user_email');
+        localStorage.removeItem('triade_currentUser');
       } catch { }
 
       setTimeout(() => {
@@ -561,7 +562,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
 
   return (
     <div
-      className="relative min-h-screen w-full bg-[#070c18] text-slate-100 flex flex-col justify-between overflow-x-hidden font-sans"
+      className="relative min-h-screen w-full bg-[#041020] text-slate-100 flex flex-col justify-between overflow-x-hidden font-sans"
       style={{ zoom: 0.81 }}
     >
       {/* Background Grid Pattern & Ambient Glows */}
@@ -569,17 +570,17 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
         className="absolute inset-0 pointer-events-none z-0"
         style={{
           backgroundImage: `
-            linear-gradient(to right, rgba(59, 130, 246, 0.05) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(59, 130, 246, 0.05) 1px, transparent 1px)
+            linear-gradient(to right, rgba(236, 41, 7, 0.05) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(236, 41, 7, 0.05) 1px, transparent 1px)
           `,
           backgroundSize: '48px 48px'
         }}
       />
 
       {/* Soft Radial Ambient Lighting */}
-      <div className="absolute top-0 left-1/4 w-[600px] h-[500px] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none z-0" />
-      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-sky-500/10 rounded-full blur-[140px] pointer-events-none z-0" />
-      <div className="absolute top-1/2 right-10 w-[350px] h-[350px] bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none z-0" />
+      <div className="absolute top-0 left-1/4 w-[600px] h-[500px] bg-[#EC2907]/12 rounded-full blur-[150px] pointer-events-none z-0" />
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-orange-500/10 rounded-full blur-[140px] pointer-events-none z-0" />
+      <div className="absolute top-1/2 right-10 w-[350px] h-[350px] bg-[#011B35]/70 rounded-full blur-[110px] pointer-events-none z-0" />
 
       {/* Main Container */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-8 lg:py-12 flex-1 flex flex-col justify-center">
@@ -587,11 +588,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
         {/* Top Header Row (Logo + Status Badge) */}
         <div className="flex items-center justify-between pb-8 lg:pb-12">
           <div className="flex items-center gap-3">
-            {companyLogo ? (
+            {true ? (
               <img
-                src={companyLogo}
-                alt="Logo TransCunha"
-                className="h-24 sm:h-28 lg:h-32 max-w-[320px] sm:max-w-[380px] object-contain filter drop-shadow-[0_4px_20px_rgba(11,102,228,0.45)] transition-all"
+                src={resolveBrandLogo(companyLogo, 'dark')}
+                alt="Logo Tríade"
+                className="h-24 sm:h-28 lg:h-32 max-w-[320px] sm:max-w-[380px] object-contain filter drop-shadow-[0_4px_22px_rgba(236,41,7,0.32)] transition-all"
               />
             ) : (
               <div className="flex items-center gap-3">
@@ -623,10 +624,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
           {/* LEFT SECTION: Portal de Acesso (Auth Card)               */}
           {/* ========================================================= */}
           <div className="lg:col-span-5 flex justify-center w-full">
-            <div className={`w-full ${isRegisteringDriver ? 'max-w-xl' : 'max-w-md'} p-6 sm:p-8 rounded-3xl bg-[#0b1328]/85 border border-slate-700/60 shadow-2xl shadow-blue-950/50 backdrop-blur-2xl transition-all duration-300 relative overflow-hidden`}>
+            <div className={`w-full ${isRegisteringDriver ? 'max-w-xl' : 'max-w-md'} p-6 sm:p-8 rounded-3xl bg-[#07182E]/90 border border-slate-700/60 shadow-2xl shadow-black/60 backdrop-blur-2xl transition-all duration-300 relative overflow-hidden`}>
 
               {/* Card Top Border Glow */}
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-sky-400 to-transparent opacity-80" />
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#FF4D00] to-transparent opacity-90" />
 
               {/* Header Title */}
               <div className="text-center mb-6">
@@ -646,7 +647,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                   <button
                     type="button"
                     className={`flex-1 py-2.5 px-3 text-xs sm:text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${loginType === 'interno'
-                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md shadow-blue-900/40'
+                      ? 'bg-gradient-to-r from-[#EC2907] to-[#C41C00] text-white shadow-md shadow-orange-950/50'
                       : 'text-slate-400 hover:text-slate-200'
                       }`}
                     onClick={() => { setLoginType('interno'); setError(''); }}
@@ -657,7 +658,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                   <button
                     type="button"
                     className={`flex-1 py-2.5 px-3 text-xs sm:text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${loginType === 'motorista'
-                      ? 'bg-gradient-to-r from-sky-600 to-blue-600 text-white shadow-md shadow-blue-900/40'
+                      ? 'bg-gradient-to-r from-[#FF4D00] to-[#EC2907] text-white shadow-md shadow-orange-950/50'
                       : 'text-slate-400 hover:text-slate-200'
                       }`}
                     onClick={() => { setLoginType('motorista'); setError(''); }}
@@ -701,7 +702,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                         onChange={handleRegCpfChange}
                         placeholder="000.000.000-00"
                         maxLength={14}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs font-mono placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs font-mono placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF4D00] focus:border-transparent transition-all"
                       />
                     </div>
 
@@ -717,7 +718,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                         onChange={handleRegPhoneChange}
                         placeholder="(00) 00000-0000"
                         maxLength={15}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF4D00] focus:border-transparent transition-all"
                       />
                     </div>
                   </div>
@@ -734,7 +735,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                       value={regName}
                       onChange={e => setRegName(e.target.value)}
                       placeholder="Nome completo do motorista"
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs uppercase placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs uppercase placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF4D00] focus:border-transparent transition-all"
                     />
                   </div>
 
@@ -751,7 +752,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                       onChange={e => setRegHorsePlate(formatPlate(e.target.value))}
                       placeholder="ABC-1234 ou ABC1D23"
                       maxLength={8}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs font-mono uppercase placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs font-mono uppercase placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF4D00] focus:border-transparent transition-all"
                     />
                   </div>
 
@@ -766,7 +767,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                         disabled={isLoading}
                         value={regVehicleSetType}
                         onChange={e => setRegVehicleSetType(e.target.value as VehicleSetType)}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs focus:outline-none focus:ring-2 focus:ring-[#FF4D00] focus:border-transparent transition-all"
                       >
                         <option value="" disabled className="bg-slate-900 text-slate-400">Selecione...</option>
                         {Object.values(VehicleSetType).map(t => (
@@ -784,7 +785,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                         disabled={isLoading}
                         value={regVehicleBodyType}
                         onChange={e => setRegVehicleBodyType(e.target.value as VehicleBodyType)}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs focus:outline-none focus:ring-2 focus:ring-[#FF4D00] focus:border-transparent transition-all"
                       >
                         <option value="" disabled className="bg-slate-900 text-slate-400">Selecione...</option>
                         {Object.values(VehicleBodyType).map(b => (
@@ -808,7 +809,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                         onChange={e => setRegTrailer1Plate(formatPlate(e.target.value))}
                         placeholder="Obrigatório"
                         maxLength={8}
-                        className="w-full px-2.5 py-2 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs font-mono uppercase placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all"
+                        className="w-full px-2.5 py-2 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs font-mono uppercase placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF4D00] transition-all"
                       />
                     </div>
                     <div>
@@ -822,7 +823,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                         onChange={e => setRegTrailer2Plate(formatPlate(e.target.value))}
                         placeholder="Opcional"
                         maxLength={8}
-                        className="w-full px-2.5 py-2 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs font-mono uppercase placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all"
+                        className="w-full px-2.5 py-2 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs font-mono uppercase placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF4D00] transition-all"
                       />
                     </div>
                     <div>
@@ -836,7 +837,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                         onChange={e => setRegTrailer3Plate(formatPlate(e.target.value))}
                         placeholder="Opcional"
                         maxLength={8}
-                        className="w-full px-2.5 py-2 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs font-mono uppercase placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all"
+                        className="w-full px-2.5 py-2 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs font-mono uppercase placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF4D00] transition-all"
                       />
                     </div>
                   </div>
@@ -855,7 +856,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                           value={regPassword}
                           onChange={e => setRegPassword(e.target.value)}
                           placeholder="Mínimo 4 dígitos"
-                          className="w-full px-3 py-2.5 pr-9 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all"
+                          className="w-full px-3 py-2.5 pr-9 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF4D00] transition-all"
                         />
                         <button
                           type="button"
@@ -879,7 +880,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                           value={regConfirmPassword}
                           onChange={e => setRegConfirmPassword(e.target.value)}
                           placeholder="Repita a senha"
-                          className="w-full px-3 py-2.5 pr-9 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all"
+                          className="w-full px-3 py-2.5 pr-9 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-xs placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF4D00] transition-all"
                         />
                         <button
                           type="button"
@@ -909,7 +910,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="w-full py-3.5 px-4 rounded-xl font-black text-sm text-white bg-gradient-to-r from-blue-600 via-primary to-sky-500 hover:from-blue-500 hover:to-sky-400 shadow-lg shadow-blue-900/40 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                      className="w-full py-3.5 px-4 rounded-xl font-black text-sm text-white bg-gradient-to-r from-[#C41C00] via-primary to-[#FF4D00] hover:from-[#EC2907] hover:to-[#FF6A00] shadow-lg shadow-[#EC2907]/35 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                     >
                       {isLoading ? (
                         <span>CADASTRANDO MOTORISTA...</span>
@@ -946,8 +947,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                             disabled={isLoading}
                             value={email}
                             onChange={e => setEmail(e.target.value)}
-                            placeholder="seu.email@transcunhaoficial.com.br, usuário ou CPF"
-                            className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                            placeholder="seu.email@triadeoficial.com.br, usuário ou CPF"
+                            className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF4D00] focus:border-transparent transition-all"
                           />
                         </div>
                       </div>
@@ -970,7 +971,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                             placeholder="Digite sua senha de acesso"
-                            className="w-full pl-10 pr-10 py-3 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                            className="w-full pl-10 pr-10 py-3 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF4D00] focus:border-transparent transition-all"
                           />
                           <button
                             type="button"
@@ -1003,7 +1004,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                             onChange={handleCpfChange}
                             maxLength={14}
                             placeholder="000.000.000-00"
-                            className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-sm font-mono placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all"
+                            className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-sm font-mono placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF4D00] focus:border-transparent transition-all"
                           />
                         </div>
                       </div>
@@ -1023,7 +1024,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Senha (Opcional no 1º acesso)"
-                            className="w-full pl-10 pr-10 py-3 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all"
+                            className="w-full pl-10 pr-10 py-3 rounded-xl bg-slate-950/80 border border-slate-700/80 text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FF4D00] focus:border-transparent transition-all"
                           />
                           <button
                             type="button"
@@ -1043,7 +1044,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                       <button
                         type="button"
                         onClick={() => { setIsRegisteringDriver(true); setError(''); }}
-                        className="w-full py-2.5 px-3 rounded-xl border border-dashed border-sky-500/50 bg-sky-500/5 hover:bg-sky-500/10 text-sky-400 font-bold text-xs flex items-center justify-center gap-1.5 transition-all"
+                        className="w-full py-2.5 px-3 rounded-xl border border-dashed border-[#FF4D00]/50 bg-[#FF4D00]/5 hover:bg-[#FF4D00]/15 text-orange-400 font-bold text-xs flex items-center justify-center gap-1.5 transition-all"
                       >
                         <UserPlus className="w-4 h-4" />
                         <span>Não é cadastrado? Criar conta de motorista</span>
@@ -1062,7 +1063,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="w-full py-3.5 px-4 rounded-xl font-extrabold text-sm sm:text-base text-white bg-gradient-to-r from-blue-600 via-primary to-blue-700 hover:from-blue-500 hover:to-blue-600 shadow-lg shadow-blue-900/50 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 disabled:opacity-50 tracking-wide uppercase"
+                      className="w-full py-3.5 px-4 rounded-xl font-extrabold text-sm sm:text-base text-white bg-gradient-to-r from-[#C41C00] via-primary to-[#FF4D00] hover:from-[#EC2907] hover:to-[#FF6A00] shadow-lg shadow-[#EC2907]/40 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 disabled:opacity-50 tracking-wide uppercase"
                     >
                       {isLoading ? (
                         <span>PROCESSANDO...</span>
@@ -1081,7 +1082,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
               <div className="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between gap-3 text-xs text-slate-400">
                 <button
                   type="button"
-                  onClick={() => alert("Para obter suporte ou recuperar credenciais corporativas, contate a administração pelo ramal interno ou envie um e-mail para suporte@transcunhaoficial.com.br.")}
+                  onClick={() => alert("Para obter suporte ou recuperar credenciais corporativas, contate a administração pelo ramal interno ou envie um e-mail para suporte@triadeoficial.com.br.")}
                   className="hover:text-slate-200 transition-colors flex items-center gap-1.5"
                 >
                   <HelpCircle className="w-3.5 h-3.5 text-slate-500" />
@@ -1091,14 +1092,14 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                 <button
                   type="button"
                   onClick={handlePwaInstall}
-                  className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-sky-500/20 via-blue-600/20 to-indigo-600/25 hover:from-sky-500/30 hover:via-blue-600/30 hover:to-indigo-600/35 border border-sky-400/40 text-sky-300 hover:text-white font-bold text-xs transition-all shadow-md shadow-sky-950/60 group"
-                  title="Baixar e instalar o aplicativo TransCunha"
+                  className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#EC2907]/20 via-[#FF4D00]/20 to-amber-500/20 hover:from-[#EC2907]/35 hover:via-[#FF4D00]/30 hover:to-amber-500/30 border border-[#FF4D00]/45 text-orange-300 hover:text-white font-bold text-xs transition-all shadow-md shadow-orange-950/50 group"
+                  title="Baixar e instalar o aplicativo Tríade"
                 >
-                  <Download className="w-3.5 h-3.5 text-sky-400 group-hover:translate-y-0.5 transition-transform" />
+                  <Download className="w-3.5 h-3.5 text-orange-400 group-hover:translate-y-0.5 transition-transform" />
                   <span>Baixar App</span>
                   <span className="flex h-2 w-2 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-400"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF4D00] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF4D00]"></span>
                   </span>
                 </button>
               </div>
@@ -1107,20 +1108,20 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
           </div>
 
           {/* ========================================================= */}
-          {/* RIGHT HERO SECTION: TransCunha Presentation & Features    */}
+          {/* RIGHT HERO SECTION: Tríade Presentation & Features    */}
           {/* ========================================================= */}
           <div className="lg:col-span-7 flex flex-col space-y-6 lg:space-y-8 text-left">
 
             {/* Tag Pill */}
-            <div className="inline-flex items-center gap-2 self-start px-3 py-1.5 rounded-full bg-blue-950/60 border border-blue-500/30 text-sky-400 text-xs font-bold tracking-wide shadow-sm">
-              <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+            <div className="inline-flex items-center gap-2 self-start px-3 py-1.5 rounded-full bg-[#EC2907]/15 border border-[#FF4D00]/35 text-orange-300 text-xs font-bold tracking-wide shadow-sm">
+              <Sparkles className="w-3.5 h-3.5 text-orange-400" />
               <span>LOGÍSTICA INTELIGENTE & GESTÃO DE CARGAS</span>
             </div>
 
             {/* Main Headline */}
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15]">
               Eficiência, controle e pontualidade{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-sky-300 to-blue-400">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6A00] via-[#EC2907] to-amber-300">
                 na estrada.
               </span>
             </h1>
@@ -1135,8 +1136,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
 
               {/* Card 1: Operações ao Vivo */}
               <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 hover:border-slate-700 transition-all flex items-start gap-3.5 backdrop-blur-md group hover:-translate-y-0.5 shadow-sm">
-                <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 group-hover:bg-blue-500/20 transition-colors">
-                  <Activity className="w-5 h-5 text-sky-400" />
+                <div className="w-10 h-10 rounded-xl bg-[#EC2907]/15 border border-[#FF4D00]/25 flex items-center justify-center shrink-0 group-hover:bg-[#EC2907]/25 transition-colors">
+                  <Activity className="w-5 h-5 text-orange-400" />
                 </div>
                 <div>
                   <h2 className="text-sm font-bold text-white mb-0.5">Operações ao Vivo</h2>
@@ -1169,7 +1170,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
               {/* Card 4: App para Celular / Motoristas (Super Destacado) */}
               <div
                 onClick={handlePwaInstall}
-                className="relative p-4 rounded-2xl bg-gradient-to-br from-indigo-950/80 via-slate-900/90 to-purple-950/60 border-2 border-indigo-500/50 hover:border-indigo-400 transition-all flex flex-col justify-between gap-3 backdrop-blur-md group hover:-translate-y-1 shadow-lg shadow-indigo-950/50 cursor-pointer overflow-hidden"
+                className="relative p-4 rounded-2xl bg-gradient-to-br from-[#011B35] via-[#0A1E38] to-[#290D07]/90 border-2 border-[#FF4D00]/50 hover:border-orange-400 transition-all flex flex-col justify-between gap-3 backdrop-blur-md group hover:-translate-y-1 shadow-lg shadow-orange-950/40 cursor-pointer overflow-hidden"
               >
                 {/* Glow Effect */}
                 <div className="absolute -top-10 -right-10 w-28 h-28 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none group-hover:bg-indigo-500/30 transition-all"></div>
@@ -1204,7 +1205,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
 
             </div>
 
-            {/* TransCunha Pillars / Lema */}
+            {/* Tríade Pillars / Lema */}
             <div className="pt-2 flex flex-wrap items-center gap-6 sm:gap-8 text-xs font-bold tracking-wider uppercase text-slate-400">
               <div className="flex items-center gap-2 text-slate-300">
                 <div className="w-4 h-4 rounded-full bg-orange-500/20 border border-orange-500/40 flex items-center justify-center">
@@ -1253,7 +1254,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                     App Oficial
                   </div>
                   <h3 className="text-lg sm:text-xl font-black text-white leading-tight">
-                    Baixar App TransCunha
+                    Baixar App Tríade
                   </h3>
                 </div>
               </div>
@@ -1349,9 +1350,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
       )}
 
       {/* Footer Bottom Bar */}
-      <div className="relative z-10 w-full border-t border-slate-800/80 bg-[#060a14]/90 py-4 px-6 text-[11px] text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 max-w-7xl mx-auto">
+      <div className="relative z-10 w-full border-t border-slate-800/80 bg-[#030B17]/95 py-4 px-6 text-[11px] text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 max-w-7xl mx-auto">
         <div>
-          © 2026 TRANSCUNHA Logística. Todos os direitos reservados.
+          © 2026 TRÍADE Logística. Todos os direitos reservados.
         </div>
         <div className="font-mono text-slate-400">
           v2.5 • Alta Performance

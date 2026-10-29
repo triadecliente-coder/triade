@@ -1,15 +1,15 @@
 import { supabase } from '../supabase';
 import type { FiscalDocument, FiscalDocumentType, FiscalAlertLevel, FiscalDocumentAttachment } from '../types';
 
-export const STORAGE_DOCUMENTS_KEY = 'transcunha_fiscal_documents_v1';
-export const STORAGE_TYPES_KEY = 'transcunha_fiscal_document_types_v1';
-export const FISCAL_DOCUMENTS_CHANGED_EVENT = 'transcunha:fiscal_documents_changed';
+export const STORAGE_DOCUMENTS_KEY = 'triade_fiscal_documents_v1';
+export const STORAGE_TYPES_KEY = 'triade_fiscal_document_types_v1';
+export const FISCAL_DOCUMENTS_CHANGED_EVENT = 'triade:fiscal_documents_changed';
 export const SUPABASE_FISCAL_RECORD_ID = 889;
-export const FISCAL_REALTIME_CHANNEL = 'transcunha_fiscal_control';
+export const FISCAL_REALTIME_CHANNEL = 'triade_fiscal_control';
 
 // Canal local no mesmo navegador (entre diferentes abas)
 const localFiscalBroadcast = typeof window !== 'undefined' && 'BroadcastChannel' in window 
-  ? new BroadcastChannel('transcunha_fiscal_sync') 
+  ? new BroadcastChannel('triade_fiscal_sync') 
   : null;
 
 let fiscalChannelInstance: ReturnType<typeof supabase.channel> | null = null;
@@ -325,7 +325,7 @@ export function subscribeToFiscalControl(onUpdate: (payload?: any) => void): () 
   let localBc: BroadcastChannel | null = null;
   if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
     try {
-      localBc = new BroadcastChannel('transcunha_fiscal_sync');
+      localBc = new BroadcastChannel('triade_fiscal_sync');
       localBc.onmessage = (event) => {
         if (isMounted) {
           onUpdate(event.data);

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { resolveBrandLogo } from '../utils/brandLogo';
 import { 
   Download, Printer, Share2, Check, ChevronLeft, ChevronRight, 
   Maximize2, Minimize2, ArrowLeft, Phone, Mail, MapPin, ShieldCheck, CheckCircle2, 
@@ -31,7 +32,7 @@ export const CommercialPresentationPage: React.FC<CommercialPresentationPageProp
   const pdfStagingRef = useRef<HTMLDivElement>(null);
 
   const totalSlides = 7;
-  const logoSrc = companyLogo || '/logo.png';
+  const logoSrc = resolveBrandLogo(companyLogo, 'dark');
   const clientsLogoSrc = '/logos_clientes.png';
 
   const clientBrands = [
@@ -159,7 +160,7 @@ export const CommercialPresentationPage: React.FC<CommercialPresentationPageProp
         pdf.addImage(imgData, 'PNG', 0, 0, 297, 210, undefined, 'FAST');
       }
 
-      pdf.save('Apresentacao_Comercial_Transcunha_2026.pdf');
+      pdf.save('Apresentacao_Comercial_Triade_2026.pdf');
     } catch (error: any) {
       console.error('Erro na exportação do PDF:', error);
       setPdfError(error?.message || 'Falha ao compilar PDF.');
@@ -178,7 +179,7 @@ export const CommercialPresentationPage: React.FC<CommercialPresentationPageProp
   const renderHeader = (category: string, title: string) => (
     <div className="flex items-center justify-between border-b border-slate-700/80 pb-3 mb-4 shrink-0">
       <div className="flex items-center gap-4">
-        <img src={logoSrc} alt="Transcunha" className="h-10 w-auto object-contain filter drop-shadow" />
+        <img src={logoSrc} alt="Tríade" className="h-10 w-auto object-contain filter drop-shadow" />
         <div className="h-7 w-px bg-slate-700" />
         <div>
           <span className="text-xs font-bold uppercase tracking-widest text-sky-400 block leading-tight">
@@ -202,7 +203,7 @@ export const CommercialPresentationPage: React.FC<CommercialPresentationPageProp
             boxSizing: 'border-box'
           }}
         >
-          <span style={{ lineHeight: 1, display: 'inline-block' }}>transcunhaoficial.com.br</span>
+          <span style={{ lineHeight: 1, display: 'inline-block' }}>triadeoficial.com.br</span>
         </div>
       </div>
     </div>
@@ -212,7 +213,7 @@ export const CommercialPresentationPage: React.FC<CommercialPresentationPageProp
   const renderFooter = (pageNumber: number) => (
     <div className="flex items-center justify-between text-xs text-slate-400 border-t border-slate-700/80 pt-3 mt-4 shrink-0">
       <span className="font-semibold text-slate-300">
-        TC TRANSCUNHA TRANSPORTES E LOGÍSTICA • Soluções que movem o futuro
+        TRÍADE TRANSPORTES E LOGÍSTICA • Soluções que movem o futuro
       </span>
       <div 
         className="font-mono text-sky-400 font-bold bg-slate-900/90 rounded border border-slate-700 text-xs shadow-sm shrink-0"
@@ -293,7 +294,7 @@ export const CommercialPresentationPage: React.FC<CommercialPresentationPageProp
               <div className="p-6 rounded-3xl bg-slate-900/90 border border-blue-500/30 backdrop-blur-md shadow-2xl flex items-center justify-center shrink-0">
                 <img 
                   src={logoSrc} 
-                  alt="TC Transcunha Logo" 
+                  alt="Tríade Logo" 
                   className="h-36 w-auto object-contain filter drop-shadow-[0_8px_24px_rgba(0,82,204,0.6)]" 
                 />
               </div>
@@ -378,7 +379,7 @@ export const CommercialPresentationPage: React.FC<CommercialPresentationPageProp
                     Especialistas em Transporte Rodoviário de Cargas
                   </h3>
                   <p className="text-sm text-slate-200 leading-relaxed mb-3">
-                    A <strong className="text-white">Transcunha Transportes e Logística</strong> é uma empresa consolidada no modal rodoviário, estrategicamente posicionada próxima aos maiores polos de produção e processamento do agronegócio e da indústria brasileira.
+                    A <strong className="text-white">Tríade Transportes e Logística</strong> é uma empresa consolidada no modal rodoviário, estrategicamente posicionada próxima aos maiores polos de produção e processamento do agronegócio e da indústria brasileira.
                   </p>
                   <p className="text-sm text-slate-200 leading-relaxed">
                     Com mais de 15 anos de expertise fundadora, conectamos produtores, indústrias e portos com máxima eficiência, transparência fiscal e total garantia de pontualidade.
@@ -953,7 +954,7 @@ export const CommercialPresentationPage: React.FC<CommercialPresentationPageProp
         // SLIDE 6: CLIENTES E RELACIONAMENTO (Sophisticated Glassmorphic Transparent Showcase)
         return (
           <div className="w-full h-full flex flex-col justify-between p-10 bg-gradient-to-br from-[#081126] via-[#0d1836] to-[#091228] box-border">
-            {renderHeader("Parcerias Estratégicas", "Grandes Marcas que Confiam na Transcunha")}
+            {renderHeader("Parcerias Estratégicas", "Grandes Marcas que Confiam na Tríade")}
 
             <div className="flex-1 flex flex-col justify-between my-2">
               <p className="text-center text-sm text-slate-300 max-w-3xl mx-auto mb-3">
@@ -1057,7 +1058,7 @@ export const CommercialPresentationPage: React.FC<CommercialPresentationPageProp
                 <div 
                   onClick={() => window.open('/site', '_blank')}
                   className="p-4 rounded-xl bg-slate-900/90 border border-slate-700 hover:border-sky-500/60 hover:bg-slate-800/90 transition-all cursor-pointer group flex items-center justify-between shadow-lg"
-                  title="Clique para abrir o website oficial (transcunhaoficial.com.br)"
+                  title="Clique para abrir o website oficial (triadeoficial.com.br)"
                 >
                   <div className="flex items-center gap-3.5">
                     <div className="w-10 h-10 rounded-lg bg-blue-600/20 text-sky-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
@@ -1065,7 +1066,7 @@ export const CommercialPresentationPage: React.FC<CommercialPresentationPageProp
                     </div>
                     <div>
                       <span className="text-xs text-slate-400 uppercase font-bold tracking-wider">Portal Oficial</span>
-                      <p className="text-base font-bold text-white group-hover:text-sky-300 transition-colors">www.transcunhaoficial.com.br</p>
+                      <p className="text-base font-bold text-white group-hover:text-sky-300 transition-colors">www.triadeoficial.com.br</p>
                     </div>
                   </div>
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-600/20 text-sky-300 text-xs font-bold border border-blue-500/30 group-hover:bg-sky-500 group-hover:text-white transition-all">
@@ -1083,7 +1084,7 @@ export const CommercialPresentationPage: React.FC<CommercialPresentationPageProp
                     </div>
                     <div>
                       <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">E-mail Comercial</span>
-                      <p className="text-sm font-bold text-white">comercialtranscunha@gmail.com</p>
+                      <p className="text-sm font-bold text-white">comercialtriade@gmail.com</p>
                     </div>
                   </div>
                 </div>
@@ -1182,7 +1183,7 @@ export const CommercialPresentationPage: React.FC<CommercialPresentationPageProp
               <button 
                 onClick={onBackToApp}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold transition-all border border-slate-700 cursor-pointer"
-                title="Voltar ao Sistema Transcunha"
+                title="Voltar ao Sistema Tríade"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Voltar ao Sistema</span>
@@ -1192,7 +1193,7 @@ export const CommercialPresentationPage: React.FC<CommercialPresentationPageProp
             <div className="flex items-center gap-2.5">
               <img 
                 src={logoSrc} 
-                alt="Transcunha" 
+                alt="Tríade" 
                 className="h-8 md:h-9 w-auto object-contain filter drop-shadow-[0_2px_8px_rgba(0,82,204,0.4)]"
                 onError={(e) => {
                   (e.target as HTMLElement).style.display = 'none';
@@ -1208,7 +1209,7 @@ export const CommercialPresentationPage: React.FC<CommercialPresentationPageProp
                   </span>
                 </div>
                 <p className="text-[10px] text-slate-400 hidden md:block">
-                  Transcunha Transportes e Logística • Soluções que movem o futuro
+                  Tríade Transportes e Logística • Soluções que movem o futuro
                 </p>
               </div>
             </div>
@@ -1272,7 +1273,7 @@ export const CommercialPresentationPage: React.FC<CommercialPresentationPageProp
               target="_blank"
               rel="noopener noreferrer"
               className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 transition-all cursor-pointer"
-              title="Abrir o Website Oficial (transcunhaoficial.com.br)"
+              title="Abrir o Website Oficial (triadeoficial.com.br)"
             >
               <Globe className="w-3.5 h-3.5 text-emerald-400" />
               <span>Website Oficial</span>

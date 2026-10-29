@@ -1,7 +1,7 @@
 import { supabase } from '../supabase';
 import type { ExpedidorRecebedor, Cargo } from '../types';
 
-const STORAGE_KEY = 'transcunha_expedidores_recebedores';
+const STORAGE_KEY = 'triade_expedidores_recebedores';
 
 /**
  * Lê de forma síncrona os registros de Expedidor/Recebedor do localStorage.

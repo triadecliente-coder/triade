@@ -38,7 +38,7 @@ export interface StayRecord {
   date: string; // = created_at, para compatibilidade com o histórico
 }
 
-const STAY_CTE_STORAGE_KEY = 'transcunha_stay_cte_numbers';
+const STAY_CTE_STORAGE_KEY = 'triade_stay_cte_numbers';
 
 export function getStoredStayCteNumbers(): Record<string, string> {
   if (typeof window === 'undefined') return {};

@@ -101,7 +101,7 @@ export const FirstResultTab: React.FC<FirstResultTabProps> = ({
   };
 
   // Função para identificar a filial do embarque e agrupar nas 4 frentes do dashboard:
-  // "Ag GO" = Agência Goiás (Filial TRANSCUNHA-GOAIS / Catalão - GO / Operações do Maurício e Murilo)
+  // "Ag GO" = Agência Goiás (Filial TRÍADE-GOIÁS / Catalão - GO / Operações do Maurício e Murilo)
   // "Ag SP" = Agência do "RAFAEL PINHEIRO" + "RAFAEL TARANTELLI" / Filial SP
   // "Ag PR" = Agência Paraná / Cambará
   // "Matriz" = Demais operações / Sede
@@ -176,7 +176,7 @@ export const FirstResultTab: React.FC<FirstResultTabProps> = ({
         const bCity = (bObj.city || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const bState = (bObj.state || '').toLowerCase();
 
-        // Filial Goiás (TRANSCUNHA-GOAIS / Catalão - GO)
+        // Filial Goiás (TRÍADE-GOIÁS / Catalão - GO)
         if (
           bName.includes('go') ||
           bName.includes('goias') ||

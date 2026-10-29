@@ -46,7 +46,7 @@ export function cleanPlate(plate?: string): string {
 }
 
 /**
- * Mapeia o tipo de veículo do Transcunha para o enum aceito pelo SIGA GR:
+ * Mapeia o tipo de veículo do Tríade para o enum aceito pelo SIGA GR:
  * [ Baú, BI-Caçamba, BI-Trem, Container, LS, Rodotrem, Sider, Tanque, Truck, Vanderléia ]
  */
 export function mapVehicleTypeToSiga(vehicleType?: string): SigaVehicleType {
@@ -142,7 +142,7 @@ async function requestSiga(
   const targetHost = cfg.apiUrl || (cfg.environment === 'production' ? 'https://api.sigagr.com.br' : 'https://api.staging.sigagr.com.br');
   const method = options.method || 'GET';
 
-  // Usa o endpoint de proxy do Transcunha
+  // Usa o endpoint de proxy do Tríade
   const proxyUrl = '/api/siga-gr/proxy';
 
   const headers: Record<string, string> = {
@@ -439,7 +439,7 @@ export async function createSigaAnalysis(
     const analysisData: SigaAnalysisResponseData = response.data?.analysis || response.data;
     const processNumber = String(analysisData.process_number);
 
-    // Salva o registro inicial no histórico do Transcunha
+    // Salva o registro inicial no histórico do Tríade
     const record: SigaRequestRecord = {
       id: `siga_${processNumber}`,
       processNumber,
@@ -641,7 +641,7 @@ export async function simulateSigaStatus(
 }
 
 /**
- * Utilitário: Monta o input de criação automática a partir dos objetos do sistema Transcunha.
+ * Utilitário: Monta o input de criação automática a partir dos objetos do sistema Tríade.
  */
 export function buildSigaCreateInputFromContext(
   productName: SigaProduct,
@@ -653,7 +653,7 @@ export function buildSigaCreateInputFromContext(
 
   return {
     product_name: productName,
-    requester_email: requesterEmail || 'operacao@transcunha.com.br',
+    requester_email: requesterEmail || 'operacao@triade.com.br',
     driver_personal_document: formatCpf(driver?.cpf || ''),
     vehicle_type: vehicleType,
     truck_license_plate: cleanPlate(vehicle?.plate || ''),

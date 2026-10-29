@@ -1,5 +1,5 @@
 -- =====================================================================
--- MIGRAÇÃO TRANSCUNHA LOGÍSTICA - CANAL DE COMUNICAÇÃO WHATSAPP
+-- MIGRAÇÃO TRÍADE LOGÍSTICA - CANAL DE COMUNICAÇÃO WHATSAPP
 -- =====================================================================
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -99,14 +99,14 @@ BEGIN
     CREATE POLICY "wa_queue_all" ON public.whatsapp_messages_queue FOR ALL TO authenticated USING (true) WITH CHECK (true);
 END $$;
 
--- SEEDS INICIAIS DE TEMPLATES PADRÕES DA TRANSCUNHA
+-- SEEDS INICIAIS DE TEMPLATES PADRÕES DA TRÍADE
 INSERT INTO public.whatsapp_templates (name, trigger_event, description, body_text, available_tags, attachment_type, is_active)
 VALUES
 (
     'Aviso de Oferta / Nova Carga',
     'shipment.created',
     'Mensagem enviada a motoristas cadastrados quando uma nova oportunidade de frete na rota é aberta.',
-    '🚛 *Transcunha Logística - Oportunidade de Carga*\n\nOlá, *{{motorista_nome}}*! Temos uma nova carga disponível para você:\n\n📍 *Origem:* {{origem}}\n🎯 *Destino:* {{destino}}\n📦 *Mercadoria:* {{mercadoria}}\n⚖️ *Peso:* {{peso}}\n💰 *Valor do Frete:* R$ {{valor_frete}}\n\nInteressado? Responda a esta mensagem ou acesse nosso app para confirmar!',
+    '🚛 *Tríade Logística - Oportunidade de Carga*\n\nOlá, *{{motorista_nome}}*! Temos uma nova carga disponível para você:\n\n📍 *Origem:* {{origem}}\n🎯 *Destino:* {{destino}}\n📦 *Mercadoria:* {{mercadoria}}\n⚖️ *Peso:* {{peso}}\n💰 *Valor do Frete:* R$ {{valor_frete}}\n\nInteressado? Responda a esta mensagem ou acesse nosso app para confirmar!',
     '[{"tag": "{{motorista_nome}}", "label": "Nome do Motorista", "example": "Carlos Silva", "description": "Primeiro nome ou nome completo do motorista"}, {"tag": "{{origem}}", "label": "Origem", "example": "Santos - SP", "description": "Cidade e UF de coleta"}, {"tag": "{{destino}}", "label": "Destino", "example": "Curitiba - PR", "description": "Cidade e UF de entrega"}, {"tag": "{{mercadoria}}", "label": "Mercadoria", "example": "Soja a Granel", "description": "Tipo do produto transportado"}, {"tag": "{{peso}}", "label": "Peso / Volume", "example": "32.000 kg", "description": "Peso total da carga"}, {"tag": "{{valor_frete}}", "label": "Valor do Frete", "example": "6.800,00", "description": "Valor líquido do frete"}]'::jsonb,
     'none',
     true
@@ -115,7 +115,7 @@ VALUES
     'Ordem de Carregamento & Documentos',
     'shipment.loading_order',
     'Disparo automático ao emitir a Ordem de Carregamento com o PDF anexo para o motorista.',
-    '📋 *Ordem de Carregamento Transcunha*\n\nOlá, *{{motorista_nome}}*! Segue em anexo a sua Ordem de Carregamento referente ao embarque *#{{numero_carga}}*.\n\n📍 *Local de Coleta:* {{local_coleta}}\n📅 *Data Programada:* {{data_coleta}}\n📞 *Contato no Local:* {{contato_coleta}}\n\nPor favor, apresente este documento na portaria ao chegar.',
+    '📋 *Ordem de Carregamento Tríade*\n\nOlá, *{{motorista_nome}}*! Segue em anexo a sua Ordem de Carregamento referente ao embarque *#{{numero_carga}}*.\n\n📍 *Local de Coleta:* {{local_coleta}}\n📅 *Data Programada:* {{data_coleta}}\n📞 *Contato no Local:* {{contato_coleta}}\n\nPor favor, apresente este documento na portaria ao chegar.',
     '[{"tag": "{{motorista_nome}}", "label": "Nome do Motorista", "example": "Carlos Silva", "description": "Nome do motorista"}, {"tag": "{{numero_carga}}", "label": "Nº Carga / Embarque", "example": "TC-8492", "description": "Identificador da carga"}, {"tag": "{{local_coleta}}", "label": "Ponto de Coleta", "example": "Terminal Graneleiro Armazém 4", "description": "Endereço ou empresa de carregamento"}, {"tag": "{{data_coleta}}", "label": "Data da Coleta", "example": "20/09/2026", "description": "Data prevista"}, {"tag": "{{contato_coleta}}", "label": "Contato Coleta", "example": "(11) 98888-7777 - Sr. Marcos", "description": "Responsável na expedição"}]'::jsonb,
     'dynamic_contract',
     true
@@ -133,7 +133,7 @@ VALUES
     'Emissão de CT-e e DACTE em PDF',
     'shipment.cte_emitted',
     'Envio do CT-e autorizado diretamente para o motorista e embarcador.',
-    '📄 *CT-e Autorizado - Transcunha Logística*\n\nInformamos que o Conhecimento de Transporte Eletrônico (*CT-e nº {{numero_cte}}*) foi autorizado pela SEFAZ.\n\n🚛 *Placa:* {{placa_veiculo}}\n📦 *Carga:* {{numero_carga}}\n📄 O DACTE em formato PDF está anexado nesta mensagem para fiscalização rodoviária.',
+    '📄 *CT-e Autorizado - Tríade Logística*\n\nInformamos que o Conhecimento de Transporte Eletrônico (*CT-e nº {{numero_cte}}*) foi autorizado pela SEFAZ.\n\n🚛 *Placa:* {{placa_veiculo}}\n📦 *Carga:* {{numero_carga}}\n📄 O DACTE em formato PDF está anexado nesta mensagem para fiscalização rodoviária.',
     '[{"tag": "{{numero_cte}}", "label": "Nº do CT-e", "example": "10492", "description": "Número fiscal do CT-e"}, {"tag": "{{placa_veiculo}}", "label": "Placa do Veículo", "example": "BRA2E19", "description": "Placa do cavalo mecânico"}, {"tag": "{{numero_carga}}", "label": "Nº Embarque", "example": "TC-8492", "description": "Código da carga"}]'::jsonb,
     'dynamic_cte',
     true
@@ -142,7 +142,7 @@ VALUES
     'Comprovante de Quitação do Saldo',
     'shipment.balance_paid',
     'Notificação de finalização do frete com envio do comprovante de quitação do saldo.',
-    '🎉 *Frete Concluído - Saldo Quitado*\n\nOlá, *{{motorista_nome}}*! O saldo final do seu frete (*Embarque #{{numero_carga}}*) foi creditado com sucesso.\n\n💰 *Valor do Saldo:* R$ {{valor_saldo}}\n📄 O comprovante de transferência segue em anexo.\n\nA equipe Transcunha agradece pela parceria em mais uma viagem!',
+    '🎉 *Frete Concluído - Saldo Quitado*\n\nOlá, *{{motorista_nome}}*! O saldo final do seu frete (*Embarque #{{numero_carga}}*) foi creditado com sucesso.\n\n💰 *Valor do Saldo:* R$ {{valor_saldo}}\n📄 O comprovante de transferência segue em anexo.\n\nA equipe Tríade agradece pela parceria em mais uma viagem!',
     '[{"tag": "{{motorista_nome}}", "label": "Nome do Motorista", "example": "Carlos Silva", "description": "Nome do motorista"}, {"tag": "{{numero_carga}}", "label": "Nº Embarque", "example": "TC-8492", "description": "Código da carga"}, {"tag": "{{valor_saldo}}", "label": "Valor do Saldo", "example": "1.850,00", "description": "Valor líquido do saldo final"}]'::jsonb,
     'dynamic_voucher',
     true

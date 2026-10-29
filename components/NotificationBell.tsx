@@ -74,7 +74,7 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [decisionOffer, setDecisionOffer] = useState<FreightOffer | null>(null);
   const [isAudioMuted, setIsAudioMuted] = useState<boolean>(() => {
-    return localStorage.getItem('transcunha_audio_muted') === 'true';
+    return localStorage.getItem('triade_audio_muted') === 'true';
   });
 
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -94,7 +94,7 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
   const toggleAudioMute = () => {
     const nextState = !isAudioMuted;
     setIsAudioMuted(nextState);
-    localStorage.setItem('transcunha_audio_muted', String(nextState));
+    localStorage.setItem('triade_audio_muted', String(nextState));
   };
 
   const cargoMap = useMemo(() => new Map(cargos.map(c => [c.id, c])), [cargos]);

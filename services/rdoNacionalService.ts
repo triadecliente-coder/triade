@@ -106,7 +106,7 @@ export async function submitRdoSolicitacao(
 
     // Monta o payload final conforme documentação oficial
     const requestBody: RdoSolicitacaoPayload = {
-      nomeDoCliente: payload.nomeDoCliente || config.clientName || 'TRANSCUNHA TRANSPORTES',
+      nomeDoCliente: payload.nomeDoCliente || config.clientName || 'TRÍADE TRANSPORTES',
       cpf: cleanCpf,
       nome: payload.nome.trim().toUpperCase(),
       nomeDaMae: payload.nomeDaMae?.trim() ? payload.nomeDaMae.trim().toUpperCase() : undefined,

@@ -724,7 +724,7 @@ const SupervisorReport: React.FC<CommercialReportProps> = ({
         doc.setFontSize(7);
         doc.setTextColor(148, 163, 184);
         doc.text(
-          `Transcunha Logística - Relatório de Agenciamento | Página ${data.pageNumber} de ${pageNumber}`,
+          `Tríade Logística - Relatório de Agenciamento | Página ${data.pageNumber} de ${pageNumber}`,
           pageWidth / 2,
           pageHeight - 6,
           { align: 'center' }

@@ -194,12 +194,12 @@ const TicketModal: React.FC<TicketModalProps> = ({
   
   // Visualização Grid vs Lista
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
-    return (localStorage.getItem('transcunha_ticket_view_mode') as ViewMode) || 'list';
+    return (localStorage.getItem('triade_ticket_view_mode') as ViewMode) || 'list';
   });
 
   const handleSetViewMode = (mode: ViewMode) => {
     setViewMode(mode);
-    localStorage.setItem('transcunha_ticket_view_mode', mode);
+    localStorage.setItem('triade_ticket_view_mode', mode);
   };
 
   // Filtros Avançados
@@ -252,9 +252,9 @@ const TicketModal: React.FC<TicketModalProps> = ({
       return () => clearTimeout(timer);
     };
 
-    window.addEventListener('transcunha:ticket_changed', handleTicketChanged);
+    window.addEventListener('triade:ticket_changed', handleTicketChanged);
     return () => {
-      window.removeEventListener('transcunha:ticket_changed', handleTicketChanged);
+      window.removeEventListener('triade:ticket_changed', handleTicketChanged);
     };
   }, [isOpen]);
 

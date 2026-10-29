@@ -587,7 +587,7 @@ const ReportsPage: React.FC<ReportsPageProps> = ({ shipments, embarcadores, carg
                     <MultiSelectDropdown label="Origem" options={originOptions} selectedValues={filterOrigin} onChange={setFilterOrigin} placeholder="Todas..." />
                     <MultiSelectDropdown label="Destino" options={destOptions} selectedValues={filterDest} onChange={setFilterDest} placeholder="Todos..." />
                     {!isCliente && !isAgenciadorEmbarque && (
-                      <MultiSelectDropdown label="Filial Transcunha" options={branchOptions} selectedValues={filterBranch} onChange={setFilterBranch} placeholder="Todas..." />
+                      <MultiSelectDropdown label="Filial Tríade" options={branchOptions} selectedValues={filterBranch} onChange={setFilterBranch} placeholder="Todas..." />
                     )}
                 </div>
                 {activeFiltersCount > 0 && (

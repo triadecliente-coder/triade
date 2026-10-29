@@ -1,7 +1,7 @@
 import * as XLSX from 'xlsx';
 import { calculateTacTaxDeductions } from './freightCalculation';
 
-export interface TranscunhaSpreadsheetRow {
+export interface TriadeSpreadsheetRow {
   id: string;
   orderIndex?: number;
   // 0. Embarques do Sistema (Primeira Coluna no Canto Esquerdo)
@@ -99,7 +99,7 @@ export interface TranscunhaSpreadsheetRow {
 export interface ParseResult {
   sheetNames: string[];
   activeSheet: string;
-  rows: TranscunhaSpreadsheetRow[];
+  rows: TriadeSpreadsheetRow[];
   totalRows: number;
 }
 
@@ -294,7 +294,7 @@ export function formatCteAndHours(
 /**
  * Lê e analisa a planilha do Excel (XLSX, XLSM ou CSV)
  */
-export function parseTranscunhaWorkbook(buffer: ArrayBuffer | Uint8Array, sheetNamePreference?: string): ParseResult {
+export function parseTriadeWorkbook(buffer: ArrayBuffer | Uint8Array, sheetNamePreference?: string): ParseResult {
   const workbook = XLSX.read(buffer, {
     type: 'array',
     cellDates: true,
@@ -441,7 +441,7 @@ export function parseTranscunhaWorkbook(buffer: ArrayBuffer | Uint8Array, sheetN
     valorQuebraCiot: getColIdx(['VALOR TOTAL', 'VAL-CIO', 'VAL-CIOT', 'VALOR CIOT', 'VALOR QUEBRA', 'TOTAL VALOR']),
   };
 
-  const rows: TranscunhaSpreadsheetRow[] = [];
+  const rows: TriadeSpreadsheetRow[] = [];
 
   for (let r = headerRowIndex + 1; r < data.length; r++) {
     const row = data[r];
@@ -574,9 +574,9 @@ export function parseTranscunhaWorkbook(buffer: ArrayBuffer | Uint8Array, sheetN
 }
 
 /**
- * Registros reais capturados diretamente da planilha operacional da Transcunha
+ * Registros reais capturados diretamente da planilha operacional da Tríade
  */
-export const SAMPLE_TRANSCUNHA_SHEET_ROWS: TranscunhaSpreadsheetRow[] = [
+export const SAMPLE_TRIADE_SHEET_ROWS: TriadeSpreadsheetRow[] = [
   {
     id: 'row_1874',
     cteHoras: '1822 - 01/09/26 - 08:00',
@@ -600,7 +600,7 @@ export const SAMPLE_TRANSCUNHA_SHEET_ROWS: TranscunhaSpreadsheetRow[] = [
     saldoOriginalPedido: '150.00',
     produto: 'AÇUCAR 50KG',
     tipoCarga: 'SACOS',
-    transportadora: 'TRANSCUNHA',
+    transportadora: 'TRÍADE',
     cadastro: 'LIBERADO',
     matrizFilial: 'MATRIZ',
     liberacao: 'LIB-9941',
@@ -663,7 +663,7 @@ export const SAMPLE_TRANSCUNHA_SHEET_ROWS: TranscunhaSpreadsheetRow[] = [
     saldoOriginalPedido: '240.00',
     produto: 'FOSFATO',
     tipoCarga: 'GRANEL',
-    transportadora: 'TRANSCUNHA',
+    transportadora: 'TRÍADE',
     cadastro: 'LIBERADO',
     matrizFilial: 'MATRIZ',
     liberacao: 'LIB-8841',
@@ -726,7 +726,7 @@ export const SAMPLE_TRANSCUNHA_SHEET_ROWS: TranscunhaSpreadsheetRow[] = [
     saldoOriginalPedido: '190.00',
     produto: 'FOSFATO',
     tipoCarga: 'GRANEL',
-    transportadora: 'TRANSCUNHA',
+    transportadora: 'TRÍADE',
     cadastro: 'LIBERADO',
     matrizFilial: 'MATRIZ',
     liberacao: 'LIB-8842',
@@ -789,7 +789,7 @@ export const SAMPLE_TRANSCUNHA_SHEET_ROWS: TranscunhaSpreadsheetRow[] = [
     saldoOriginalPedido: '420.00',
     produto: 'AÇUCAR 50KG',
     tipoCarga: 'SACOS',
-    transportadora: 'TRANSCUNHA',
+    transportadora: 'TRÍADE',
     cadastro: 'LIBERADO',
     matrizFilial: 'MATRIZ',
     liberacao: 'LIB-7712',
@@ -894,14 +894,14 @@ export const SAMPLE_TRANSCUNHA_SHEET_ROWS: TranscunhaSpreadsheetRow[] = [
   }
 ];
 
-export const STORAGE_KEY_SPREADSHEET_ROWS = 'transcunha_control_spreadsheet_rows_v2';
-export const STORAGE_KEY_SPREADSHEET_SHEETS = 'transcunha_control_spreadsheet_sheets_v2';
-export const STORAGE_KEY_ACTIVE_SHEET = 'transcunha_control_spreadsheet_active_sheet_v2';
+export const STORAGE_KEY_SPREADSHEET_ROWS = 'triade_control_spreadsheet_rows_v2';
+export const STORAGE_KEY_SPREADSHEET_SHEETS = 'triade_control_spreadsheet_sheets_v2';
+export const STORAGE_KEY_ACTIVE_SHEET = 'triade_control_spreadsheet_active_sheet_v2';
 
 /**
  * Recalcula campos dependentes seguindo fórmulas e funções idênticas ao Excel
  */
-export function recalculateSpreadsheetRow(row: TranscunhaSpreadsheetRow): TranscunhaSpreadsheetRow {
+export function recalculateSpreadsheetRow(row: TriadeSpreadsheetRow): TriadeSpreadsheetRow {
   const updated = { ...row };
 
   // 1. Frete Bruto Empresa = Frete Empresa Unitário * Peso
@@ -964,7 +964,7 @@ export function recalculateSpreadsheetRow(row: TranscunhaSpreadsheetRow): Transc
 /**
  * Cria uma nova linha vazia com formatação padrão pronta para edição
  */
-export function createNewEmptyRow(index: number = 1, idEmbarqueSistema?: string): TranscunhaSpreadsheetRow {
+export function createNewEmptyRow(index: number = 1, idEmbarqueSistema?: string): TriadeSpreadsheetRow {
   const today = new Date().toLocaleDateString('pt-BR');
   const nowTime = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
   const randomCte = String(2000 + Math.floor(Math.random() * 8000));
@@ -988,13 +988,13 @@ export function createNewEmptyRow(index: number = 1, idEmbarqueSistema?: string)
     proprietario: '',
     anttContratoPix: '',
     telefone: '',
-    solicitante: 'Controladoria Transcunha',
+    solicitante: 'Controladoria Tríade',
     carregarEmpresa: '',
     numeroPedido: `PED-${randomCte}`,
     saldoOriginalPedido: '0.00',
     produto: 'SOJA EM GRÃOS',
     tipoCarga: 'GRANEL',
-    transportadora: 'TRANSCUNHA',
+    transportadora: 'TRÍADE',
     cadastro: 'LIBERADO',
     matrizFilial: 'MATRIZ',
     liberacao: 'LIB-OK',
@@ -1040,15 +1040,15 @@ import {
   saveSpreadsheetRowsToIndexedDB,
   clearSpreadsheetStorage,
   getSpreadsheetRowsMemoryCache
-} from './transcunhaSpreadsheetStorage';
+} from './triadeSpreadsheetStorage';
 
 /**
  * Carrega as linhas persistidas (verificando cache em memória e localStorage como fallback síncrono)
  */
-export function loadPersistedSpreadsheetRows(): TranscunhaSpreadsheetRow[] | null {
+export function loadPersistedSpreadsheetRows(): TriadeSpreadsheetRow[] | null {
   if (typeof window !== 'undefined') {
     try {
-      if (localStorage.getItem('transcunha_spreadsheet_user_deleted') === 'true') {
+      if (localStorage.getItem('triade_spreadsheet_user_deleted') === 'true') {
         return null;
       }
     } catch {}
@@ -1061,7 +1061,7 @@ export function loadPersistedSpreadsheetRows(): TranscunhaSpreadsheetRow[] | nul
 /**
  * Salva as linhas com persistência permanente no IndexedDB (sem limite de 5MB)
  */
-export function savePersistedSpreadsheetRows(rows: TranscunhaSpreadsheetRow[], sheetName?: string): boolean {
+export function savePersistedSpreadsheetRows(rows: TriadeSpreadsheetRow[], sheetName?: string): boolean {
   if (typeof window === 'undefined') return false;
   // Dispara salvamento permanente assíncrono no IndexedDB
   saveSpreadsheetRowsToIndexedDB(rows, sheetName).catch(err => {

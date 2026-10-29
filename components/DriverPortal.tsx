@@ -3,6 +3,7 @@ import type { User, Cargo, Shipment, Product, Driver, Vehicle } from '../types';
 import { CargoStatus, ShipmentStatus } from '../types';
 import { supabase } from '../supabase';
 import { upsertDriver } from '../lib/db';
+import { resolveBrandLogo } from '../utils/brandLogo';
 import { saveDriverLastLocationToDb } from '../hooks/useDriverLocations';
 import { 
   Package, 
@@ -416,19 +417,19 @@ const DriverPortal: React.FC<DriverPortalProps> = ({
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#090D16] text-slate-100 font-sans pb-24">
+    <div className="flex flex-col min-h-screen bg-[#041020] text-slate-100 font-sans pb-24">
       
       {/* TOP HEADER */}
-      <header className="sticky top-0 z-30 bg-[#0E1526]/95 backdrop-blur border-b border-slate-800/80 px-4 py-3 flex items-center justify-between shadow-lg">
+      <header className="sticky top-0 z-30 bg-[#06162B]/95 backdrop-blur border-b border-slate-800/80 px-4 py-3 flex items-center justify-between shadow-lg">
         <div className="flex items-center gap-3">
-          {companyLogo ? (
-            <img src={companyLogo} alt="Transcunha" className="h-8 max-w-[130px] object-contain" />
+          {true ? (
+            <img src={resolveBrandLogo(companyLogo, 'dark')} alt="Tríade" className="h-9 max-w-[140px] object-contain" />
           ) : (
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center font-black text-white text-lg shadow-md">
                 T
               </div>
-              <span className="font-bold tracking-tight text-white text-lg">TRANSCUNHA</span>
+              <span className="font-bold tracking-tight text-white text-lg">TRÍADE</span>
             </div>
           )}
 

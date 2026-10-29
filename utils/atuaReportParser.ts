@@ -53,7 +53,7 @@ export interface AtuaCteRecord {
   rawLine?: string;
 }
 
-export interface TranscunhaReportRecord {
+export interface TriadeReportRecord {
   shipmentId: string;
   cteNumber: string;
   date: string;
@@ -70,9 +70,9 @@ export interface TranscunhaReportRecord {
 }
 
 export interface AtuaReportParseResult {
-  detectedFileType: 'ATUA_CTRC' | 'TRANSCUNHA_PROFIT' | 'UNKNOWN';
+  detectedFileType: 'ATUA_CTRC' | 'TRIADE_PROFIT' | 'UNKNOWN';
   records: AtuaCteRecord[];
-  transcunhaRecords?: TranscunhaReportRecord[];
+  triadeRecords?: TriadeReportRecord[];
   periodText?: string;
   startDate?: string;
   endDate?: string;
@@ -147,7 +147,7 @@ export const parseAtuaTextLine = (line: string): AtuaCteRecord | null => {
   if (
     trimmed.startsWith('Relatório') ||
     trimmed.startsWith('Ambiente') ||
-    trimmed.startsWith('TRANSCUNHA') ||
+    trimmed.startsWith('TRÍADE') || trimmed.startsWith('TRIADE') ||
     trimmed.startsWith('Usuário') ||
     trimmed.startsWith('Número') ||
     trimmed.startsWith('Desenvolvido') ||
@@ -253,7 +253,7 @@ export const parseAtuaTextLine = (line: string): AtuaCteRecord | null => {
     isCanceled: cleaned.includes('CANCELADO') || cleaned.includes('Canc.'),
     emissionDate,
     emissionTime,
-    branch: 'Transcunha',
+    branch: 'Tríade',
     plate,
     weight,
     companyFreight,
@@ -284,9 +284,9 @@ export const parseAtuaTextReport = (fullText: string): AtuaReportParseResult => 
   let endDate = '';
 
   // Detecção de tipo de arquivo
-  const isTranscunha = fullText.includes('Relatório: Lucro Real da Operação de Embarque') || fullText.includes('Lucro Real da Operação');
-  if (isTranscunha) {
-    return parseTranscunhaTextReport(fullText);
+  const isTriade = fullText.includes('Relatório: Lucro Real da Operação de Embarque') || fullText.includes('Lucro Real da Operação');
+  if (isTriade) {
+    return parseTriadeTextReport(fullText);
   }
 
   // Tenta extrair período do cabeçalho
@@ -327,11 +327,11 @@ export const parseAtuaTextReport = (fullText: string): AtuaReportParseResult => 
 };
 
 /**
- * Parser para o Relatório de Lucro Real da Transcunha
+ * Parser para o Relatório de Lucro Real da Tríade
  */
-export const parseTranscunhaTextReport = (fullText: string): AtuaReportParseResult => {
+export const parseTriadeTextReport = (fullText: string): AtuaReportParseResult => {
   const lines = fullText.split('\n');
-  const transcunhaRecords: TranscunhaReportRecord[] = [];
+  const triadeRecords: TriadeReportRecord[] = [];
   const atuaConvertedRecords: AtuaCteRecord[] = [];
   const errors: string[] = [];
 
@@ -377,7 +377,7 @@ export const parseTranscunhaTextReport = (fullText: string): AtuaReportParseResu
       const federalTax = nums[5] ?? 0;
       const netProfit = nums[6] ?? 0;
 
-      transcunhaRecords.push({
+      triadeRecords.push({
         shipmentId,
         cteNumber,
         date,
@@ -399,7 +399,7 @@ export const parseTranscunhaTextReport = (fullText: string): AtuaReportParseResu
         docType: 'CT',
         isCanceled: false,
         emissionDate: date,
-        branch: 'Transcunha',
+        branch: 'Tríade',
         plate,
         weight,
         companyFreight,
@@ -416,9 +416,9 @@ export const parseTranscunhaTextReport = (fullText: string): AtuaReportParseResu
   }
 
   return {
-    detectedFileType: 'TRANSCUNHA_PROFIT',
+    detectedFileType: 'TRIADE_PROFIT',
     records: atuaConvertedRecords,
-    transcunhaRecords,
+    triadeRecords,
     periodText,
     startDate,
     endDate,
@@ -557,7 +557,7 @@ const extractAtuaFromCoordinates = (allPagesItems: any[][]): AtuaCteRecord[] => 
         isCanceled,
         cancelDate,
         emissionDate,
-        branch: 'Transcunha',
+        branch: 'Tríade',
         plate,
         weight,
         companyFreight,
@@ -582,7 +582,7 @@ const extractAtuaFromCoordinates = (allPagesItems: any[][]): AtuaCteRecord[] => 
 };
 
 /**
- * Lê e analisa arquivo PDF do Atua TMS ou Transcunha diretamente no navegador
+ * Lê e analisa arquivo PDF do Atua TMS ou Tríade diretamente no navegador
  */
 export const parseAtuaPdfFile = async (file: File): Promise<AtuaReportParseResult> => {
   setupPdfWorker();
@@ -650,9 +650,9 @@ export const parseAtuaPdfFile = async (file: File): Promise<AtuaReportParseResul
     }
   }
 
-  // Se o documento é o "Relatório: Lucro Real da Operação de Embarque" da Transcunha
+  // Se o documento é o "Relatório: Lucro Real da Operação de Embarque" da Tríade
   if (fullText.includes('Relatório: Lucro Real da Operação de Embarque') || fullText.includes('Lucro Real da Operação')) {
-    return parseTranscunhaTextReport(fullText);
+    return parseTriadeTextReport(fullText);
   }
 
   // Tenta primeiro a extração geométrica por coordenadas (100% de acurácia no CTRC do Atua)
@@ -691,7 +691,7 @@ export const parseAtuaPdfFile = async (file: File): Promise<AtuaReportParseResul
 };
 
 /**
- * Lê e analisa arquivo Excel (.xlsx, .xls) ou CSV exportado do Atua TMS ou Transcunha
+ * Lê e analisa arquivo Excel (.xlsx, .xls) ou CSV exportado do Atua TMS ou Tríade
  */
 export const parseAtuaExcelFile = async (file: File): Promise<AtuaReportParseResult> => {
   const arrayBuffer = await file.arrayBuffer();
@@ -706,7 +706,7 @@ export const parseAtuaExcelFile = async (file: File): Promise<AtuaReportParseRes
   // Se o Excel for texto livre ou formatado
   const asText = rawRows.map(r => r.join(' ')).join('\n');
   if (asText.includes('Relatório: Lucro Real da Operação de Embarque') || asText.includes('Lucro Real da Operação')) {
-    return parseTranscunhaTextReport(asText);
+    return parseTriadeTextReport(asText);
   }
 
   let headerIndex = -1;
@@ -782,7 +782,7 @@ export const parseAtuaExcelFile = async (file: File): Promise<AtuaReportParseRes
       docType: 'CT',
       isCanceled: false,
       emissionDate,
-      branch: 'Transcunha',
+      branch: 'Tríade',
       plate,
       weight,
       companyFreight,

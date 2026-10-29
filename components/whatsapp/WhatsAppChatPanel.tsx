@@ -866,13 +866,13 @@ export const WhatsAppChatPanel: React.FC<WhatsAppChatPanelProps> = ({
       setLoadingChats(false);
     };
 
-    window.addEventListener('transcunha:whatsapp_history_synced', handleExternalSync);
-    window.addEventListener('transcunha:whatsapp_disconnected', handleDisconnected);
+    window.addEventListener('triade:whatsapp_history_synced', handleExternalSync);
+    window.addEventListener('triade:whatsapp_disconnected', handleDisconnected);
 
     return () => {
       unsubscribeRealtime();
-      window.removeEventListener('transcunha:whatsapp_history_synced', handleExternalSync);
-      window.removeEventListener('transcunha:whatsapp_disconnected', handleDisconnected);
+      window.removeEventListener('triade:whatsapp_history_synced', handleExternalSync);
+      window.removeEventListener('triade:whatsapp_disconnected', handleDisconnected);
     };
   }, []);
 

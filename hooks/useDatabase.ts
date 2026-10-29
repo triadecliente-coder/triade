@@ -8,6 +8,7 @@ import type {
 } from '../types';
 import { INITIAL_PERMISSIONS } from '../auth';
 import { DEFAULT_RISK_QUERY_OPTIONS, DEFAULT_LOADING_ORDER_MODELS } from '../types';
+import { DEFAULT_LOGO_LIGHT } from '../utils/brandLogo';
 import { 
   fetchClients, fetchOwners, fetchDrivers, fetchVehicles, fetchProducts,
   fetchCargos, fetchShipments, fetchShipmentById, fetchUsers, fetchTickets, fetchProfilePermissions,
@@ -99,14 +100,14 @@ export function useDatabase(currentUser: User | null) {
   const [branches, setBranches] = useState<Branch[]>([]);
   const [riskQueryOptions, setRiskQueryOptions] = useState<RiskQueryOption[]>(() => {
     try {
-      const saved = localStorage.getItem('transcunha_risk_query_options');
+      const saved = localStorage.getItem('triade_risk_query_options');
       if (saved) return JSON.parse(saved);
     } catch {}
     return DEFAULT_RISK_QUERY_OPTIONS;
   });
   const [loadingOrderModels, setLoadingOrderModels] = useState<LoadingOrderModel[]>(() => {
     try {
-      const saved = localStorage.getItem('transcunha_loading_order_models');
+      const saved = localStorage.getItem('triade_loading_order_models');
       if (saved) return JSON.parse(saved);
     } catch {}
     return DEFAULT_LOADING_ORDER_MODELS;
@@ -118,18 +119,18 @@ export function useDatabase(currentUser: User | null) {
   
   const [companyLogo, setCompanyLogo] = useState<string | null>(() => {
     try {
-      return localStorage.getItem('transcunha_companyLogo') || localStorage.getItem('trancunha_companyLogo');
+      return localStorage.getItem('triade_companyLogo') || DEFAULT_LOGO_LIGHT;
     } catch { return null; }
   });
   const [themeImage, setThemeImage] = useState<string | null>(() => {
     try {
-      return localStorage.getItem('transcunha_themeImage') || localStorage.getItem('trancunha_themeImage');
+      return localStorage.getItem('triade_themeImage') || localStorage.getItem('triade_themeImage');
     } catch { return null; }
   });
 
   const [nextIds, setNextIds] = useState(() => {
     try {
-      const saved = localStorage.getItem('transcunha_nextIds') || localStorage.getItem('trancunha_nextIds');
+      const saved = localStorage.getItem('triade_nextIds') || localStorage.getItem('triade_nextIds');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed.cargo && parsed.cargo > 1000000) parsed.cargo = 100;
@@ -187,7 +188,7 @@ export function useDatabase(currentUser: User | null) {
 
         if (dbPermissions) setProfilePermissions({ ...INITIAL_PERMISSIONS, ...dbPermissions });
         if (dbSettings) {
-          setCompanyLogo(dbSettings.company_logo || null);
+          setCompanyLogo(dbSettings.company_logo || DEFAULT_LOGO_LIGHT);
           setThemeImage(dbSettings.theme_image || null);
         }
 
@@ -273,7 +274,7 @@ export function useDatabase(currentUser: User | null) {
 
         if (dbPermissions) setProfilePermissions({ ...INITIAL_PERMISSIONS, ...dbPermissions });
         if (dbSettings) {
-          setCompanyLogo(dbSettings.company_logo || null);
+          setCompanyLogo(dbSettings.company_logo || DEFAULT_LOGO_LIGHT);
           setThemeImage(dbSettings.theme_image || null);
         }
 
@@ -300,7 +301,7 @@ export function useDatabase(currentUser: User | null) {
       setIsLoading(false);
       fetchAppSettings().then(settings => {
         if (settings) {
-          setCompanyLogo(settings.company_logo || null);
+          setCompanyLogo(settings.company_logo || DEFAULT_LOGO_LIGHT);
           setThemeImage(settings.theme_image || null);
         }
       });
@@ -553,7 +554,7 @@ export function useDatabase(currentUser: User | null) {
           case 'app_settings': {
             const dbSettings = await fetchAppSettings();
             if (isSubscribed && dbSettings) {
-              setCompanyLogo(dbSettings.company_logo || null);
+              setCompanyLogo(dbSettings.company_logo || DEFAULT_LOGO_LIGHT);
               setThemeImage(dbSettings.theme_image || null);
             }
             break;
@@ -727,7 +728,7 @@ export function useDatabase(currentUser: User | null) {
       if (!isSubscribed) return;
       const data = e.data || e.detail;
       if (!data) return;
-      const type = data.type || (e.type === 'transcunha:shipment_changed' ? 'shipment_changed' : 'cargo_changed');
+      const type = data.type || (e.type === 'triade:shipment_changed' ? 'shipment_changed' : 'cargo_changed');
       const payload = data.payload || data;
       if (type === 'shipment_changed') {
         const { action, shipmentId, shipment } = payload;
@@ -757,13 +758,13 @@ export function useDatabase(currentUser: User | null) {
     };
 
     const localBc = typeof window !== 'undefined' && 'BroadcastChannel' in window 
-      ? new BroadcastChannel('transcunha_operations_sync') 
+      ? new BroadcastChannel('triade_operations_sync') 
       : null;
     if (localBc) {
       localBc.onmessage = handleLocalBroadcast;
     }
-    window.addEventListener('transcunha:shipment_changed', handleLocalBroadcast);
-    window.addEventListener('transcunha:cargo_changed', handleLocalBroadcast);
+    window.addEventListener('triade:shipment_changed', handleLocalBroadcast);
+    window.addEventListener('triade:cargo_changed', handleLocalBroadcast);
 
     // ── Heartbeat inteligente ultraleve e sincronização no foco da janela ──
     const checkTimestampAndSync = async () => {
@@ -861,8 +862,8 @@ export function useDatabase(currentUser: User | null) {
       if (localBc) {
         localBc.close();
       }
-      window.removeEventListener('transcunha:shipment_changed', handleLocalBroadcast);
-      window.removeEventListener('transcunha:cargo_changed', handleLocalBroadcast);
+      window.removeEventListener('triade:shipment_changed', handleLocalBroadcast);
+      window.removeEventListener('triade:cargo_changed', handleLocalBroadcast);
       if (channelRef) {
         try { supabase.removeChannel(channelRef); } catch {}
         channelRef = null;

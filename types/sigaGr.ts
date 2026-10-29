@@ -278,7 +278,7 @@ export interface SigaAnalysisResponseData {
 }
 
 export interface SigaRequestRecord {
-  id: string; // Identificador único Transcunha
+  id: string; // Identificador único Tríade
   processNumber: string; // Número do processo SIGA GR
   state: SigaAnalysisState;
   productName: SigaProduct;

@@ -6,11 +6,11 @@ import type {
   User 
 } from '../types';
 
-const STORAGE_EMAILS_KEY = 'transcunha_corporate_emails';
-const STORAGE_CONFIG_KEY = 'transcunha_corporate_email_config';
+const STORAGE_EMAILS_KEY = 'triade_corporate_emails';
+const STORAGE_CONFIG_KEY = 'triade_corporate_email_config';
 
 export const DEFAULT_EMAIL_SERVER_CONFIG: CorporateEmailServerConfig = {
-  domain: 'transcunhaoficial.com.br',
+  domain: 'triadeoficial.com.br',
   webmailUrl: 'https://outlook.office.com',
   smtpHost: 'smtp.office365.com',
   smtpPort: 587,
@@ -35,14 +35,14 @@ export const PROVIDER_PRESETS: Record<CorporateEmailServerConfig['providerPreset
   webmailUrl: string;
 }> = {
   cpanel: {
-    label: 'cPanel / Hospedagem Própria (Padrão Transcunha)',
-    smtpHost: 'mail.transcunhaoficial.com.br',
+    label: 'cPanel / Hospedagem Própria (Padrão Tríade)',
+    smtpHost: 'mail.triadeoficial.com.br',
     smtpPort: 465,
     smtpSecure: 'ssl',
-    imapHost: 'mail.transcunhaoficial.com.br',
+    imapHost: 'mail.triadeoficial.com.br',
     imapPort: 993,
     imapSecure: 'ssl',
-    webmailUrl: 'https://webmail.transcunhaoficial.com.br',
+    webmailUrl: 'https://webmail.triadeoficial.com.br',
   },
   google_workspace: {
     label: 'Google Workspace (Gmail Corporativo)',
@@ -52,7 +52,7 @@ export const PROVIDER_PRESETS: Record<CorporateEmailServerConfig['providerPreset
     imapHost: 'imap.gmail.com',
     imapPort: 993,
     imapSecure: 'ssl',
-    webmailUrl: 'https://mail.google.com/a/transcunhaoficial.com.br',
+    webmailUrl: 'https://mail.google.com/a/triadeoficial.com.br',
   },
   microsoft_365: {
     label: 'Microsoft 365 / Outlook Corporativo',
@@ -86,88 +86,88 @@ export const PROVIDER_PRESETS: Record<CorporateEmailServerConfig['providerPreset
   },
   custom: {
     label: 'Configuração Personalizada (Servidor Dedicado)',
-    smtpHost: 'mail.transcunhaoficial.com.br',
+    smtpHost: 'mail.triadeoficial.com.br',
     smtpPort: 465,
     smtpSecure: 'ssl',
-    imapHost: 'mail.transcunhaoficial.com.br',
+    imapHost: 'mail.triadeoficial.com.br',
     imapPort: 993,
     imapSecure: 'ssl',
-    webmailUrl: 'https://webmail.transcunhaoficial.com.br',
+    webmailUrl: 'https://webmail.triadeoficial.com.br',
   }
 };
 
 const INITIAL_ACCOUNTS: CorporateEmailAccount[] = [
   {
     id: 'email_diretoria',
-    email: 'diretoria@transcunhaoficial.com.br',
+    email: 'diretoria@triadeoficial.com.br',
     displayName: 'Diretoria Executiva',
     department: 'Diretoria',
     password: 'Tc#Diretoria*2026',
     status: 'Ativo',
     quotaMb: 20480, // 20 GB
     usedMb: 4890,
-    aliases: ['admin@transcunhaoficial.com.br', 'ceo@transcunhaoficial.com.br'],
-    signature: 'Diretoria Executiva — Transcunha Logística & Transportes',
+    aliases: ['admin@triadeoficial.com.br', 'ceo@triadeoficial.com.br'],
+    signature: 'Diretoria Executiva — Tríade Logística & Transportes',
     notes: 'Caixa postal master da diretoria.',
     createdAt: '2026-01-10T10:00:00.000Z',
     updatedAt: '2026-10-12T10:00:00.000Z',
   },
   {
     id: 'email_financeiro',
-    email: 'financeiro@transcunhaoficial.com.br',
+    email: 'financeiro@triadeoficial.com.br',
     displayName: 'Financeiro & Controladoria',
     department: 'Financeiro',
     password: 'Tc#Finan$2026!',
     status: 'Ativo',
     quotaMb: 10240, // 10 GB
     usedMb: 3410,
-    aliases: ['cobranca@transcunhaoficial.com.br', 'pagamentos@transcunhaoficial.com.br', 'fiscal@transcunhaoficial.com.br'],
-    signature: 'Setor Financeiro — Transcunha Logística\nTel: (66) 3544-0000 | financeiro@transcunhaoficial.com.br',
+    aliases: ['cobranca@triadeoficial.com.br', 'pagamentos@triadeoficial.com.br', 'fiscal@triadeoficial.com.br'],
+    signature: 'Setor Financeiro — Tríade Logística\nTel: (66) 3544-0000 | financeiro@triadeoficial.com.br',
     notes: 'Recepção de NFs, boletos e conciliação bancária.',
     createdAt: '2026-01-10T10:00:00.000Z',
     updatedAt: '2026-10-12T10:00:00.000Z',
   },
   {
     id: 'email_operacional',
-    email: 'operacional@transcunhaoficial.com.br',
+    email: 'operacional@triadeoficial.com.br',
     displayName: 'Central Operacional & Logística',
     department: 'Operacional',
     password: 'Tc#Operac@2026',
     status: 'Ativo',
     quotaMb: 10240,
     usedMb: 2950,
-    aliases: ['logistica@transcunhaoficial.com.br', 'cargas@transcunhaoficial.com.br', 'embarques@transcunhaoficial.com.br'],
-    signature: 'Central de Cargas & Rastreamento — Transcunha Logística',
+    aliases: ['logistica@triadeoficial.com.br', 'cargas@triadeoficial.com.br', 'embarques@triadeoficial.com.br'],
+    signature: 'Central de Cargas & Rastreamento — Tríade Logística',
     notes: 'Ordens de carregamento, romaneios e envio de comprovantes de entrega.',
     createdAt: '2026-01-10T10:00:00.000Z',
     updatedAt: '2026-10-12T10:00:00.000Z',
   },
   {
     id: 'email_comercial',
-    email: 'comercial@transcunhaoficial.com.br',
+    email: 'comercial@triadeoficial.com.br',
     displayName: 'Equipe Comercial & Cotações',
     department: 'Comercial',
     password: 'Tc#Comercial2026$',
     status: 'Ativo',
     quotaMb: 10240,
     usedMb: 1820,
-    aliases: ['vendas@transcunhaoficial.com.br', 'cotacao@transcunhaoficial.com.br'],
-    signature: 'Departamento Comercial — Transcunha Logística\nCotações rápidas de fretes pesados e agronegócio.',
+    aliases: ['vendas@triadeoficial.com.br', 'cotacao@triadeoficial.com.br'],
+    signature: 'Departamento Comercial — Tríade Logística\nCotações rápidas de fretes pesados e agronegócio.',
     notes: 'Atendimento a embarcadores e clientes.',
     createdAt: '2026-01-10T10:00:00.000Z',
     updatedAt: '2026-10-12T10:00:00.000Z',
   },
   {
     id: 'email_contato',
-    email: 'contato@transcunhaoficial.com.br',
+    email: 'contato@triadeoficial.com.br',
     displayName: 'Atendimento Geral & SAC',
     department: 'Geral',
     password: 'Tc#Contato2026&',
     status: 'Ativo',
     quotaMb: 5120,
     usedMb: 920,
-    aliases: ['sac@transcunhaoficial.com.br', 'suporte@transcunhaoficial.com.br'],
-    signature: 'Transcunha Logística & Transportes Ltda.\nExcelência em Logística Rodoviária.',
+    aliases: ['sac@triadeoficial.com.br', 'suporte@triadeoficial.com.br'],
+    signature: 'Tríade Logística & Transportes Ltda.\nExcelência em Logística Rodoviária.',
     notes: 'E-mail institucional principal.',
     createdAt: '2026-01-10T10:00:00.000Z',
     updatedAt: '2026-10-12T10:00:00.000Z',
@@ -183,24 +183,24 @@ class CorporateEmailService {
       const saved = localStorage.getItem(STORAGE_CONFIG_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Atualiza automaticamente o domínio legado transcunha.com.br para transcunhaoficial.com.br
-        if (!parsed.domain || parsed.domain === 'transcunha.com.br') {
-          parsed.domain = 'transcunhaoficial.com.br';
+        // Atualiza automaticamente o domínio legado triade.com.br para triadeoficial.com.br
+        if (!parsed.domain || parsed.domain === 'triade.com.br') {
+          parsed.domain = 'triadeoficial.com.br';
         }
-        if (parsed.webmailUrl && parsed.webmailUrl.includes('transcunha.com.br')) {
-          parsed.webmailUrl = parsed.webmailUrl.replace('transcunha.com.br', 'transcunhaoficial.com.br');
+        if (parsed.webmailUrl && parsed.webmailUrl.includes('triade.com.br')) {
+          parsed.webmailUrl = parsed.webmailUrl.replace('triade.com.br', 'triadeoficial.com.br');
         }
-        if (parsed.smtpHost && parsed.smtpHost.includes('transcunha.com.br')) {
-          parsed.smtpHost = parsed.smtpHost.replace('transcunha.com.br', 'transcunhaoficial.com.br');
+        if (parsed.smtpHost && parsed.smtpHost.includes('triade.com.br')) {
+          parsed.smtpHost = parsed.smtpHost.replace('triade.com.br', 'triadeoficial.com.br');
         }
-        if (parsed.imapHost && parsed.imapHost.includes('transcunha.com.br')) {
-          parsed.imapHost = parsed.imapHost.replace('transcunha.com.br', 'transcunhaoficial.com.br');
+        if (parsed.imapHost && parsed.imapHost.includes('triade.com.br')) {
+          parsed.imapHost = parsed.imapHost.replace('triade.com.br', 'triadeoficial.com.br');
         }
 
-        if (parsed.providerPreset === 'cpanel' || parsed.providerPreset === 'google_workspace' || parsed.smtpHost === 'mail.transcunha.com.br' || parsed.smtpHost === 'smtp.gmail.com') {
-          return { ...DEFAULT_EMAIL_SERVER_CONFIG, domain: 'transcunhaoficial.com.br' };
+        if (parsed.providerPreset === 'cpanel' || parsed.providerPreset === 'google_workspace' || parsed.smtpHost === 'mail.triade.com.br' || parsed.smtpHost === 'smtp.gmail.com') {
+          return { ...DEFAULT_EMAIL_SERVER_CONFIG, domain: 'triadeoficial.com.br' };
         }
-        return { ...DEFAULT_EMAIL_SERVER_CONFIG, ...parsed, domain: parsed.domain || 'transcunhaoficial.com.br' };
+        return { ...DEFAULT_EMAIL_SERVER_CONFIG, ...parsed, domain: parsed.domain || 'triadeoficial.com.br' };
       }
     } catch (e) {
       console.error('[CorporateEmailService] Erro ao ler configuração:', e);
@@ -230,22 +230,22 @@ class CorporateEmailService {
       const saved = localStorage.getItem(STORAGE_EMAILS_KEY);
       if (saved) {
         accounts = JSON.parse(saved);
-        // Migra contas salvas no localStorage que ainda contenham @transcunha.com.br
+        // Migra contas salvas no localStorage que ainda contenham @triade.com.br
         let migrated = false;
         accounts = accounts.map(a => {
           let email = a.email;
-          if (email && email.toLowerCase().endsWith('@transcunha.com.br')) {
-            email = email.replace(/@transcunha\.com\.br$/i, '@transcunhaoficial.com.br');
+          if (email && email.toLowerCase().endsWith('@triade.com.br')) {
+            email = email.replace(/@triade\.com\.br$/i, '@triadeoficial.com.br');
             migrated = true;
           }
           const aliases = (a.aliases || []).map(al => {
-            if (al.toLowerCase().endsWith('@transcunha.com.br')) {
+            if (al.toLowerCase().endsWith('@triade.com.br')) {
               migrated = true;
-              return al.replace(/@transcunha\.com\.br$/i, '@transcunhaoficial.com.br');
+              return al.replace(/@triade\.com\.br$/i, '@triadeoficial.com.br');
             }
             return al;
           });
-          const signature = a.signature ? a.signature.replace(/transcunha\.com\.br/g, 'transcunhaoficial.com.br') : a.signature;
+          const signature = a.signature ? a.signature.replace(/triade\.com\.br/g, 'triadeoficial.com.br') : a.signature;
           if (signature !== a.signature) migrated = true;
 
           return { ...a, email, aliases, signature };
@@ -262,12 +262,12 @@ class CorporateEmailService {
       accounts = [...INITIAL_ACCOUNTS];
     }
 
-    // Se houver usuários do sistema com e-mails corporativos (@transcunhaoficial.com.br) ou corporateEmail definido,
+    // Se houver usuários do sistema com e-mails corporativos (@triadeoficial.com.br) ou corporateEmail definido,
     // sincroniza automaticamente seus nomes e vínculos.
     if (users && users.length > 0) {
       let changed = false;
       users.forEach(u => {
-        const corpEmail = (u.corporateEmail || (u.email && (u.email.toLowerCase().endsWith('@transcunhaoficial.com.br') || u.email.toLowerCase().endsWith('@transcunha.com.br')) ? u.email.replace(/@transcunha\.com\.br$/i, '@transcunhaoficial.com.br') : '')).trim().toLowerCase();
+        const corpEmail = (u.corporateEmail || (u.email && (u.email.toLowerCase().endsWith('@triadeoficial.com.br') || u.email.toLowerCase().endsWith('@triade.com.br')) ? u.email.replace(/@triade\.com\.br$/i, '@triadeoficial.com.br') : '')).trim().toLowerCase();
         if (corpEmail) {
           const existing = accounts.find(a => a.email.toLowerCase() === corpEmail || a.userId === u.id);
           if (existing) {
@@ -401,24 +401,24 @@ class CorporateEmailService {
   }
 
   /**
-   * Gera o código HTML padronizado para assinatura de e-mail da Transcunha Logística.
+   * Gera o código HTML padronizado para assinatura de e-mail da Tríade Logística.
    */
   generateSignatureHtml(
     account: CorporateEmailAccount, 
     companyLogo?: string | null,
     extraPhone = '(66) 3544-0000'
   ): string {
-    const logoUrl = companyLogo || 'https://transcunhaoficial.com.br/logo.png';
-    return `<div style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #1e293b; line-height: 1.4; border-left: 4px solid #2563eb; padding-left: 14px; margin-top: 16px;">
-  <div style="font-size: 15px; font-weight: bold; color: #0f172a;">${account.displayName}</div>
-  <div style="font-size: 12px; color: #64748b; font-weight: 600; text-transform: uppercase;">${account.department} — Transcunha Logística</div>
+    const logoUrl = companyLogo || 'https://triadeoficial.com.br/logo.png';
+    return `<div style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #1e293b; line-height: 1.4; border-left: 4px solid #EC2907; padding-left: 14px; margin-top: 16px;">
+  <div style="font-size: 15px; font-weight: bold; color: #011B35;">${account.displayName}</div>
+  <div style="font-size: 12px; color: #64748b; font-weight: 600; text-transform: uppercase;">${account.department} — Tríade Logística</div>
   <div style="margin-top: 6px; font-size: 12px; color: #334155;">
-    <strong>E-mail:</strong> <a href="mailto:${account.email}" style="color: #2563eb; text-decoration: none;">${account.email}</a><br/>
+    <strong>E-mail:</strong> <a href="mailto:${account.email}" style="color: #EC2907; text-decoration: none;">${account.email}</a><br/>
     <strong>Telefone / WhatsApp:</strong> ${extraPhone}<br/>
-    <strong>Website:</strong> <a href="https://transcunhaoficial.com.br" target="_blank" style="color: #2563eb; text-decoration: none;">www.transcunhaoficial.com.br</a>
+    <strong>Website:</strong> <a href="https://triadeoficial.com.br" target="_blank" style="color: #EC2907; text-decoration: none;">www.triadeoficial.com.br</a>
   </div>
   <div style="margin-top: 8px; font-size: 11px; color: #94a3b8; font-style: italic;">
-    Transcunha Logística & Transportes — Excelência, Segurança e Eficiência no Transporte Rodoviário.
+    Tríade Logística & Transportes — Excelência, Segurança e Eficiência no Transporte Rodoviário.
   </div>
 </div>`;
   }

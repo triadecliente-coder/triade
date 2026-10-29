@@ -86,25 +86,25 @@ export const SystemUpdateModal: React.FC<SystemUpdateModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-fade-in overflow-y-auto">
       <div 
-        className="relative w-full max-w-4xl bg-white dark:bg-[#0c1427] rounded-3xl shadow-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden flex flex-col max-h-[90vh] my-auto"
+        className="relative w-full max-w-4xl bg-white dark:bg-[#07182E] rounded-3xl shadow-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden flex flex-col max-h-[90vh] my-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* TOP GLOW & HEADER */}
-        <div className="relative bg-gradient-to-br from-blue-700 via-indigo-800 to-slate-950 p-6 sm:p-8 text-white">
-          <div className="absolute top-0 right-0 w-72 h-72 bg-sky-400/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20"></div>
+        <div className="relative bg-gradient-to-br from-[#011B35] via-[#0B2548] to-[#2B0E08] p-6 sm:p-8 text-white">
+          <div className="absolute top-0 right-0 w-72 h-72 bg-[#FF4D00]/20 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20"></div>
           
           <div className="flex items-start justify-between gap-4 relative z-10">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold text-sky-200 mb-3 shadow-sm">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold text-orange-200 mb-3 shadow-sm">
                 <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
                 <span>Atualização do Sistema</span>
                 <span className="opacity-40">•</span>
                 <span className="font-mono text-white font-extrabold">{latestRelease.version}</span>
               </div>
               <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-snug">
-                O que há de novo no Transcunha Logística?
+                O que há de novo no Tríade Logística?
               </h2>
-              <p className="text-xs sm:text-sm text-blue-100/80 mt-1.5 leading-relaxed max-w-lg">
+              <p className="text-xs sm:text-sm text-slate-200/85 mt-1.5 leading-relaxed max-w-lg">
                 Confira o resumo das atualizações e melhorias implementadas no sistema.
               </p>
             </div>
@@ -129,7 +129,7 @@ export const SystemUpdateModal: React.FC<SystemUpdateModalProps> = ({
               }}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                 activeTab === 'latest'
-                  ? 'bg-white text-blue-900 shadow-md'
+                  ? 'bg-white text-[#011B35] shadow-md'
                   : 'bg-white/10 text-white/80 hover:bg-white/15'
               }`}
             >

@@ -369,7 +369,7 @@ export function buildInterpolatedMessage(
   const nomeMotorista = extractFirstName(shipment.driverName || driver?.name);
   const origem = cargo?.origin || 'Origem';
   const destino = cargo?.destination || 'Destino';
-  const nomeEmbarcador = client?.nomeFantasia || client?.razaoSocial || 'Transcunha Logística';
+  const nomeEmbarcador = client?.nomeFantasia || client?.razaoSocial || 'Tríade Logística';
   const enderecoCarregamento = cargo?.originLocation || client?.address || cargo?.origin || 'Pátio de Carregamento';
   const contatoEmbarcador = client?.phone || cargo?.originLocation || '(35) 9872-1970';
   const dataHorarioCarregamento = formatLoadingWindow(shipment.scheduledDate, shipment.scheduledTime);

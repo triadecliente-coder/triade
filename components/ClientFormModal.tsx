@@ -41,8 +41,8 @@ const ClientFormModal: React.FC<ClientFormModalProps> = ({
     requiresScheduling: false,
     salespersonName: '',
     salespersonCommissionPerTon: 0,
-    loadingOrderModelId: 'mod_padrao_transcunha',
-    ordemCarregamentoModelId: 'mod_padrao_transcunha',
+    loadingOrderModelId: 'mod_padrao_triade',
+    ordemCarregamentoModelId: 'mod_padrao_triade',
     secondaryCnpjs: [],
   });
 
@@ -71,7 +71,7 @@ const ClientFormModal: React.FC<ClientFormModalProps> = ({
 
   useEffect(() => {
     if (clientToEdit) {
-      const selectedModelId = clientToEdit.loadingOrderModelId || clientToEdit.ordemCarregamentoModelId || 'mod_padrao_transcunha';
+      const selectedModelId = clientToEdit.loadingOrderModelId || clientToEdit.ordemCarregamentoModelId || 'mod_padrao_triade';
       setClient({
         ...clientToEdit,
         salespersonName: clientToEdit.salespersonName || '',
@@ -97,8 +97,8 @@ const ClientFormModal: React.FC<ClientFormModalProps> = ({
         requiresScheduling: false,
         salespersonName: '',
         salespersonCommissionPerTon: 0,
-        loadingOrderModelId: 'mod_padrao_transcunha',
-        ordemCarregamentoModelId: 'mod_padrao_transcunha',
+        loadingOrderModelId: 'mod_padrao_triade',
+        ordemCarregamentoModelId: 'mod_padrao_triade',
         secondaryCnpjs: [],
       });
       setShowSalesperson(false);
@@ -601,7 +601,7 @@ const ClientFormModal: React.FC<ClientFormModalProps> = ({
                       </p>
                     </div>
                     {(() => {
-                      const selModel = availableModels.find(m => m.id === client.loadingOrderModelId) || availableModels.find(m => m.id === 'mod_padrao_transcunha');
+                      const selModel = availableModels.find(m => m.id === client.loadingOrderModelId) || availableModels.find(m => m.id === 'mod_padrao_triade');
                       return selModel ? (
                         <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1 shrink-0 ${
                           selModel.status === 'ativo'
@@ -622,7 +622,7 @@ const ClientFormModal: React.FC<ClientFormModalProps> = ({
                       </label>
                       <select
                         name="loadingOrderModelId"
-                        value={client.loadingOrderModelId || 'mod_padrao_transcunha'}
+                        value={client.loadingOrderModelId || 'mod_padrao_triade'}
                         onChange={handleChange}
                         className="w-full p-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-semibold text-gray-900 dark:text-white focus:ring-2 focus:ring-primary shadow-xs"
                       >
@@ -635,7 +635,7 @@ const ClientFormModal: React.FC<ClientFormModalProps> = ({
                     </div>
 
                     {(() => {
-                      const selModel = availableModels.find(m => m.id === client.loadingOrderModelId) || availableModels.find(m => m.id === 'mod_padrao_transcunha');
+                      const selModel = availableModels.find(m => m.id === client.loadingOrderModelId) || availableModels.find(m => m.id === 'mod_padrao_triade');
                       if (!selModel) return null;
                       return (
                         <div className="p-3.5 bg-gradient-to-r from-blue-50/70 to-indigo-50/70 dark:from-blue-950/30 dark:to-indigo-950/30 border border-blue-200/80 dark:border-blue-800/60 rounded-xl space-y-1.5 text-xs animate-fadeIn">

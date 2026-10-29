@@ -44,7 +44,7 @@ import {
   parseAtuaExcelFile, 
   parseAtuaTextReport, 
   type AtuaCteRecord, 
-  type TranscunhaReportRecord,
+  type TriadeReportRecord,
   type AtuaReportParseResult,
   normalizePlate 
 } from '../utils/atuaReportParser';
@@ -82,7 +82,7 @@ export interface ReconciliationItem {
   status: ReconciliationStatus;
   divergenceReasons: string[];
 
-  transcunha: {
+  triade: {
     weight: number;
     companyFreight: number;
     driverFreight: number;
@@ -132,8 +132,8 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
   onOpenShipmentDetail
 }) => {
   const [atuaResult, setAtuaResult] = useState<AtuaReportParseResult | null>(null);
-  const [uploadedTranscunhaRecords, setUploadedTranscunhaRecords] = useState<TranscunhaReportRecord[] | null>(null);
-  const [transcunhaFileName, setTranscunhaFileName] = useState<string>('');
+  const [uploadedTriadeRecords, setUploadedTriadeRecords] = useState<TriadeReportRecord[] | null>(null);
+  const [triadeFileName, setTriadeFileName] = useState<string>('');
   const [isParsing, setIsParsing] = useState(false);
   const [parseError, setParseError] = useState<string | null>(null);
   const [uploadedFileName, setUploadedFileName] = useState<string>('');
@@ -154,12 +154,12 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
   const [pasteText, setPasteText] = useState('');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const transcunhaFileInputRef = useRef<HTMLInputElement>(null);
+  const triadeFileInputRef = useRef<HTMLInputElement>(null);
 
   const cargoMap = useMemo(() => new Map(cargos.map(c => [c.id, c])), [cargos]);
   const clientMap = useMemo(() => new Map(clients.map(c => [c.id, c.nomeFantasia || c.razaoSocial || ''])), [clients]);
 
-  // Handler de upload do arquivo Atua TMS (com detecção inteligente caso o usuário envie o arquivo Transcunha)
+  // Handler de upload do arquivo Atua TMS (com detecção inteligente caso o usuário envie o arquivo Tríade)
   const handleFileUpload = async (file: File) => {
     setIsParsing(true);
     setParseError(null);
@@ -175,17 +175,17 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
         throw new Error('Formato não suportado. Por favor, envie um arquivo PDF, Excel (.xlsx, .xls) ou CSV.');
       }
 
-      // Se o usuário acidentalmente enviou o relatório de Lucro Real da Transcunha no slot do Atua
-      if (result.detectedFileType === 'TRANSCUNHA_PROFIT') {
-        const tRecords = result.transcunhaRecords || [];
-        setUploadedTranscunhaRecords(tRecords);
-        setTranscunhaFileName(file.name);
+      // Se o usuário acidentalmente enviou o relatório de Lucro Real da Tríade no slot do Atua
+      if (result.detectedFileType === 'TRIADE_PROFIT') {
+        const tRecords = result.triadeRecords || [];
+        setUploadedTriadeRecords(tRecords);
+        setTriadeFileName(file.name);
         setUploadedFileName('');
         if (result.startDate && !startDate) setStartDate(result.startDate);
         if (result.endDate && !endDate) setEndDate(result.endDate);
 
         setParseError(
-          `Arquivo identificado: "Relatório: Lucro Real da Operação de Embarque" da Transcunha (${tRecords.length} embarques importados com sucesso). Para realizar o confronto, selecione agora o "Relatório Detalhado do CTRC" gerado no Atua TMS.`
+          `Arquivo identificado: "Relatório: Lucro Real da Operação de Embarque" da Tríade (${tRecords.length} embarques importados com sucesso). Para realizar o confronto, selecione agora o "Relatório Detalhado do CTRC" gerado no Atua TMS.`
         );
         return;
       }
@@ -212,11 +212,11 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
     }
   };
 
-  // Handler de upload opcional do arquivo de Lucro Real da Transcunha
-  const handleTranscunhaFileUpload = async (file: File) => {
+  // Handler de upload opcional do arquivo de Lucro Real da Tríade
+  const handleTriadeFileUpload = async (file: File) => {
     setIsParsing(true);
     setParseError(null);
-    setTranscunhaFileName(file.name);
+    setTriadeFileName(file.name);
 
     try {
       let result: AtuaReportParseResult;
@@ -229,10 +229,10 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
         throw new Error('Formato não suportado. Por favor, envie um arquivo PDF, Excel (.xlsx, .xls) ou CSV.');
       }
 
-      if (result.transcunhaRecords && result.transcunhaRecords.length > 0) {
-        setUploadedTranscunhaRecords(result.transcunhaRecords);
+      if (result.triadeRecords && result.triadeRecords.length > 0) {
+        setUploadedTriadeRecords(result.triadeRecords);
       } else if (result.records.length > 0) {
-        const converted: TranscunhaReportRecord[] = result.records.map(r => ({
+        const converted: TriadeReportRecord[] = result.records.map(r => ({
           shipmentId: r.cteNumber,
           cteNumber: r.cteNumber,
           date: r.emissionDate,
@@ -247,7 +247,7 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
           netProfit: r.result,
           rawLine: r.rawLine
         }));
-        setUploadedTranscunhaRecords(converted);
+        setUploadedTriadeRecords(converted);
       } else {
         throw new Error('Nenhum registro de embarque identificado neste arquivo.');
       }
@@ -255,7 +255,7 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
       if (result.startDate && !startDate) setStartDate(result.startDate);
       if (result.endDate && !endDate) setEndDate(result.endDate);
     } catch (err: any) {
-      setParseError(err?.message || 'Falha ao processar arquivo da Transcunha.');
+      setParseError(err?.message || 'Falha ao processar arquivo da Tríade.');
     } finally {
       setIsParsing(false);
     }
@@ -267,15 +267,15 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
     setParseError(null);
     try {
       const result = parseAtuaTextReport(pasteText);
-      if (result.detectedFileType === 'TRANSCUNHA_PROFIT') {
-        const tRecords = result.transcunhaRecords || [];
-        setUploadedTranscunhaRecords(tRecords);
-        setTranscunhaFileName('Texto Lucro Real');
+      if (result.detectedFileType === 'TRIADE_PROFIT') {
+        const tRecords = result.triadeRecords || [];
+        setUploadedTriadeRecords(tRecords);
+        setTriadeFileName('Texto Lucro Real');
         setIsPasteModalOpen(false);
         setPasteText('');
         if (result.startDate && !startDate) setStartDate(result.startDate);
         if (result.endDate && !endDate) setEndDate(result.endDate);
-        setParseError(`Identificado como Relatório de Lucro Real Transcunha (${tRecords.length} embarques). Agora envie o CTRC do Atua TMS.`);
+        setParseError(`Identificado como Relatório de Lucro Real Tríade (${tRecords.length} embarques). Agora envie o CTRC do Atua TMS.`);
         return;
       }
 
@@ -296,8 +296,8 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
     }
   };
 
-  // 1. Enriquecimento dos Embarques do Transcunha no Período Selecionado
-  const enrichedTranscunhaData = useMemo(() => {
+  // 1. Enriquecimento dos Embarques do Tríade no Período Selecionado
+  const enrichedTriadeData = useMemo(() => {
     // Filtra embarques que possuem CT-e emitido e respeitam o período
     const validShipments = shipments.filter(s => {
       const cteVal = s.cteNumber || getShipmentCte(s);
@@ -446,8 +446,8 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
     });
 
     // Mescla embarques do relatório Lucro Real em arquivo (se fornecido)
-    if (uploadedTranscunhaRecords && uploadedTranscunhaRecords.length > 0) {
-      uploadedTranscunhaRecords.forEach((tr, idx) => {
+    if (uploadedTriadeRecords && uploadedTriadeRecords.length > 0) {
+      uploadedTriadeRecords.forEach((tr, idx) => {
         const cteClean = tr.cteNumber ? tr.cteNumber.replace(/[^0-9]/g, '') : '';
         if (!cteClean) return;
 
@@ -455,7 +455,7 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
         const exists = items.some(it => it.cteNumber === cteClean);
         if (!exists) {
           const fakeShipment: Shipment = {
-            id: tr.shipmentId || `transcunha-file-${idx}`,
+            id: tr.shipmentId || `triade-file-${idx}`,
             horsePlate: tr.plate,
             scheduledDate: tr.date,
             client: tr.clientName,
@@ -489,29 +489,29 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
     }
 
     return items;
-  }, [shipments, cargos, cargoMap, clientMap, stays, startDate, endDate, uploadedTranscunhaRecords]);
+  }, [shipments, cargos, cargoMap, clientMap, stays, startDate, endDate, uploadedTriadeRecords]);
 
   // 2. Motor de Reconciliação / Auditoria Cruzada
   const reconciliationItems: ReconciliationItem[] = useMemo(() => {
-    if (!atuaResult && enrichedTranscunhaData.length === 0) return [];
+    if (!atuaResult && enrichedTriadeData.length === 0) return [];
 
     const atuaRecords = atuaResult?.records || [];
-    const matchedTranscunhaKeys = new Set<string>();
+    const matchedTriadeKeys = new Set<string>();
     const matchedAtuaIndexes = new Set<number>();
     const results: ReconciliationItem[] = [];
 
-    // Passo 1: Cruzar registros do Atua com o Transcunha
+    // Passo 1: Cruzar registros do Atua com o Tríade
     atuaRecords.forEach((atuaRec, atuaIdx) => {
       const atuaCteClean = atuaRec.cteNumber.replace(/[^0-9]/g, '');
       const atuaPlateClean = normalizePlate(atuaRec.plate);
 
       // Procura primeiro pelo número exato do CT-e
-      let match = enrichedTranscunhaData.find(t => t.cteNumber && t.cteNumber === atuaCteClean && !matchedTranscunhaKeys.has(t.key));
+      let match = enrichedTriadeData.find(t => t.cteNumber && t.cteNumber === atuaCteClean && !matchedTriadeKeys.has(t.key));
 
       // Fallback: se não achar por CT-e e o peso/frete for compatível, tenta por placa e data próxima (+/- 3 dias)
       if (!match && atuaPlateClean) {
-        match = enrichedTranscunhaData.find(t => {
-          if (matchedTranscunhaKeys.has(t.key)) return false;
+        match = enrichedTriadeData.find(t => {
+          if (matchedTriadeKeys.has(t.key)) return false;
           if (t.plate !== atuaPlateClean) return false;
           if (!atuaRec.emissionDate || !t.date) return false;
           const diffDays = Math.abs((new Date(atuaRec.emissionDate).getTime() - new Date(t.date).getTime()) / (1000 * 3600 * 24));
@@ -520,7 +520,7 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
       }
 
       if (match) {
-        matchedTranscunhaKeys.add(match.key);
+        matchedTriadeKeys.add(match.key);
         matchedAtuaIndexes.add(atuaIdx);
 
         // Calcula diferenças
@@ -572,7 +572,7 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
           destination: match.destination || atuaRec.destinationCity,
           status: isDivergent ? 'DIVERGENT' : 'CONCILIATED',
           divergenceReasons: reasons,
-          transcunha: {
+          triade: {
             weight: match.weight,
             companyFreight: match.companyFreight,
             driverFreight: match.driverFreight,
@@ -606,7 +606,7 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
           }
         });
       } else {
-        // Órfão no Atua (Consta no Atua mas não foi encontrado no Transcunha)
+        // Órfão no Atua (Consta no Atua mas não foi encontrado no Tríade)
         results.push({
           id: `atua-orphan-${atuaRec.cteNumber}-${atuaIdx}`,
           cteNumber: atuaRec.cteNumber,
@@ -616,8 +616,8 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
           origin: atuaRec.originCity,
           destination: atuaRec.destinationCity,
           status: 'ORPHAN_ATUA',
-          divergenceReasons: ['Consta no relatório do Atua TMS, mas não foi localizado no Transcunha'],
-          transcunha: null,
+          divergenceReasons: ['Consta no relatório do Atua TMS, mas não foi localizado no Tríade'],
+          triade: null,
           atua: {
             weight: atuaRec.weight,
             companyFreight: atuaRec.companyFreight,
@@ -643,11 +643,11 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
       }
     });
 
-    // Passo 2: Pendentes no Atua (Constam no Transcunha mas não foram achados no Atua)
-    enrichedTranscunhaData.forEach(t => {
-      if (!matchedTranscunhaKeys.has(t.key)) {
+    // Passo 2: Pendentes no Atua (Constam no Tríade mas não foram achados no Atua)
+    enrichedTriadeData.forEach(t => {
+      if (!matchedTriadeKeys.has(t.key)) {
         results.push({
-          id: `transcunha-pending-${t.key}`,
+          id: `triade-pending-${t.key}`,
           cteNumber: t.cteNumber,
           shipmentId: t.shipment.id,
           shipment: t.shipment,
@@ -660,8 +660,8 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
           origin: t.origin,
           destination: t.destination,
           status: 'PENDING_ATUA',
-          divergenceReasons: ['Cadastrado no Transcunha, mas não localizado no relatório do Atua TMS'],
-          transcunha: {
+          divergenceReasons: ['Cadastrado no Tríade, mas não localizado no relatório do Atua TMS'],
+          triade: {
             weight: t.weight,
             companyFreight: t.companyFreight,
             driverFreight: t.driverFreight,
@@ -687,7 +687,7 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
     });
 
     return results;
-  }, [atuaResult, enrichedTranscunhaData, tolerance, weightTolerance]);
+  }, [atuaResult, enrichedTriadeData, tolerance, weightTolerance]);
 
   // Totais e KPIs da Conciliação
   const kpis = useMemo(() => {
@@ -757,7 +757,7 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
 
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
-    doc.text('Relatório de Conciliação e Auditoria: Atua TMS vs. Transcunha', 14, 15);
+    doc.text('Relatório de Conciliação e Auditoria: Atua TMS vs. Tríade', 14, 15);
 
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
@@ -794,17 +794,17 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
         item.shipmentId || '---',
         item.plate || '---',
         statusText,
-        item.transcunha ? `R$ ${item.transcunha.companyFreight.toFixed(2)}` : '---',
+        item.triade ? `R$ ${item.triade.companyFreight.toFixed(2)}` : '---',
         item.atua ? `R$ ${item.atua.companyFreight.toFixed(2)}` : '---',
         item.delta.companyFreight !== 0 ? `R$ ${item.delta.companyFreight.toFixed(2)}` : 'R$ 0,00',
-        item.transcunha ? `R$ ${item.transcunha.driverFreight.toFixed(2)}` : '---',
+        item.triade ? `R$ ${item.triade.driverFreight.toFixed(2)}` : '---',
         item.atua ? `R$ ${item.atua.driverFreight.toFixed(2)}` : '---',
         item.delta.driverFreight !== 0 ? `R$ ${item.delta.driverFreight.toFixed(2)}` : 'R$ 0,00',
-        item.transcunha ? `R$ ${item.transcunha.toll.toFixed(2)}` : '---',
+        item.triade ? `R$ ${item.triade.toll.toFixed(2)}` : '---',
         item.atua ? `R$ ${item.atua.toll.toFixed(2)}` : '---',
-        item.transcunha ? `R$ ${item.transcunha.icms.toFixed(2)}` : '---',
+        item.triade ? `R$ ${item.triade.icms.toFixed(2)}` : '---',
         item.atua ? `R$ ${item.atua.icms.toFixed(2)}` : '---',
-        item.transcunha ? `R$ ${item.transcunha.netProfit.toFixed(2)}` : '---',
+        item.triade ? `R$ ${item.triade.netProfit.toFixed(2)}` : '---',
         item.atua ? `R$ ${item.atua.netProfit.toFixed(2)}` : '---',
         item.delta.netProfit !== 0 ? `R$ ${item.delta.netProfit.toFixed(2)}` : 'R$ 0,00',
       ];
@@ -833,14 +833,14 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
       }
     });
 
-    doc.save(`auditoria_atua_transcunha_${new Date().toISOString().split('T')[0]}.pdf`);
+    doc.save(`auditoria_atua_triade_${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
   // Exportação em CSV / Excel
   const handleExportCSV = () => {
     const headers = [
       'CT-e',
-      'ID Embarque Transcunha',
+      'ID Embarque Tríade',
       'Tipo Conhecimento',
       'Status Auditoria',
       'Placa',
@@ -849,25 +849,25 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
       'Motorista',
       'Origem',
       'Destino',
-      'Peso Transcunha (t)',
+      'Peso Tríade (t)',
       'Peso Atua (t)',
       'Delta Peso (t)',
-      'Frete Empresa Transcunha (R$)',
+      'Frete Empresa Tríade (R$)',
       'Frete Empresa Atua (R$)',
       'Delta Frete Empresa (R$)',
-      'Frete Motorista Transcunha (R$)',
+      'Frete Motorista Tríade (R$)',
       'Frete Motorista Atua (R$)',
       'Delta Frete Motorista (R$)',
-      'Pedagio Transcunha (R$)',
+      'Pedagio Tríade (R$)',
       'Pedagio Atua (R$)',
       'Delta Pedagio (R$)',
-      'ICMS Transcunha (R$)',
+      'ICMS Tríade (R$)',
       'ICMS Atua (R$)',
       'Delta ICMS (R$)',
-      'Imposto Federal Transcunha (R$)',
+      'Imposto Federal Tríade (R$)',
       'Imposto Federal Atua (R$)',
       'Delta Imposto Federal (R$)',
-      'Lucro Real Transcunha (R$)',
+      'Lucro Real Tríade (R$)',
       'Resultado Atua (R$)',
       'Delta Lucro Real vs Resultado (R$)',
       'Motivos Divergencia'
@@ -885,25 +885,25 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
         `"${(item.driverName || '').replace(/"/g, '""')}"`,
         `"${(item.origin || '').replace(/"/g, '""')}"`,
         `"${(item.destination || '').replace(/"/g, '""')}"`,
-        (item.transcunha?.weight || 0).toFixed(2),
+        (item.triade?.weight || 0).toFixed(2),
         (item.atua?.weight || 0).toFixed(2),
         item.delta.weight.toFixed(2),
-        (item.transcunha?.companyFreight || 0).toFixed(2),
+        (item.triade?.companyFreight || 0).toFixed(2),
         (item.atua?.companyFreight || 0).toFixed(2),
         item.delta.companyFreight.toFixed(2),
-        (item.transcunha?.driverFreight || 0).toFixed(2),
+        (item.triade?.driverFreight || 0).toFixed(2),
         (item.atua?.driverFreight || 0).toFixed(2),
         item.delta.driverFreight.toFixed(2),
-        (item.transcunha?.toll || 0).toFixed(2),
+        (item.triade?.toll || 0).toFixed(2),
         (item.atua?.toll || 0).toFixed(2),
         item.delta.toll.toFixed(2),
-        (item.transcunha?.icms || 0).toFixed(2),
+        (item.triade?.icms || 0).toFixed(2),
         (item.atua?.icms || 0).toFixed(2),
         item.delta.icms.toFixed(2),
-        (item.transcunha?.federalTax || 0).toFixed(2),
+        (item.triade?.federalTax || 0).toFixed(2),
         (item.atua?.federalTax || 0).toFixed(2),
         item.delta.federalTax.toFixed(2),
-        (item.transcunha?.netProfit || 0).toFixed(2),
+        (item.triade?.netProfit || 0).toFixed(2),
         (item.atua?.netProfit || 0).toFixed(2),
         item.delta.netProfit.toFixed(2),
         `"${item.divergenceReasons.join(' | ').replace(/"/g, '""')}"`
@@ -916,7 +916,7 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `auditoria_atua_transcunha_${new Date().toISOString().split('T')[0]}.csv`;
+    link.download = `auditoria_atua_triade_${new Date().toISOString().split('T')[0]}.csv`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -939,7 +939,7 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
                 </span>
               </h1>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Confronto automatizado entre o Relatório Detalhado do CTRC (Atua) e o Lucro Real (Transcunha).
+                Confronto automatizado entre o Relatório Detalhado do CTRC (Atua) e o Lucro Real (Tríade).
               </p>
             </div>
           </div>
@@ -969,22 +969,22 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
 
           <button
             type="button"
-            onClick={() => transcunhaFileInputRef.current?.click()}
+            onClick={() => triadeFileInputRef.current?.click()}
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
-            title="Importar Relatório de Lucro Real da Transcunha em PDF/Excel (Opcional)"
+            title="Importar Relatório de Lucro Real da Tríade em PDF/Excel (Opcional)"
           >
             <Upload className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             <span>
-              {uploadedTranscunhaRecords ? `Lucro Real Carregado (${uploadedTranscunhaRecords.length})` : 'Importar Lucro Real Transcunha (Opcional)'}
+              {uploadedTriadeRecords ? `Lucro Real Carregado (${uploadedTriadeRecords.length})` : 'Importar Lucro Real Tríade (Opcional)'}
             </span>
           </button>
           <input
-            ref={transcunhaFileInputRef}
+            ref={triadeFileInputRef}
             type="file"
             accept=".pdf,.xlsx,.xls,.csv"
             onChange={(e) => {
               const file = e.target.files?.[0];
-              if (file) handleTranscunhaFileUpload(file);
+              if (file) handleTriadeFileUpload(file);
               e.target.value = '';
             }}
             className="hidden"
@@ -1051,7 +1051,7 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
       )}
 
       {/* STATUS DAS FONTES DE DADOS */}
-      {(atuaResult || uploadedTranscunhaRecords) && (
+      {(atuaResult || uploadedTriadeRecords) && (
         <div className="flex flex-wrap items-center gap-2 text-xs">
           {atuaResult && (
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 font-semibold">
@@ -1059,15 +1059,15 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
               <span>Atua TMS: <strong>{uploadedFileName || 'Relatório Detalhado do CTRC'}</strong> ({atuaResult.records.length} CT-es extraídos)</span>
             </span>
           )}
-          {uploadedTranscunhaRecords ? (
+          {uploadedTriadeRecords ? (
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-semibold">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Base Transcunha: <strong>{transcunhaFileName}</strong> ({uploadedTranscunhaRecords.length} embarques importados)</span>
+              <span>Base Tríade: <strong>{triadeFileName}</strong> ({uploadedTriadeRecords.length} embarques importados)</span>
             </span>
           ) : (
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
               <Layers className="w-3.5 h-3.5 text-slate-500" />
-              <span>Base Transcunha: Embarques Online ({enrichedTranscunhaData.length} registros no período)</span>
+              <span>Base Tríade: Embarques Online ({enrichedTriadeData.length} registros no período)</span>
             </span>
           )}
         </div>
@@ -1083,7 +1083,7 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
             Nenhum relatório do Atua importado ainda
           </h3>
           <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mb-4">
-            Envie o arquivo PDF ou Excel do <strong>"Relatório Detalhado do CTRC"</strong> emitido no Atua TMS (MaisFrete) para cruzar automaticamente com os embarques da Transcunha.
+            Envie o arquivo PDF ou Excel do <strong>"Relatório Detalhado do CTRC"</strong> emitido no Atua TMS (MaisFrete) para cruzar automaticamente com os embarques da Tríade.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2">
             <button
@@ -1096,11 +1096,11 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
             </button>
             <button
               type="button"
-              onClick={() => transcunhaFileInputRef.current?.click()}
+              onClick={() => triadeFileInputRef.current?.click()}
               className="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold border border-slate-300 dark:border-slate-700 shadow-sm cursor-pointer inline-flex items-center gap-2"
             >
               <Upload className="w-4 h-4 text-emerald-600" />
-              Importar Lucro Real Transcunha (Opcional)
+              Importar Lucro Real Tríade (Opcional)
             </button>
             <button
               type="button"
@@ -1163,19 +1163,19 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
 
           {/* Órfãos Atua */}
           <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-800 border border-purple-200 dark:border-purple-900/50 shadow-2xs">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400 flex items-center gap-1" title="Consta no relatório do Atua mas não foi achado no Transcunha">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400 flex items-center gap-1" title="Consta no relatório do Atua mas não foi achado no Tríade">
               <AlertCircle className="w-3 h-3" /> Órfãos no Atua
             </p>
             <p className="text-xl font-black text-purple-600 dark:text-purple-400 mt-1">
               {kpis.orphanAtua}
               <span className="text-[10px] font-normal text-slate-400 ml-1">não cadastrados</span>
             </p>
-            <p className="text-[9px] text-purple-500 dark:text-purple-400 mt-1 truncate">Ausentes no Transcunha</p>
+            <p className="text-[9px] text-purple-500 dark:text-purple-400 mt-1 truncate">Ausentes no Tríade</p>
           </div>
 
           {/* Pendentes Atua */}
           <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-800 border border-amber-200 dark:border-amber-900/50 shadow-2xs">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 flex items-center gap-1" title="Cadastrado no Transcunha mas ausente no Atua">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 flex items-center gap-1" title="Cadastrado no Tríade mas ausente no Atua">
               <HelpCircle className="w-3 h-3" /> Pendentes Atua
             </p>
             <p className="text-xl font-black text-amber-600 dark:text-amber-400 mt-1">
@@ -1474,11 +1474,11 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
                               <AlertTriangle className="w-2.5 h-2.5" /> Divergente
                             </span>
                           ) : item.status === 'ORPHAN_ATUA' ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300 border border-purple-200 dark:border-purple-800" title="Consta no Atua mas não foi encontrado no Transcunha">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300 border border-purple-200 dark:border-purple-800" title="Consta no Atua mas não foi encontrado no Tríade">
                               <AlertCircle className="w-2.5 h-2.5" /> Órfão Atua
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800" title="Cadastrado no Transcunha mas ausente no Atua">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800" title="Cadastrado no Tríade mas ausente no Atua">
                               <HelpCircle className="w-2.5 h-2.5" /> Pendente Atua
                             </span>
                           )}
@@ -1489,9 +1489,9 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
                           <>
                             {/* Frete Empr. Trans */}
                             <td className="py-2.5 px-2 text-right font-mono whitespace-nowrap">
-                              {item.transcunha ? (
+                              {item.triade ? (
                                 <span className="font-semibold text-slate-900 dark:text-white">
-                                  R$ {item.transcunha.companyFreight.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                  R$ {item.triade.companyFreight.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </span>
                               ) : (
                                 <span className="text-slate-400">---</span>
@@ -1518,9 +1518,9 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
 
                             {/* Frete Mot. Trans */}
                             <td className="py-2.5 px-2 text-right font-mono whitespace-nowrap">
-                              {item.transcunha ? (
+                              {item.triade ? (
                                 <span className="font-semibold text-slate-800 dark:text-slate-200">
-                                  R$ {item.transcunha.driverFreight.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                  R$ {item.triade.driverFreight.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </span>
                               ) : (
                                 <span className="text-slate-400">---</span>
@@ -1549,7 +1549,7 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
                             <td className="py-2.5 px-2 text-right font-mono whitespace-nowrap">
                               <div>
                                 <span className="font-medium text-slate-700 dark:text-slate-300">
-                                  R$ {(item.transcunha?.toll ?? item.atua?.toll ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                  R$ {(item.triade?.toll ?? item.atua?.toll ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </span>
                                 {Math.abs(item.delta.toll) > tolerance && (
                                   <p className="text-[9px] font-bold text-rose-600">
@@ -1563,7 +1563,7 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
                             <td className="py-2.5 px-2 text-right font-mono whitespace-nowrap">
                               <div>
                                 <span className="font-medium text-slate-700 dark:text-slate-300">
-                                  R$ {(item.transcunha?.icms ?? item.atua?.icms ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                  R$ {(item.triade?.icms ?? item.atua?.icms ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </span>
                                 {Math.abs(item.delta.icms) > tolerance && (
                                   <p className="text-[9px] font-bold text-rose-600">
@@ -1575,9 +1575,9 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
 
                             {/* Lucro Trans */}
                             <td className="py-2.5 px-2 text-right font-mono whitespace-nowrap font-black">
-                              {item.transcunha ? (
-                                <span className={item.transcunha.netProfit >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}>
-                                  R$ {item.transcunha.netProfit.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                              {item.triade ? (
+                                <span className={item.triade.netProfit >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}>
+                                  R$ {item.triade.netProfit.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </span>
                               ) : (
                                 <span className="text-slate-400">---</span>
@@ -1608,7 +1608,7 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
                             {/* Frete Empresa */}
                             <td className="py-2.5 px-2 text-right font-mono whitespace-nowrap">
                               <span className="font-semibold text-slate-900 dark:text-white">
-                                R$ {(item.transcunha?.companyFreight ?? item.atua?.companyFreight ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                R$ {(item.triade?.companyFreight ?? item.atua?.companyFreight ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                               </span>
                               {Math.abs(item.delta.companyFreight) > tolerance && (
                                 <p className={`text-[9px] font-bold ${item.delta.companyFreight > 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
@@ -1620,7 +1620,7 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
                             {/* Frete Motorista */}
                             <td className="py-2.5 px-2 text-right font-mono whitespace-nowrap">
                               <span className="font-semibold text-slate-800 dark:text-slate-200">
-                                R$ {(item.transcunha?.driverFreight ?? item.atua?.driverFreight ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                R$ {(item.triade?.driverFreight ?? item.atua?.driverFreight ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                               </span>
                               {Math.abs(item.delta.driverFreight) > tolerance && (
                                 <p className={`text-[9px] font-bold ${item.delta.driverFreight > 0 ? 'text-rose-600' : 'text-emerald-600'}`}>
@@ -1632,14 +1632,14 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
                             {/* Pedágio */}
                             <td className="py-2.5 px-2 text-right font-mono whitespace-nowrap">
                               <span className="text-slate-700 dark:text-slate-300">
-                                R$ {(item.transcunha?.toll ?? item.atua?.toll ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                R$ {(item.triade?.toll ?? item.atua?.toll ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                               </span>
                             </td>
 
                             {/* ICMS */}
                             <td className="py-2.5 px-2 text-right font-mono whitespace-nowrap">
                               <span className="text-slate-700 dark:text-slate-300">
-                                R$ {(item.transcunha?.icms ?? item.atua?.icms ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                R$ {(item.triade?.icms ?? item.atua?.icms ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                               </span>
                               {Math.abs(item.delta.icms) > tolerance && (
                                 <p className="text-[9px] font-bold text-rose-600">
@@ -1651,14 +1651,14 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
                             {/* Imp. Federal */}
                             <td className="py-2.5 px-2 text-right font-mono whitespace-nowrap">
                               <span className="text-slate-700 dark:text-slate-300">
-                                R$ {(item.transcunha?.federalTax ?? item.atua?.federalTax ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                R$ {(item.triade?.federalTax ?? item.atua?.federalTax ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                               </span>
                             </td>
 
                             {/* Resultado */}
                             <td className="py-2.5 px-2 text-right font-mono whitespace-nowrap font-black">
-                              <span className={(item.transcunha?.netProfit ?? item.atua?.netProfit ?? 0) >= 0 ? 'text-emerald-600' : 'text-rose-600'}>
-                                R$ {(item.transcunha?.netProfit ?? item.atua?.netProfit ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                              <span className={(item.triade?.netProfit ?? item.atua?.netProfit ?? 0) >= 0 ? 'text-emerald-600' : 'text-rose-600'}>
+                                R$ {(item.triade?.netProfit ?? item.atua?.netProfit ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                               </span>
                               {Math.abs(item.delta.netProfit) > tolerance && (
                                 <p className={`text-[9px] font-black ${item.delta.netProfit > 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
@@ -1686,7 +1686,7 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
                                 type="button"
                                 onClick={() => onOpenShipmentDetail(item.shipment!)}
                                 className="p-1 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 transition-colors"
-                                title="Abrir dados do embarque no Transcunha"
+                                title="Abrir dados do embarque no Tríade"
                               >
                                 <Eye className="w-4 h-4" />
                               </button>
@@ -1708,7 +1708,7 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
                                 </p>
                                 <div className="text-[11px] text-slate-600 dark:text-slate-400 space-y-0.5">
                                   <p><span className="font-semibold">CT-e:</span> {item.cteNumber} {item.isComplementary ? '(Complementar)' : '(Normal)'}</p>
-                                  <p><span className="font-semibold">ID Transcunha:</span> {item.shipmentId || 'Não vinculado'}</p>
+                                  <p><span className="font-semibold">ID Tríade:</span> {item.shipmentId || 'Não vinculado'}</p>
                                   <p><span className="font-semibold">Placa:</span> {item.plate} | <span className="font-semibold">Data:</span> {item.date}</p>
                                   <p><span className="font-semibold">Cliente:</span> {item.clientName || '---'}</p>
                                   <p><span className="font-semibold">Motorista:</span> {item.driverName || '---'}</p>
@@ -1720,32 +1720,32 @@ const AtuaReconciliationPage: React.FC<AtuaReconciliationPageProps> = ({
                               <div className="space-y-1.5">
                                 <p className="font-bold text-slate-800 dark:text-slate-200 text-xs flex items-center gap-1.5">
                                   <Scale className="w-3.5 h-3.5 text-indigo-500" />
-                                  Confronto Direto (Transcunha vs. Atua)
+                                  Confronto Direto (Tríade vs. Atua)
                                 </p>
                                 <div className="text-[11px] font-mono space-y-0.5">
                                   <p className="flex justify-between">
                                     <span className="text-slate-500 font-sans">Peso:</span>
-                                    <span>{item.transcunha?.weight?.toFixed(2) || '0.00'} t vs {item.atua?.weight?.toFixed(2) || '0.00'} t</span>
+                                    <span>{item.triade?.weight?.toFixed(2) || '0.00'} t vs {item.atua?.weight?.toFixed(2) || '0.00'} t</span>
                                   </p>
                                   <p className="flex justify-between">
                                     <span className="text-slate-500 font-sans">Frete Empresa:</span>
-                                    <span>R$ {item.transcunha?.companyFreight?.toFixed(2) || '0.00'} vs R$ {item.atua?.companyFreight?.toFixed(2) || '0.00'}</span>
+                                    <span>R$ {item.triade?.companyFreight?.toFixed(2) || '0.00'} vs R$ {item.atua?.companyFreight?.toFixed(2) || '0.00'}</span>
                                   </p>
                                   <p className="flex justify-between">
                                     <span className="text-slate-500 font-sans">Frete Motorista:</span>
-                                    <span>R$ {item.transcunha?.driverFreight?.toFixed(2) || '0.00'} vs R$ {item.atua?.driverFreight?.toFixed(2) || '0.00'}</span>
+                                    <span>R$ {item.triade?.driverFreight?.toFixed(2) || '0.00'} vs R$ {item.atua?.driverFreight?.toFixed(2) || '0.00'}</span>
                                   </p>
                                   <p className="flex justify-between">
                                     <span className="text-slate-500 font-sans">Pedágio:</span>
-                                    <span>R$ {item.transcunha?.toll?.toFixed(2) || '0.00'} vs R$ {item.atua?.toll?.toFixed(2) || '0.00'}</span>
+                                    <span>R$ {item.triade?.toll?.toFixed(2) || '0.00'} vs R$ {item.atua?.toll?.toFixed(2) || '0.00'}</span>
                                   </p>
                                   <p className="flex justify-between">
                                     <span className="text-slate-500 font-sans">ICMS:</span>
-                                    <span>R$ {item.transcunha?.icms?.toFixed(2) || '0.00'} vs R$ {item.atua?.icms?.toFixed(2) || '0.00'}</span>
+                                    <span>R$ {item.triade?.icms?.toFixed(2) || '0.00'} vs R$ {item.atua?.icms?.toFixed(2) || '0.00'}</span>
                                   </p>
                                   <p className="flex justify-between font-bold border-t dark:border-slate-700 pt-0.5">
                                     <span className="text-slate-700 dark:text-slate-300 font-sans">Lucro Real / Result:</span>
-                                    <span>R$ {item.transcunha?.netProfit?.toFixed(2) || '0.00'} vs R$ {item.atua?.netProfit?.toFixed(2) || '0.00'}</span>
+                                    <span>R$ {item.triade?.netProfit?.toFixed(2) || '0.00'} vs R$ {item.atua?.netProfit?.toFixed(2) || '0.00'}</span>
                                   </p>
                                 </div>
                               </div>

@@ -1,7 +1,7 @@
 import { supabase } from '../supabase';
 import type { Shipment, Cargo, Ticket } from '../types';
 
-export const OPERATIONS_REALTIME_CHANNEL = 'transcunha_operations_hub';
+export const OPERATIONS_REALTIME_CHANNEL = 'triade_operations_hub';
 
 export interface ShipmentBroadcastPayload {
   action: 'create' | 'update' | 'delete' | 'status_change';
@@ -30,7 +30,7 @@ let operationsChannelInstance: ReturnType<typeof supabase.channel> | null = null
 
 // Canal local no mesmo navegador (entre diferentes abas)
 const localBroadcast = typeof window !== 'undefined' && 'BroadcastChannel' in window 
-  ? new BroadcastChannel('transcunha_operations_sync') 
+  ? new BroadcastChannel('triade_operations_sync') 
   : null;
 
 /**
@@ -85,7 +85,7 @@ export function broadcastShipmentChange(data: ShipmentBroadcastPayload): void {
 
     // 3. Evento customizado DOM para a própria janela
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('transcunha:shipment_changed', { detail: payloadWithTs }));
+      window.dispatchEvent(new CustomEvent('triade:shipment_changed', { detail: payloadWithTs }));
     }
   } catch (err) {
     console.warn('[Operations Realtime Hub] Erro ao disparar broadcast de embarque:', err);
@@ -119,7 +119,7 @@ export function broadcastCargoChange(data: CargoBroadcastPayload): void {
     }
 
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('transcunha:cargo_changed', { detail: payloadWithTs }));
+      window.dispatchEvent(new CustomEvent('triade:cargo_changed', { detail: payloadWithTs }));
     }
   } catch (err) {
     console.warn('[Operations Realtime Hub] Erro ao disparar broadcast de carga:', err);
@@ -153,7 +153,7 @@ export function broadcastTicketChange(data: TicketBroadcastPayload): void {
     }
 
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('transcunha:ticket_changed', { detail: payloadWithTs }));
+      window.dispatchEvent(new CustomEvent('triade:ticket_changed', { detail: payloadWithTs }));
     }
   } catch (err) {
     console.warn('[Operations Realtime Hub] Erro ao disparar broadcast de chamado:', err);
@@ -199,7 +199,7 @@ export function broadcastRdoChange(data: RdoBroadcastPayload): void {
     }
 
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('transcunha:rdo_changed', { detail: payloadWithTs }));
+      window.dispatchEvent(new CustomEvent('triade:rdo_changed', { detail: payloadWithTs }));
     }
   } catch (err) {
     console.warn('[Operations Realtime Hub] Erro ao disparar broadcast de RDO:', err);
@@ -244,7 +244,7 @@ export function broadcastSigaChange(data: SigaBroadcastPayload): void {
     }
 
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('transcunha:siga_changed', { detail: payloadWithTs }));
+      window.dispatchEvent(new CustomEvent('triade:siga_changed', { detail: payloadWithTs }));
     }
   } catch (err) {
     console.warn('[Operations Realtime Hub] Erro ao disparar broadcast de SIGA GR:', err);

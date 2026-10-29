@@ -72,8 +72,8 @@ export const WhatsAppLiveTestModal: React.FC<WhatsAppLiveTestModalProps> = ({
         templateId: template?.id,
         renderedBody: rendered,
         messageType: template?.attachment_type !== 'none' ? 'document' : 'text',
-        mediaFilename: template?.default_filename || 'Comprovante_Transcunha.pdf',
-        mediaUrl: template?.attachment_type !== 'none' ? 'https://transcunha.log/docs/exemplo_teste.pdf' : undefined
+        mediaFilename: template?.default_filename || 'Comprovante_Triade.pdf',
+        mediaUrl: template?.attachment_type !== 'none' ? 'https://triade.log/docs/exemplo_teste.pdf' : undefined
       });
 
       setSuccess(true);

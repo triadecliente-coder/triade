@@ -452,7 +452,7 @@ const OperationalMapPage: React.FC<OperationalMapPageProps> = ({
       showToast('Nenhuma carga no resultado para divulgar.', 'warning');
       return;
     }
-    const header = '🌐 *TRANSCUNHA LOGÍSTICA — CARGAS DISPONÍVEIS* 🌐\n';
+    const header = '🌐 *TRÍADE LOGÍSTICA — CARGAS DISPONÍVEIS* 🌐\n';
     const loadsText = filteredLoads.map(load => {
       const product = products.find(p => p.id === load.productId)?.name?.toUpperCase() || 'DIVERSOS';
       const origin = load.origin.toUpperCase();

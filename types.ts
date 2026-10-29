@@ -958,7 +958,7 @@ export interface FinancialTransaction {
   supplierOrClientName?: string;
   supplierOrClientCpfCnpj?: string;
   
-  // Vínculos operacionais com Transcunha
+  // Vínculos operacionais com Tríade
   shipmentId?: string;
   cargoId?: string;
   driverId?: string;
@@ -1151,8 +1151,8 @@ export const DEFAULT_LOADING_ORDER_MODELS: LoadingOrderModel[] = [
     ]
   },
   {
-    id: 'mod_padrao_transcunha',
-    nome: 'Modelo Padrão Transcunha',
+    id: 'mod_padrao_triade',
+    nome: 'Modelo Padrão Tríade',
     descricao: 'Ordem de carregamento completa com dados de transportadora, motorista, veículo, carga e instruções gerais.',
     status: 'ativo',
     isDefault: true,

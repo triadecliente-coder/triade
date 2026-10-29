@@ -1409,7 +1409,7 @@ export const fetchClientBranches = async (): Promise<Record<string, ClientBranch
     console.warn('[DB] Error loading client branches:', err);
   }
   try {
-    const local = localStorage.getItem('transcunha_client_branches');
+    const local = localStorage.getItem('triade_client_branches');
     if (local) return JSON.parse(local);
   } catch {}
   return {};
@@ -1417,7 +1417,7 @@ export const fetchClientBranches = async (): Promise<Record<string, ClientBranch
 
 export const saveClientBranches = async (branchesMap: Record<string, ClientBranchCnpj[]>): Promise<void> => {
   try {
-    localStorage.setItem('transcunha_client_branches', JSON.stringify(branchesMap));
+    localStorage.setItem('triade_client_branches', JSON.stringify(branchesMap));
   } catch {}
 
   try {
@@ -1453,7 +1453,7 @@ export const fetchClientExtraConfig = async (): Promise<Record<string, ClientExt
     console.warn('[DB] Error loading client extra config:', err);
   }
   try {
-    const local = localStorage.getItem('transcunha_client_extra_config');
+    const local = localStorage.getItem('triade_client_extra_config');
     if (local) return JSON.parse(local);
   } catch {}
   return {};
@@ -1472,7 +1472,7 @@ export const saveClientExtraConfig = async (configMap: Record<string, ClientExtr
     console.warn('[DB] Error saving client extra config:', err);
   }
   try {
-    localStorage.setItem('transcunha_client_extra_config', JSON.stringify(configMap));
+    localStorage.setItem('triade_client_extra_config', JSON.stringify(configMap));
   } catch {}
 };
 
@@ -1656,12 +1656,12 @@ export async function fetchTickets(): Promise<Ticket[]> {
     dbTickets = data.map(toTicket);
     // Cacheia tickets do banco localmente
     try {
-      localStorage.setItem('transcunha_tickets_cache', JSON.stringify(dbTickets));
+      localStorage.setItem('triade_tickets_cache', JSON.stringify(dbTickets));
     } catch {}
   } catch (error) {
     if (!isMissingTableError(error)) console.warn('[fetchTickets] Falha ao consultar Supabase, recuperando do cache local:', error);
     try {
-      const cached = localStorage.getItem('transcunha_tickets_cache');
+      const cached = localStorage.getItem('triade_tickets_cache');
       if (cached) {
         dbTickets = JSON.parse(cached);
       }
@@ -1673,7 +1673,7 @@ export async function fetchTickets(): Promise<Ticket[]> {
 
   // AUDITORIA / RECUPERAÇÃO: Verifica se há chamados no cache de emergência que não constam no Supabase
   try {
-    const emergencyRaw = localStorage.getItem('transcunha_emergency_tickets');
+    const emergencyRaw = localStorage.getItem('triade_emergency_tickets');
     if (emergencyRaw) {
       const emergencyList: Ticket[] = JSON.parse(emergencyRaw);
       const dbIds = new Set(dbTickets.map(t => t.id));
@@ -1737,7 +1737,7 @@ export async function fetchRiskQueryOptions(): Promise<RiskQueryOption[]> {
     if (!error && data && data.length > 0) {
       const options = data.map(toRiskQueryOption);
       try {
-        localStorage.setItem('transcunha_risk_query_options', JSON.stringify(options));
+        localStorage.setItem('triade_risk_query_options', JSON.stringify(options));
       } catch {}
       return options;
     }
@@ -1759,7 +1759,7 @@ export async function fetchRiskQueryOptions(): Promise<RiskQueryOption[]> {
         createdAt: opt.createdAt || '',
       }));
       try {
-        localStorage.setItem('transcunha_risk_query_options', JSON.stringify(options));
+        localStorage.setItem('triade_risk_query_options', JSON.stringify(options));
       } catch {}
       return options;
     }
@@ -1769,7 +1769,7 @@ export async function fetchRiskQueryOptions(): Promise<RiskQueryOption[]> {
 
   // 3. Fallback to localStorage
   try {
-    const saved = localStorage.getItem('transcunha_risk_query_options');
+    const saved = localStorage.getItem('triade_risk_query_options');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
@@ -1806,7 +1806,7 @@ export async function saveAllRiskQueryOptions(options: RiskQueryOption[]): Promi
 
   // 3. Save to localStorage
   try {
-    localStorage.setItem('transcunha_risk_query_options', JSON.stringify(options));
+    localStorage.setItem('triade_risk_query_options', JSON.stringify(options));
   } catch {}
 }
 
@@ -1860,7 +1860,7 @@ export async function fetchLoadingOrderModels(): Promise<LoadingOrderModel[]> {
         models = [...models, ...missingDefaults];
       }
       try {
-        localStorage.setItem('transcunha_loading_order_models', JSON.stringify(models));
+        localStorage.setItem('triade_loading_order_models', JSON.stringify(models));
       } catch {}
       return models;
     }
@@ -1870,7 +1870,7 @@ export async function fetchLoadingOrderModels(): Promise<LoadingOrderModel[]> {
 
   // 2. Fallback to localStorage
   try {
-    const saved = localStorage.getItem('transcunha_loading_order_models');
+    const saved = localStorage.getItem('triade_loading_order_models');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
@@ -1903,7 +1903,7 @@ export async function saveLoadingOrderModels(models: LoadingOrderModel[]): Promi
 
   // 2. Save to localStorage
   try {
-    localStorage.setItem('transcunha_loading_order_models', JSON.stringify(models));
+    localStorage.setItem('triade_loading_order_models', JSON.stringify(models));
   } catch {}
 }
 
@@ -2264,7 +2264,7 @@ export async function insertUniqueTicket(ticketData: Omit<Ticket, 'id' | 'histor
 
   // Também verifica cache de emergência local
   try {
-    const cachedStr = localStorage.getItem('transcunha_emergency_tickets');
+    const cachedStr = localStorage.getItem('triade_emergency_tickets');
     if (cachedStr) {
       const cached = JSON.parse(cachedStr);
       if (Array.isArray(cached)) {
@@ -2297,10 +2297,10 @@ export async function insertUniqueTicket(ticketData: Omit<Ticket, 'id' | 'histor
 
     // Salva cópia de emergência local ANTES da chamada de rede
     try {
-      const emergencyRaw = localStorage.getItem('transcunha_emergency_tickets');
+      const emergencyRaw = localStorage.getItem('triade_emergency_tickets');
       const emergencyList: Ticket[] = emergencyRaw ? JSON.parse(emergencyRaw) : [];
       const updatedEmergency = [newTicket, ...emergencyList.filter(e => e.id !== newTicket.id)];
-      localStorage.setItem('transcunha_emergency_tickets', JSON.stringify(updatedEmergency));
+      localStorage.setItem('triade_emergency_tickets', JSON.stringify(updatedEmergency));
     } catch {}
 
     const { error } = await supabase.from('tickets').insert(payload);
@@ -2308,9 +2308,9 @@ export async function insertUniqueTicket(ticketData: Omit<Ticket, 'id' | 'histor
       console.log(`[insertUniqueTicket] Chamado ${generatedId} gravado com sucesso no Supabase.`);
       // Atualiza também o cache geral
       try {
-        const cacheRaw = localStorage.getItem('transcunha_tickets_cache');
+        const cacheRaw = localStorage.getItem('triade_tickets_cache');
         const list: Ticket[] = cacheRaw ? JSON.parse(cacheRaw) : [];
-        localStorage.setItem('transcunha_tickets_cache', JSON.stringify([newTicket, ...list.filter(t => t.id !== newTicket.id)]));
+        localStorage.setItem('triade_tickets_cache', JSON.stringify([newTicket, ...list.filter(t => t.id !== newTicket.id)]));
       } catch {}
 
       // Dispara broadcast instantâneo WebSocket para todos os usuários
@@ -2342,14 +2342,14 @@ export async function upsertTicket(ticket: Ticket): Promise<void> {
   
   // Atualiza cache de emergência local imediatamente
   try {
-    const emergencyRaw = localStorage.getItem('transcunha_emergency_tickets');
+    const emergencyRaw = localStorage.getItem('triade_emergency_tickets');
     const emergencyList: Ticket[] = emergencyRaw ? JSON.parse(emergencyRaw) : [];
     const updatedEmergency = [ticket, ...emergencyList.filter(e => e.id !== ticket.id)];
-    localStorage.setItem('transcunha_emergency_tickets', JSON.stringify(updatedEmergency));
+    localStorage.setItem('triade_emergency_tickets', JSON.stringify(updatedEmergency));
 
-    const cacheRaw = localStorage.getItem('transcunha_tickets_cache');
+    const cacheRaw = localStorage.getItem('triade_tickets_cache');
     const list: Ticket[] = cacheRaw ? JSON.parse(cacheRaw) : [];
-    localStorage.setItem('transcunha_tickets_cache', JSON.stringify([ticket, ...list.filter(t => t.id !== ticket.id)]));
+    localStorage.setItem('triade_tickets_cache', JSON.stringify([ticket, ...list.filter(t => t.id !== ticket.id)]));
   } catch {}
 
   const { error } = await supabase.from('tickets').upsert(payload);
@@ -2370,15 +2370,15 @@ export async function upsertTicket(ticket: Ticket): Promise<void> {
 export async function deleteTicket(id: string): Promise<void> {
   try {
     // Remove do cache local
-    const emergencyRaw = localStorage.getItem('transcunha_emergency_tickets');
+    const emergencyRaw = localStorage.getItem('triade_emergency_tickets');
     if (emergencyRaw) {
       const emergencyList: Ticket[] = JSON.parse(emergencyRaw);
-      localStorage.setItem('transcunha_emergency_tickets', JSON.stringify(emergencyList.filter(e => e.id !== id)));
+      localStorage.setItem('triade_emergency_tickets', JSON.stringify(emergencyList.filter(e => e.id !== id)));
     }
-    const cacheRaw = localStorage.getItem('transcunha_tickets_cache');
+    const cacheRaw = localStorage.getItem('triade_tickets_cache');
     if (cacheRaw) {
       const list: Ticket[] = JSON.parse(cacheRaw);
-      localStorage.setItem('transcunha_tickets_cache', JSON.stringify(list.filter(t => t.id !== id)));
+      localStorage.setItem('triade_tickets_cache', JSON.stringify(list.filter(t => t.id !== id)));
     }
   } catch {}
 
@@ -2861,7 +2861,7 @@ const DEFAULT_RDO_CONFIG: RdoConfig = {
   apiToken: '',
   callbackToken: '',
   apiUrl: 'https://painel.mrbsolucoes.com.br',
-  clientName: 'TRANSCUNHA TRANSPORTES',
+  clientName: 'TRÍADE TRANSPORTES',
   enabled: true,
   autoApproveInRisk: true,
 };
@@ -2873,7 +2873,7 @@ export async function fetchRdoConfig(): Promise<RdoConfig> {
     if (!error && data?.permissions?.rdo_config) {
       const config = { ...DEFAULT_RDO_CONFIG, ...data.permissions.rdo_config };
       try {
-        localStorage.setItem('transcunha_rdo_config', JSON.stringify(config));
+        localStorage.setItem('triade_rdo_config', JSON.stringify(config));
       } catch {}
       return config;
     }
@@ -2883,7 +2883,7 @@ export async function fetchRdoConfig(): Promise<RdoConfig> {
 
   // 2. Fallback to localStorage
   try {
-    const saved = localStorage.getItem('transcunha_rdo_config');
+    const saved = localStorage.getItem('triade_rdo_config');
     if (saved) {
       return { ...DEFAULT_RDO_CONFIG, ...JSON.parse(saved) };
     }
@@ -2908,7 +2908,7 @@ export async function saveRdoConfig(config: RdoConfig): Promise<void> {
 
   // 2. Save to localStorage
   try {
-    localStorage.setItem('transcunha_rdo_config', JSON.stringify(config));
+    localStorage.setItem('triade_rdo_config', JSON.stringify(config));
   } catch {}
 }
 
@@ -2922,7 +2922,7 @@ export async function fetchRdoRequests(): Promise<RdoRequestRecord[]> {
     if (!error && data) {
       const records = data.map(toRdoRequest);
       try {
-        localStorage.setItem('transcunha_rdo_requests', JSON.stringify(records));
+        localStorage.setItem('triade_rdo_requests', JSON.stringify(records));
       } catch {}
       return records;
     }
@@ -2932,7 +2932,7 @@ export async function fetchRdoRequests(): Promise<RdoRequestRecord[]> {
 
   // Fallback to localStorage
   try {
-    const saved = localStorage.getItem('transcunha_rdo_requests');
+    const saved = localStorage.getItem('triade_rdo_requests');
     if (saved) {
       return JSON.parse(saved);
     }
@@ -2963,7 +2963,7 @@ export async function upsertRdoRequest(record: RdoRequestRecord): Promise<void> 
     } else {
       nextList = [record, ...current];
     }
-    localStorage.setItem('transcunha_rdo_requests', JSON.stringify(nextList));
+    localStorage.setItem('triade_rdo_requests', JSON.stringify(nextList));
   } catch {}
 
   // Broadcast realtime update
@@ -3039,7 +3039,7 @@ export async function fetchSigaConfig(): Promise<SigaConfig> {
     if (!error && data?.permissions?.siga_config) {
       const config = { ...DEFAULT_SIGA_CONFIG, ...data.permissions.siga_config };
       try {
-        localStorage.setItem('transcunha_siga_config', JSON.stringify(config));
+        localStorage.setItem('triade_siga_config', JSON.stringify(config));
       } catch {}
       return config;
     }
@@ -3049,7 +3049,7 @@ export async function fetchSigaConfig(): Promise<SigaConfig> {
 
   // 2. Fallback para localStorage
   try {
-    const saved = localStorage.getItem('transcunha_siga_config');
+    const saved = localStorage.getItem('triade_siga_config');
     if (saved) {
       return { ...DEFAULT_SIGA_CONFIG, ...JSON.parse(saved) };
     }
@@ -3074,7 +3074,7 @@ export async function saveSigaConfig(config: SigaConfig): Promise<void> {
 
   // 2. Salva em localStorage
   try {
-    localStorage.setItem('transcunha_siga_config', JSON.stringify(config));
+    localStorage.setItem('triade_siga_config', JSON.stringify(config));
   } catch {}
 }
 
@@ -3113,7 +3113,7 @@ export async function fetchSigaRequests(): Promise<SigaRequestRecord[]> {
         rawAnalysis: r.raw_analysis || undefined,
       }));
       try {
-        localStorage.setItem('transcunha_siga_requests', JSON.stringify(records));
+        localStorage.setItem('triade_siga_requests', JSON.stringify(records));
       } catch {}
       return records;
     }
@@ -3123,7 +3123,7 @@ export async function fetchSigaRequests(): Promise<SigaRequestRecord[]> {
 
   // Fallback para localStorage
   try {
-    const saved = localStorage.getItem('transcunha_siga_requests');
+    const saved = localStorage.getItem('triade_siga_requests');
     if (saved) {
       return JSON.parse(saved);
     }
@@ -3179,7 +3179,7 @@ export async function upsertSigaRequest(record: SigaRequestRecord): Promise<void
     } else {
       nextList = [record, ...current];
     }
-    localStorage.setItem('transcunha_siga_requests', JSON.stringify(nextList));
+    localStorage.setItem('triade_siga_requests', JSON.stringify(nextList));
   } catch {}
 
   // Broadcast realtime update
@@ -3202,7 +3202,7 @@ export async function deleteSigaRequest(idOrProcessNumber: string): Promise<void
   try {
     const current = await fetchSigaRequests();
     const filtered = current.filter(r => r.id !== idOrProcessNumber && r.processNumber !== idOrProcessNumber);
-    localStorage.setItem('transcunha_siga_requests', JSON.stringify(filtered));
+    localStorage.setItem('triade_siga_requests', JSON.stringify(filtered));
   } catch {}
 
   broadcastSigaChange({

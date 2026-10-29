@@ -153,24 +153,24 @@ export default defineConfig({
     },
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['vite.svg'],
+      includeAssets: ['favicon.png', 'icon-192.png', 'icon.png', 'logo.png', 'logo-dark.png'],
       manifest: {
-        name: 'Transcunha Logística',
-        short_name: 'Transcunha',
-        description: 'Sistema de Gestão Transcunha',
-        theme_color: '#0B66E4',
-        background_color: '#F8FAFC',
+        name: 'Tríade Logística',
+        short_name: 'Tríade',
+        description: 'Sistema de Gestão Tríade',
+        theme_color: '#011B35',
+        background_color: '#041020',
         display: 'standalone',
         icons: [
           {
-            src: '/vite.svg',
+            src: '/icon-192.png',
             sizes: '192x192',
-            type: 'image/svg+xml'
+            type: 'image/png'
           },
           {
-            src: '/vite.svg',
+            src: '/icon.png',
             sizes: '512x512',
-            type: 'image/svg+xml'
+            type: 'image/png'
           }
         ]
       },

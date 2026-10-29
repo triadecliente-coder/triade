@@ -4,7 +4,7 @@
  */
 export function playAlertSound(type: 'warning' | 'critical' | 'order' = 'warning') {
   try {
-    const isMuted = localStorage.getItem('transcunha_audio_muted') === 'true';
+    const isMuted = localStorage.getItem('triade_audio_muted') === 'true';
     if (isMuted) return;
 
     const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;

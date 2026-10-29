@@ -21,11 +21,35 @@ export interface SystemRelease {
 }
 
 /**
- * Registro de versões e atualizações do sistema Transcunha.
+ * Registro de versões e atualizações do sistema Tríade.
  * Sempre que subir uma nova atualização ou commit com novidades,
  * incremente a versão ou adicione um novo registro no topo da lista.
  */
 export const SYSTEM_RELEASES: SystemRelease[] = [
+  {
+    id: 'rel_2026_10_29_v2_90_0',
+    version: 'v2.90.0',
+    date: '29/10/2026',
+    title: 'Nova Identidade Visual Tríade: Logotipo Oficial, Paleta de Cores e Rebranding Completo',
+    summary: 'Implantação integral da identidade visual da Tríade em todo o ecossistema: novos ativos de logotipo em alta resolução com suporte adaptativo para fundos claros, escuros, PWA e relatórios PDF, nova paleta de cores inspirada na marca (Vermelho-Laranja vibrante e Azul Marinho Meia-Noite) e substituição global da nomenclatura corporativa para Tríade.',
+    items: [
+      {
+        category: 'feature',
+        title: 'Logotipo Oficial Tríade em Todas as Interfaces, PWA e PDFs',
+        description: 'Configuradas variações em fundo transparente para modo claro (/logo.png com tipografia Navy #011B35) e modo escuro (/logo-dark.png com tipografia branca de alto contraste), além de ícones dedicados (/favicon.png, /icon-192.png, /icon.png) e renderização proporcional automática em Ordens de Carregamento e relatórios PDF.'
+      },
+      {
+        category: 'improvement',
+        title: 'Nova Paleta de Cores Tríade (Vermilion, Flame Orange & Midnight Navy)',
+        description: 'Remodelado o sistema de cores global (Tailwind, variáveis CSS, Portal de Login, Barra de Navegação Superior, Portal do Motorista, Gestão de Aparência e cabeçalhos PDF) seguindo fielmente as cores da nova logo (#EC2907, #FF4D00, #C41C00 e #011B35).'
+      },
+      {
+        category: 'improvement',
+        title: 'Padronização Global da Marca Tríade em Todo o Sistema',
+        description: 'Atualizados títulos, cabeçalhos, rodapés, planilhas de controladoria, conciliação Atua TMS, templates de WhatsApp, e-mail corporativo, manifesto PWA e documentos fiscais/operacionais para a marca Tríade.'
+      }
+    ]
+  },
   {
     id: 'rel_2026_10_29_v2_89_3',
     version: 'v2.89.3',
@@ -148,7 +172,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     version: 'v2.88.1',
     date: '27/10/2026',
     title: 'Aprimoramento no Extrator do Atua TMS e Suporte a Importação Dupla de Relatórios',
-    summary: 'Correção de alta precisão na extração de dados do Relatório Detalhado do CTRC do Atua TMS (MaisFrete) via coordenadas espaciais e regex tolerante a espaçamentos de fontes vetoriais. Além disso, adicionada detecção automática do Relatório de Lucro Real da Transcunha e possibilidade de importar ambos os relatórios para conciliação mútua.',
+    summary: 'Correção de alta precisão na extração de dados do Relatório Detalhado do CTRC do Atua TMS (MaisFrete) via coordenadas espaciais e regex tolerante a espaçamentos de fontes vetoriais. Além disso, adicionada detecção automática do Relatório de Lucro Real da Tríade e possibilidade de importar ambos os relatórios para conciliação mútua.',
     items: [
       {
         category: 'fix',
@@ -157,8 +181,8 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
       },
       {
         category: 'feature',
-        title: 'Detecção Inteligente e Suporte ao Lucro Real da Transcunha',
-        description: 'Se o usuário enviar o relatório de Lucro Real da Transcunha, o sistema reconhece automaticamente o tipo do arquivo, carrega os embarques na base de auditoria e orienta o envio do relatório do Atua TMS para o confronto.'
+        title: 'Detecção Inteligente e Suporte ao Lucro Real da Tríade',
+        description: 'Se o usuário enviar o relatório de Lucro Real da Tríade, o sistema reconhece automaticamente o tipo do arquivo, carrega os embarques na base de auditoria e orienta o envio do relatório do Atua TMS para o confronto.'
       },
       {
         category: 'improvement',
@@ -171,8 +195,8 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     id: 'rel_2026_10_27_v2_88_0',
     version: 'v2.88.0',
     date: '27/10/2026',
-    title: 'Nova Ferramenta: Auditoria e Conciliação Atua TMS vs. Transcunha',
-    summary: 'Lançado no menu de Ferramentas o módulo de Auditoria e Conciliação automatizada entre o "Relatório Detalhado do CTRC" (do Atua TMS / MaisFrete) e o sistema Transcunha. A ferramenta analisa e cruza em tempo real todos os CT-es, destacando divergências de Frete Empresa, Frete Motorista, Vale-Pedágio, ICMS, Impostos Federais, Peso e Lucro Real/Resultado, além de identificar CT-es órfãos e pendentes de faturamento.',
+    title: 'Nova Ferramenta: Auditoria e Conciliação Atua TMS vs. Tríade',
+    summary: 'Lançado no menu de Ferramentas o módulo de Auditoria e Conciliação automatizada entre o "Relatório Detalhado do CTRC" (do Atua TMS / MaisFrete) e o sistema Tríade. A ferramenta analisa e cruza em tempo real todos os CT-es, destacando divergências de Frete Empresa, Frete Motorista, Vale-Pedágio, ICMS, Impostos Federais, Peso e Lucro Real/Resultado, além de identificar CT-es órfãos e pendentes de faturamento.',
     items: [
       {
         category: 'feature',
@@ -181,7 +205,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
       },
       {
         category: 'feature',
-        title: 'Motor de Confronto Linha a Linha (Transcunha vs. Atua)',
+        title: 'Motor de Confronto Linha a Linha (Tríade vs. Atua)',
         description: 'Cruza por número de CT-e (incluindo conhecimentos complementares de estadia) ou por placa/data próxima, calculando as variações absolutas e percentuais com margem de tolerância ajustável em centavos.'
       },
       {
@@ -192,7 +216,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
       {
         category: 'improvement',
         title: 'Exportação Completa para PDF e Planilha Excel (CSV)',
-        description: 'Gera relatórios institucionais com logotipo da Transcunha e planilhas tabulares prontas para conferência e envio direto às equipes fiscal, financeira e de controladoria.'
+        description: 'Gera relatórios institucionais com logotipo da Tríade e planilhas tabulares prontas para conferência e envio direto às equipes fiscal, financeira e de controladoria.'
       }
     ]
   },
@@ -770,7 +794,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
       {
         category: 'improvement',
         title: 'Regra Estrita de Filial por UF de Origem da Carga',
-        description: 'A identificação da unidade Transcunha na planilha passa a considerar estritamente o estado de origem da carga (UF MG -> Matriz, UF GO -> Filial GO, UF SP -> Filial SP, e demais UFs -> Matriz), assegurando total coerência fiscal e contábil.'
+        description: 'A identificação da unidade Tríade na planilha passa a considerar estritamente o estado de origem da carga (UF MG -> Matriz, UF GO -> Filial GO, UF SP -> Filial SP, e demais UFs -> Matriz), assegurando total coerência fiscal e contábil.'
       },
       {
         category: 'improvement',
@@ -817,13 +841,13 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     id: 'rel_2026_10_22_v2_74_6',
     version: 'v2.74.6',
     date: '22/10/2026',
-    title: 'Filtro por CNPJ da Filial Transcunha na Planilha de Controladoria',
-    summary: 'Implementado filtro avançado por CNPJ da Filial Transcunha na Planilha de Embarques da Controladoria, permitindo segmentar viagens e faturamentos da Matriz (Pratápolis/MG - 36.203.306/0001-92), Filial SP (Ipaussu/SP - 36.203.306/0002-73), Filial GO (Catalão/GO - 36.203.306/0004-35) e Filial PR (Cambará/PR - 36.203.306/0003-54) tanto no seletor da coluna TRANSPORTADORA quanto na barra de ferramentas superior.',
+    title: 'Filtro por CNPJ da Filial Tríade na Planilha de Controladoria',
+    summary: 'Implementado filtro avançado por CNPJ da Filial Tríade na Planilha de Embarques da Controladoria, permitindo segmentar viagens e faturamentos da Matriz (Pratápolis/MG - 36.203.306/0001-92), Filial SP (Ipaussu/SP - 36.203.306/0002-73), Filial GO (Catalão/GO - 36.203.306/0004-35) e Filial PR (Cambará/PR - 36.203.306/0003-54) tanto no seletor da coluna TRANSPORTADORA quanto na barra de ferramentas superior.',
     items: [
       {
         category: 'feature',
         title: 'Filtro por CNPJ da Filial na Coluna TRANSPORTADORA',
-        description: 'A coluna TRANSPORTADORA da planilha agora lista os CNPJs e filiais oficiais da Transcunha no popover de múltipla seleção estilo Excel, permitindo filtrar por uma ou mais filiais com suporte a busca rápida.'
+        description: 'A coluna TRANSPORTADORA da planilha agora lista os CNPJs e filiais oficiais da Tríade no popover de múltipla seleção estilo Excel, permitindo filtrar por uma ou mais filiais com suporte a busca rápida.'
       },
       {
         category: 'feature',
@@ -1264,12 +1288,12 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     version: 'v2.70.90',
     date: '19/10/2026',
     title: 'Cabeçalho e Endereço da Filial São Paulo nas Ordens de Carregamento para Cargas com Origem em SP',
-    summary: 'Configuração oficial dos dados cadastrais e endereço da Filial de São Paulo (TRANSCUNHA TRANSPORTES E LOGISTICA FILIAL SP - Ipaussu/SP) em todas as Ordens de Carregamento para cargas com origem em SP (UF SP), completando a cobertura operacional dos estados de GO, MG e SP.',
+    summary: 'Configuração oficial dos dados cadastrais e endereço da Filial de São Paulo (TRÍADE TRANSPORTES E LOGISTICA FILIAL SP - Ipaussu/SP) em todas as Ordens de Carregamento para cargas com origem em SP (UF SP), completando a cobertura operacional dos estados de GO, MG e SP.',
     items: [
       {
         category: 'feature',
         title: 'Emissão com Dados Oficiais da Filial São Paulo (Ipaussu/SP)',
-        description: 'Quando a carga tiver origem no estado de São Paulo (UF SP), a Ordem de Carregamento passa a emitir: "TRANSCUNHA TRANSPORTES E LOGISTICA FILIAL SP", "CNPJ: 36.203.306/0002-73 - IE: 357033425116" e "RUA JOAO OLIMPIO DA SILVA, 20, JARDIM COCAJA II - IPAUSSU/SP - 18950-546 - (35)99103-0469".'
+        description: 'Quando a carga tiver origem no estado de São Paulo (UF SP), a Ordem de Carregamento passa a emitir: "TRÍADE TRANSPORTES E LOGISTICA FILIAL SP", "CNPJ: 36.203.306/0002-73 - IE: 357033425116" e "RUA JOAO OLIMPIO DA SILVA, 20, JARDIM COCAJA II - IPAUSSU/SP - 18950-546 - (35)99103-0469".'
       },
       {
         category: 'improvement',
@@ -1288,12 +1312,12 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     version: 'v2.70.89',
     date: '19/10/2026',
     title: 'Cabeçalho e Endereço da Matriz Minas Gerais nas Ordens de Carregamento para Cargas com Origem em MG',
-    summary: 'Configuração oficial dos dados cadastrais e endereço da Matriz de Minas Gerais (TRANSCUNHA TRANSPORTES E LOGISTICA LTDA - Pratápolis/MG) em todas as Ordens de Carregamento para cargas com origem em MG (e padrão corporativo), com fidelidade total ao layout impresso.',
+    summary: 'Configuração oficial dos dados cadastrais e endereço da Matriz de Minas Gerais (TRÍADE TRANSPORTES E LOGISTICA LTDA - Pratápolis/MG) em todas as Ordens de Carregamento para cargas com origem em MG (e padrão corporativo), com fidelidade total ao layout impresso.',
     items: [
       {
         category: 'feature',
         title: 'Emissão com Dados Oficiais da Matriz Minas Gerais (Pratápolis/MG)',
-        description: 'Quando a carga tiver origem no estado de Minas Gerais (UF MG) ou padrão corporativo, a Ordem de Carregamento passa a emitir: "TRANSCUNHA TRANSPORTES E LOGISTICA LTDA", "CNPJ: 36.203.306/0001-92 - IE: 36577990000" e "R PADRE LICINIO, 105, CENTRO - PRATAPOLIS/MG - 37970-000 - (35)99103-0469".'
+        description: 'Quando a carga tiver origem no estado de Minas Gerais (UF MG) ou padrão corporativo, a Ordem de Carregamento passa a emitir: "TRÍADE TRANSPORTES E LOGISTICA LTDA", "CNPJ: 36.203.306/0001-92 - IE: 36577990000" e "R PADRE LICINIO, 105, CENTRO - PRATAPOLIS/MG - 37970-000 - (35)99103-0469".'
       },
       {
         category: 'improvement',
@@ -1312,12 +1336,12 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     version: 'v2.70.88',
     date: '19/10/2026',
     title: 'Cabeçalho e Endereço da Filial Goiás nas Ordens de Carregamento para Cargas com Origem em GO',
-    summary: 'Configuração automática em todas as ordens de carregamento (layout Consube e layout padrão) para emissão dos dados cadastrais e endereço oficial da Filial de Goiás (TRANSCUNHA TRANSPORTES E LOGISTICA GOIAS - Catalão/GO) sempre que a carga tiver origem no estado de Goiás (UF GO).',
+    summary: 'Configuração automática em todas as ordens de carregamento (layout Consube e layout padrão) para emissão dos dados cadastrais e endereço oficial da Filial de Goiás (TRÍADE TRANSPORTES E LOGISTICA GOIAS - Catalão/GO) sempre que a carga tiver origem no estado de Goiás (UF GO).',
     items: [
       {
         category: 'feature',
         title: 'Emissão com Dados Oficiais da Filial Goiás (Catalão/GO)',
-        description: 'Quando a carga tiver origem no estado de Goiás (UF GO), o cabeçalho e as assinaturas da Ordem de Carregamento passam a emitir: "TRANSCUNHA TRANSPORTES E LOGISTICA GOIAS", "CNPJ: 36.203.306/0004-35 - IE: 204719070" e "RUA 26, 365, VILA MARGON - CATALAO/GO - 75711-040 - (35)99103-0469".'
+        description: 'Quando a carga tiver origem no estado de Goiás (UF GO), o cabeçalho e as assinaturas da Ordem de Carregamento passam a emitir: "TRÍADE TRANSPORTES E LOGISTICA GOIAS", "CNPJ: 36.203.306/0004-35 - IE: 204719070" e "RUA 26, 365, VILA MARGON - CATALAO/GO - 75711-040 - (35)99103-0469".'
       },
       {
         category: 'improvement',
@@ -1556,12 +1580,12 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     id: 'rel_2026_10_17_v2_70_78',
     version: 'v2.70.78',
     date: '17/10/2026',
-    title: 'Sincronização de Faturamento das Filiais no 1º Resultado (Ag GO / TRANSCUNHA-GOAIS)',
-    summary: 'Ajustada a classificação de faturamento no 1º Resultado (FirstResultTab.tsx) para considerar a Filial cadastrada do embarque, carga e operador (ex: TRANSCUNHA-GOAIS / Catalão - GO). Anteriormente, o card Ag GO só contabilizava embarques explicitamente atribuídos ao usuário Maurício, fazendo com que os embarques da filial de Goiás caíssem indevidamente na Matriz.',
+    title: 'Sincronização de Faturamento das Filiais no 1º Resultado (Ag GO / TRÍADE-GOIÁS)',
+    summary: 'Ajustada a classificação de faturamento no 1º Resultado (FirstResultTab.tsx) para considerar a Filial cadastrada do embarque, carga e operador (ex: TRÍADE-GOIÁS / Catalão - GO). Anteriormente, o card Ag GO só contabilizava embarques explicitamente atribuídos ao usuário Maurício, fazendo com que os embarques da filial de Goiás caíssem indevidamente na Matriz.',
     items: [
       {
         category: 'fix',
-        title: 'Contabilização da Filial TRANSCUNHA-GOAIS no Card Ag GO',
+        title: 'Contabilização da Filial TRÍADE-GOIÁS no Card Ag GO',
         description: 'Atualizada a função classifyBranch para reconhecer a filial efetiva do embarque (s.branchId, cargo.branchId ou filial do operador) para Goiás, São Paulo e Paraná, garantindo alinhamento imediato entre o 1º Resultado e o Relatório de Filiais.'
       },
       {
@@ -1696,7 +1720,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
       {
         category: 'improvement',
         title: 'Janela de Cadastro Limpa para Usuários Externos (Motoristas)',
-        description: 'Os blocos de configuração de E-mail Corporativo (@transcunhaoficial.com.br) e Espelhar Acesso de Outro Usuário agora são automaticamente ocultados ao cadastrar ou editar motoristas e usuários externos.'
+        description: 'Os blocos de configuração de E-mail Corporativo (@triadeoficial.com.br) e Espelhar Acesso de Outro Usuário agora são automaticamente ocultados ao cadastrar ou editar motoristas e usuários externos.'
       },
       {
         category: 'improvement',
@@ -1744,7 +1768,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     version: 'v2.70.70',
     date: '17/10/2026',
     title: 'Estruturação da Seleção de Modelo de Ordem de Carregamento por Cliente',
-    summary: 'Implementada a arquitetura completa e escalável (banco de dados, contratos de API, tipagem e interfaces de usuário) para permitir vincular modelos de Ordem de Carregamento específicos a cada cliente e filial. Prepara o ecossistema Transcunha para a emissão dinâmica e personalizada de ordens de carregamento conforme as regras de negócio de cada contratante.',
+    summary: 'Implementada a arquitetura completa e escalável (banco de dados, contratos de API, tipagem e interfaces de usuário) para permitir vincular modelos de Ordem de Carregamento específicos a cada cliente e filial. Prepara o ecossistema Tríade para a emissão dinâmica e personalizada de ordens de carregamento conforme as regras de negócio de cada contratante.',
     items: [
       {
         category: 'feature',
@@ -1754,7 +1778,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
       {
         category: 'feature',
         title: 'Estrutura e Catálogo Inicial de Modelos de Ordem de Carregamento',
-        description: 'Criada a tipagem LoadingOrderModel com catálogo de 5 modelos de mercado (Padrão Transcunha, Grãos/Granel, Fertilizantes & Ensacados, Trading/Exportação Porto e Simplificado Ticket) com suporte a persistência dinâmica.'
+        description: 'Criada a tipagem LoadingOrderModel com catálogo de 5 modelos de mercado (Padrão Tríade, Grãos/Granel, Fertilizantes & Ensacados, Trading/Exportação Porto e Simplificado Ticket) com suporte a persistência dinâmica.'
       },
       {
         category: 'improvement',
@@ -1778,7 +1802,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
       {
         category: 'fix',
         title: 'Transmissão Instantânea de Mudança de Status entre Usuários',
-        description: 'Implementado o hub de broadcast Supabase Realtime dedicado (transcunha_operations_hub). Quando qualquer usuário avança, reverte ou edita o status de um embarque, a atualização é transmitida instantaneamente em milissegundos para todas as outras telas abertas sem necessidade de recarregar a página.'
+        description: 'Implementado o hub de broadcast Supabase Realtime dedicado (triade_operations_hub). Quando qualquer usuário avança, reverte ou edita o status de um embarque, a atualização é transmitida instantaneamente em milissegundos para todas as outras telas abertas sem necessidade de recarregar a página.'
       },
       {
         category: 'fix',
@@ -1797,7 +1821,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     version: 'v2.70.68',
     date: '17/10/2026',
     title: 'Refinamento da Leitura de Carta Frete e Correção de Falso Positivo na Nota Fiscal',
-    summary: 'Aprimoramento completo no algoritmo de detecção e extração de documentos fiscais. Eliminado o alerta falso de documento incorreto ao anexar Notas Fiscais que contêm a menção a contratos comerciais de grãos no nome ou conteúdo (ex: "NOTA FISCAL ... - CONTRATO ..."). Adicionado suporte integral ao padrão oficial de Carta Frete / Contrato de Transporte (MaisFrete / e-Frete / NSTECH / Transcunha), extraindo com máxima precisão o número do contrato, CIOT, frete líquido e bruto, tarifa por tonelada, vale-pedágio em tag, adiantamento, cálculo do saldo, dados do motorista, composição veicular (placas e reboques), tonelagem e chave PIX.',
+    summary: 'Aprimoramento completo no algoritmo de detecção e extração de documentos fiscais. Eliminado o alerta falso de documento incorreto ao anexar Notas Fiscais que contêm a menção a contratos comerciais de grãos no nome ou conteúdo (ex: "NOTA FISCAL ... - CONTRATO ..."). Adicionado suporte integral ao padrão oficial de Carta Frete / Contrato de Transporte (MaisFrete / e-Frete / NSTECH / Tríade), extraindo com máxima precisão o número do contrato, CIOT, frete líquido e bruto, tarifa por tonelada, vale-pedágio em tag, adiantamento, cálculo do saldo, dados do motorista, composição veicular (placas e reboques), tonelagem e chave PIX.',
     items: [
       {
         category: 'fix',
@@ -2046,12 +2070,12 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     id: 'rel_2026_10_14_v2_70_58',
     version: 'v2.70.58',
     date: '14/10/2026',
-    title: 'Website Institucional Oficial (transcunhaoficial.com.br) e Acesso Direto Multicanal',
+    title: 'Website Institucional Oficial (triadeoficial.com.br) e Acesso Direto Multicanal',
     summary: 'Lançamento do Website Institucional oficial com layout tecnológico de alto padrão, animações modernas, cobertura geográfica interativa, carrossel de marcas parceiras, simulador de cotação via WhatsApp e pontos de acesso direto integrados no menu do usuário e apresentação comercial.',
     items: [
       {
         category: 'feature',
-        title: 'Novo Website Institucional Moderno (transcunhaoficial.com.br)',
+        title: 'Novo Website Institucional Moderno (triadeoficial.com.br)',
         description: 'Página institucional pública de alta conversão, responsiva, com visual tech dark-mode, hero com elementos dinâmicos, contadores de métricas em tempo real, apresentação da frota, serviços agrícolas/industriais e link para o Portal do Cliente.'
       },
       {
@@ -2081,7 +2105,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
       {
         category: 'fix',
         title: 'Enquadramento e Alinhamento dos Badges da Capa e Cabeçalho',
-        description: 'Correção de baseline e espaçamentos internos nas cápsulas "Apresentação Institucional & Comercial", "Edição Oficial 2026", "Transportes & Logística Pesada" e "transcunhaoficial.com.br", eliminando proximidade com a borda inferior.'
+        description: 'Correção de baseline e espaçamentos internos nas cápsulas "Apresentação Institucional & Comercial", "Edição Oficial 2026", "Transportes & Logística Pesada" e "triadeoficial.com.br", eliminando proximidade com a borda inferior.'
       },
       {
         category: 'fix',
@@ -2105,7 +2129,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     version: 'v2.70.56',
     date: '13/10/2026',
     title: 'Nova Apresentação Comercial Institucional com Acesso Público e Exportação em PDF Horizontal',
-    summary: 'Lançamento oficial do módulo e página pública de Apresentação Comercial da Transcunha Transportes e Logística. Apresentação completa em formato horizontal (landscape), com gerador de PDF de alta fidelidade, portfólio de marcas parceiras, diferencial da tecnologia própria do Portal do Cliente e acesso público direto por link.',
+    summary: 'Lançamento oficial do módulo e página pública de Apresentação Comercial da Tríade Transportes e Logística. Apresentação completa em formato horizontal (landscape), com gerador de PDF de alta fidelidade, portfólio de marcas parceiras, diferencial da tecnologia própria do Portal do Cliente e acesso público direto por link.',
     items: [
       {
         category: 'feature',
@@ -2138,23 +2162,23 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     id: 'rel_2026_10_12_v2_70_55',
     version: 'v2.70.55',
     date: '12/10/2026',
-    title: 'Padronização do Domínio Oficial Corporativo (transcunhaoficial.com.br)',
-    summary: 'Ajuste definitivo do domínio institucional oficial da empresa para "transcunhaoficial.com.br", com migração automática das contas (@transcunhaoficial.com.br), atualização de servidores IMAP/SMTP, webmail, assinaturas digitais e telas do sistema.',
+    title: 'Padronização do Domínio Oficial Corporativo (triadeoficial.com.br)',
+    summary: 'Ajuste definitivo do domínio institucional oficial da empresa para "triadeoficial.com.br", com migração automática das contas (@triadeoficial.com.br), atualização de servidores IMAP/SMTP, webmail, assinaturas digitais e telas do sistema.',
     items: [
       {
         category: 'fix',
         title: 'Domínio Oficial Corrigido',
-        description: 'Definição do domínio "transcunhaoficial.com.br" como endereço oficial da organização em todas as configurações de e-mail e infraestrutura.'
+        description: 'Definição do domínio "triadeoficial.com.br" como endereço oficial da organização em todas as configurações de e-mail e infraestrutura.'
       },
       {
         category: 'improvement',
         title: 'Migração Automática de Caixas Postais e Aliases',
-        description: 'Sincronização inteligente com migração automática das contas e configurações locais para a terminação @transcunhaoficial.com.br, mantendo senhas e permissões intactas.'
+        description: 'Sincronização inteligente com migração automática das contas e configurações locais para a terminação @triadeoficial.com.br, mantendo senhas e permissões intactas.'
       },
       {
         category: 'improvement',
         title: 'Assinaturas Institucionais e Links Atualizados',
-        description: 'Atualização dos geradores de assinatura oficial e links de suporte e webmail para apontar diretamente para transcunhaoficial.com.br.'
+        description: 'Atualização dos geradores de assinatura oficial e links de suporte e webmail para apontar diretamente para triadeoficial.com.br.'
       }
     ]
   },
@@ -2162,7 +2186,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     id: 'rel_2026_10_12_v2_70_54',
     version: 'v2.70.54',
     date: '12/10/2026',
-    title: 'Módulo Completo de Administração de E-mail Corporativo (@transcunhaoficial.com.br)',
+    title: 'Módulo Completo de Administração de E-mail Corporativo (@triadeoficial.com.br)',
     summary: 'Criação do novo módulo dedicado para gerenciar e administrar contas de e-mail corporativo diretamente pelo sistema, integrado com o cadastro de colaboradores, controle de senhas e cotas, configuração de servidores SMTP/IMAP, acesso direto ao Webmail e gerador de assinaturas padronizadas.',
     items: [
       {
@@ -2173,12 +2197,12 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
       {
         category: 'feature',
         title: 'Integração Direta com Cadastro de Usuários',
-        description: 'Campos dedicados no formulário de colaboradores em "Gerenciar Usuários" para criar ou vincular contas @transcunhaoficial.com.br, definir senhas fortes automáticas, cotas em GB e sincronização bidirecional.'
+        description: 'Campos dedicados no formulário de colaboradores em "Gerenciar Usuários" para criar ou vincular contas @triadeoficial.com.br, definir senhas fortes automáticas, cotas em GB e sincronização bidirecional.'
       },
       {
         category: 'feature',
         title: 'Parâmetros de Servidor & DNS (SMTP / IMAP / Webmail)',
-        description: 'Configuração flexível com suporte a presets (cPanel Transcunha, Google Workspace, Microsoft 365, Zoho, Titan) e guias para configuração rápida no Outlook e celular.'
+        description: 'Configuração flexível com suporte a presets (cPanel Tríade, Google Workspace, Microsoft 365, Zoho, Titan) e guias para configuração rápida no Outlook e celular.'
       },
       {
         category: 'improvement',
@@ -3326,7 +3350,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     version: 'v2.70.7',
     date: '05/10/2026',
     title: 'Planilha de Controladoria: Paleta Original do Excel com Alto Contraste em Modo Claro',
-    summary: 'A Planilha de Embarques (Controladoria) agora reproduz fielmente a paleta de cores original da planilha oficial do Excel (OneDrive). No Modo Claro, as linhas assumem o característico preenchimento azul (#00a8e5), com texto preto encorpado de altíssimo contraste sobre o azul, preenchimento verde floresta (#005c00) para Transcunha com texto amarelo, preenchimento amarelo (#e2d308) para agência Rafael, laranja (#ea580c) para Filial SP, status SIM em amarelo ouro vibrante, RECEBIDO em lilás, deduções/descontos em vermelho vivo, fretes destacados em amarelo e boletos/pix em verde.',
+    summary: 'A Planilha de Embarques (Controladoria) agora reproduz fielmente a paleta de cores original da planilha oficial do Excel (OneDrive). No Modo Claro, as linhas assumem o característico preenchimento azul (#00a8e5), com texto preto encorpado de altíssimo contraste sobre o azul, preenchimento verde floresta (#005c00) para Tríade com texto amarelo, preenchimento amarelo (#e2d308) para agência Rafael, laranja (#ea580c) para Filial SP, status SIM em amarelo ouro vibrante, RECEBIDO em lilás, deduções/descontos em vermelho vivo, fretes destacados em amarelo e boletos/pix em verde.',
     items: [
       {
         category: 'feature',
@@ -3336,7 +3360,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
       {
         category: 'improvement',
         title: 'Cores de preenchimento e tipografia com contraste dedicado',
-        description: 'Destaque automático de filiais (Transcunha em verde floresta com amarelo, Rafael em amarelo ouro com preto, Filial SP em laranja), status já faturado SIM em amarelo ouro, pagamentos em verde, impostos e deduções em vermelho vivo e totais de destaque em amarelo.'
+        description: 'Destaque automático de filiais (Tríade em verde floresta com amarelo, Rafael em amarelo ouro com preto, Filial SP em laranja), status já faturado SIM em amarelo ouro, pagamentos em verde, impostos e deduções em vermelho vivo e totais de destaque em amarelo.'
       }
     ]
   },
@@ -3511,7 +3535,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     version: 'v2.68.0',
     date: '04/10/2026',
     title: 'Paleta de Cores da Tabela de Embarques Atualizada — Padrão Planilha Excel',
-    summary: 'A tabela de embarques (desktop) agora utiliza a mesma paleta de cores da planilha oficial de Carregamento Transcunha. Cabeçalho em azul escuro (#0070C0), linhas em azul claro (#d0ecfa/#b8e3f8) com hover em azul médio (#8dd0f5), bordas em azul céu (#00B0F0). O CSS global foi atualizado com as variáveis e classes da nova paleta.',
+    summary: 'A tabela de embarques (desktop) agora utiliza a mesma paleta de cores da planilha oficial de Carregamento Tríade. Cabeçalho em azul escuro (#0070C0), linhas em azul claro (#d0ecfa/#b8e3f8) com hover em azul médio (#8dd0f5), bordas em azul céu (#00B0F0). O CSS global foi atualizado com as variáveis e classes da nova paleta.',
     items: [
       {
         category: 'improvement',
@@ -4547,7 +4571,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     version: 'v2.33.0',
     date: '30/09/2026',
     title: 'Importador e Visualizador Fiel da Planilha de Embarque (OneDrive/Excel)',
-    summary: 'Configuração completa do campo "Planilha Embarque" na Controladoria para importar e exibir com total fidelidade as 60 colunas operacionais da planilha Excel/OneDrive ("3-15-07-2025- CARREGAMENTO TRANSCUNHA.xlsm"), com upload de arquivos XLSX/XLSM/CSV, seleção de abas, cálculos tributários, adiantamentos e fechamento de saldo de motoristas.',
+    summary: 'Configuração completa do campo "Planilha Embarque" na Controladoria para importar e exibir com total fidelidade as 60 colunas operacionais da planilha Excel/OneDrive ("3-15-07-2025- CARREGAMENTO TRÍADE.xlsm"), com upload de arquivos XLSX/XLSM/CSV, seleção de abas, cálculos tributários, adiantamentos e fechamento de saldo de motoristas.',
     items: [
       {
         category: 'feature',
@@ -4683,7 +4707,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
       {
         category: 'fix',
         title: 'Exibição Imediata do QR Code Oficial',
-        description: 'Ajustada a leitura do Supabase para filtrar estritamente pela chave oficial transcunha_oficial e carregar a imagem do QR Code criptografado automaticamente ao abrir o Mensageiro.'
+        description: 'Ajustada a leitura do Supabase para filtrar estritamente pela chave oficial triade_oficial e carregar a imagem do QR Code criptografado automaticamente ao abrir o Mensageiro.'
       },
       {
         category: 'fix',
@@ -4730,8 +4754,8 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     id: 'rel_2026_09_28_v2_27_0',
     version: 'v2.27.0',
     date: '28/09/2026',
-    title: 'Lançamento do Novo Mensageiro Transcunha Oficial (35 9872-1970)',
-    summary: 'Substituição completa do chat anterior pelo novo módulo Mensageiro Transcunha, dedicado a automações, notificações operacionais e disparos com a linha corporativa oficial (35) 9872-1970. Inclui suporte a pareamento numérico por código de telefone (Pairing Code) e QR Code, disparo rápido para motoristas e clientes, prévia fiel no formato WhatsApp e fila anti-bloqueio com histórico completo de entrega.',
+    title: 'Lançamento do Novo Mensageiro Tríade Oficial (35 9872-1970)',
+    summary: 'Substituição completa do chat anterior pelo novo módulo Mensageiro Tríade, dedicado a automações, notificações operacionais e disparos com a linha corporativa oficial (35) 9872-1970. Inclui suporte a pareamento numérico por código de telefone (Pairing Code) e QR Code, disparo rápido para motoristas e clientes, prévia fiel no formato WhatsApp e fila anti-bloqueio com histórico completo de entrega.',
     items: [
       {
         category: 'feature',
@@ -4759,8 +4783,8 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     id: 'rel_2026_09_28_v2_26_0',
     version: 'v2.26.0',
     date: '28/09/2026',
-    title: 'Lançamento do Novo Módulo Financeiro & Controladoria Transcunha',
-    summary: 'Implementação completa do ecossistema financeiro e controladoria da Transcunha Logística. O módulo traz gestão completa de Contas a Pagar e Contas a Receber, importador e conciliação bancária de arquivos OFX, DREs em 3 níveis (Operacional, Gerencial e Estratégico/EBITDA), Planilha de Controladoria de Embarques com margens de frete em tempo real e Controladoria de Saldos Bancários.',
+    title: 'Lançamento do Novo Módulo Financeiro & Controladoria Tríade',
+    summary: 'Implementação completa do ecossistema financeiro e controladoria da Tríade Logística. O módulo traz gestão completa de Contas a Pagar e Contas a Receber, importador e conciliação bancária de arquivos OFX, DREs em 3 níveis (Operacional, Gerencial e Estratégico/EBITDA), Planilha de Controladoria de Embarques com margens de frete em tempo real e Controladoria de Saldos Bancários.',
     items: [
       {
         category: 'feature',
@@ -4823,11 +4847,11 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     version: 'v2.24.0',
     date: '27/09/2026',
     title: 'Migração para Instância Limpa Oficial & Validação Real de Entrega WhatsApp',
-    summary: 'Solução definitiva para a questão dos disparos de homologação não chegarem ao celular de destino. Foi identificada a causa raiz: a sessão antiga no servidor estava em conflito (Connection Closed), fazendo com que a API rejeitasse o envio enquanto o sistema simulava sucesso. O sistema foi migrado para a nova instância transcunha_oficial, com QR Code limpo e validação rigorosa de retorno físico do WhatsApp.',
+    summary: 'Solução definitiva para a questão dos disparos de homologação não chegarem ao celular de destino. Foi identificada a causa raiz: a sessão antiga no servidor estava em conflito (Connection Closed), fazendo com que a API rejeitasse o envio enquanto o sistema simulava sucesso. O sistema foi migrado para a nova instância triade_oficial, com QR Code limpo e validação rigorosa de retorno físico do WhatsApp.',
     items: [
       {
         category: 'fix',
-        title: 'Migração para Instância Limpa Oficial (transcunha_oficial)',
+        title: 'Migração para Instância Limpa Oficial (triade_oficial)',
         description: 'Substituição da instância anterior, que acumulava mais de 300.000 mensagens e estava travada pelo Baileys após desconexão no celular. A nova instância responde em menos de 1 segundo e gera QR Codes renovados instantaneamente.'
       },
       {
@@ -4875,8 +4899,8 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     id: 'rel_2026_09_27_v2_22_0',
     version: 'v2.22.0',
     date: '27/09/2026',
-    title: 'Correção de Causa Raiz: WhatsApp Desconectado em Produção (transcunha.digital)',
-    summary: 'Identificada e corrigida a causa raiz que fazia o número vinculado aparecer como desconectado no transcunha.digital enquanto funcionava corretamente no localhost. O problema era a estratégia incorreta de proxy + timeout insuficiente para o ambiente de produção na Vercel/Railway.',
+    title: 'Correção de Causa Raiz: WhatsApp Desconectado em Produção (triade.digital)',
+    summary: 'Identificada e corrigida a causa raiz que fazia o número vinculado aparecer como desconectado no triade.digital enquanto funcionava corretamente no localhost. O problema era a estratégia incorreta de proxy + timeout insuficiente para o ambiente de produção na Vercel/Railway.',
     items: [
       {
         category: 'fix',
@@ -5260,7 +5284,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     version: 'v2.11.0',
     date: '24/09/2026',
     title: 'Janela e Central de Conversas do WhatsApp Integrada',
-    summary: 'Nova funcionalidade de chat e janela integrada para abrir, acompanhar e responder conversas de WhatsApp diretamente dentro do sistema Transcunha, com visualização em tempo real de mensagens, envio de anexos, respostas rápidas com modelos e histórico sincronizado.',
+    summary: 'Nova funcionalidade de chat e janela integrada para abrir, acompanhar e responder conversas de WhatsApp diretamente dentro do sistema Tríade, com visualização em tempo real de mensagens, envio de anexos, respostas rápidas com modelos e histórico sincronizado.',
     items: [
       {
         category: 'feature',
@@ -5575,7 +5599,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
     version: 'v2.9.5',
     date: '22/09/2026',
     title: 'Auditoria de Erros, Refatoração Estrutural e Otimização de Performance (Code-Splitting)',
-    summary: 'Varredura completa e auditoria de erros no sistema logístico Transcunha: divisão inteligente de bundle (code-splitting dinâmico com React.lazy/Suspense), otimização de chunks Rollup/Vite, limpeza de dead code e blindagem nos cálculos de frete e tributos TAC.',
+    summary: 'Varredura completa e auditoria de erros no sistema logístico Tríade: divisão inteligente de bundle (code-splitting dinâmico com React.lazy/Suspense), otimização de chunks Rollup/Vite, limpeza de dead code e blindagem nos cálculos de frete e tributos TAC.',
     items: [
       {
         category: 'improvement',
@@ -5732,7 +5756,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
       },
       {
         category: 'feature',
-        title: 'Exportação em PDF com Layout Transcunha',
+        title: 'Exportação em PDF com Layout Tríade',
         description: 'Geração de relatórios em PDF com cabeçalho institucional, logotipo da empresa, métricas consolidadas (KPIs) e tabela completa dos embarques com totais calculados.'
       },
       {
@@ -5829,7 +5853,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
       {
         category: 'security',
         title: 'Chaves e CORS de Produção Configurados',
-        description: 'Autenticação de API Key dedicada e liberação de CORS para comunicação segura com o Transcunha.'
+        description: 'Autenticação de API Key dedicada e liberação de CORS para comunicação segura com o Tríade.'
       },
       {
         category: 'improvement',
@@ -6269,7 +6293,7 @@ export const SYSTEM_RELEASES: SystemRelease[] = [
 
 export const LATEST_SYSTEM_RELEASE = SYSTEM_RELEASES[0];
 
-const STORAGE_PREFIX = 'transcunha_seen_update_';
+const STORAGE_PREFIX = 'triade_seen_update_';
 
 /**
  * Determina se um lançamento específico deve ser ocultado para o usuário

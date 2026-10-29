@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { resolveBrandLogo } from '../utils/brandLogo';
 import {
   Truck, ShieldCheck, Cpu, Globe, MapPin, Phone, Mail, ArrowRight, Menu, X,
   CheckCircle2, Clock, FileSpreadsheet, Monitor, Award, Users, Wheat, Factory,
@@ -14,7 +15,7 @@ interface InstitutionalWebsitePageProps {
 
 const WHATSAPP_COMERCIAL = '5535991030469';
 const WHATSAPP_OPERACOES = '5535998721970';
-const EMAIL_COMERCIAL = 'comercialtranscunha@gmail.com';
+const EMAIL_COMERCIAL = 'comercialtriade@gmail.com';
 
 const NAV_LINKS = [
   { id: 'inicio', label: 'Início' },
@@ -140,7 +141,7 @@ export const InstitutionalWebsitePage: React.FC<InstitutionalWebsitePageProps> =
   onGoToSystem,
   onOpenPresentation
 }) => {
-  const logoSrc = companyLogo || '/logo.png';
+  const logoSrc = resolveBrandLogo(companyLogo, 'dark');
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('inicio');
@@ -151,7 +152,7 @@ export const InstitutionalWebsitePage: React.FC<InstitutionalWebsitePageProps> =
   // SEO
   useEffect(() => {
     const prevTitle = document.title;
-    document.title = 'Transcunha Transportes e Logística | Soluções que movem o futuro';
+    document.title = 'Tríade Transportes e Logística | Soluções que movem o futuro';
     let meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
     const created = !meta;
     const prevContent = meta?.content;
@@ -160,7 +161,7 @@ export const InstitutionalWebsitePage: React.FC<InstitutionalWebsitePageProps> =
       meta.name = 'description';
       document.head.appendChild(meta);
     }
-    meta.content = 'Transcunha Transportes e Logística: transporte rodoviário de grãos e cargas industriais com +15 anos de experiência, +5.000 motoristas parceiros, cargas 100% asseguradas e Portal do Cliente em tempo real.';
+    meta.content = 'Tríade Transportes e Logística: transporte rodoviário de grãos e cargas industriais com +15 anos de experiência, +5.000 motoristas parceiros, cargas 100% asseguradas e Portal do Cliente em tempo real.';
     return () => {
       document.title = prevTitle;
       if (created) meta?.remove();
@@ -196,13 +197,13 @@ export const InstitutionalWebsitePage: React.FC<InstitutionalWebsitePageProps> =
   const handleQuoteSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const msg =
-      `Olá, Transcunha! Gostaria de solicitar uma cotação de frete.\n\n` +
+      `Olá, Tríade! Gostaria de solicitar uma cotação de frete.\n\n` +
       `*Nome:* ${form.nome}\n` +
       (form.empresa ? `*Empresa:* ${form.empresa}\n` : '') +
       `*Origem:* ${form.origem}\n` +
       `*Destino:* ${form.destino}\n` +
       (form.carga ? `*Carga / Volume:* ${form.carga}\n` : '') +
-      `\nEnviado pelo site transcunhaoficial.com.br`;
+      `\nEnviado pelo site triadeoficial.com.br`;
     window.open(whatsappLink(WHATSAPP_COMERCIAL, msg), '_blank', 'noopener');
   };
 
@@ -256,7 +257,7 @@ export const InstitutionalWebsitePage: React.FC<InstitutionalWebsitePageProps> =
       >
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-[72px] flex items-center justify-between gap-4">
           <button id="site-logo" onClick={() => scrollTo('inicio')} className="flex items-center gap-3 cursor-pointer shrink-0">
-            <img src={logoSrc} alt="Transcunha Transportes e Logística" className="h-10 w-auto object-contain drop-shadow-[0_4px_14px_rgba(0,82,204,.55)]" />
+            <img src={logoSrc} alt="Tríade Transportes e Logística" className="h-10 w-auto object-contain drop-shadow-[0_4px_14px_rgba(236,41,7,.4)]" />
             <div className="hidden sm:block text-left leading-tight">
               <div className="text-sm font-extrabold tracking-wide">TRANS<span className="text-sky-400">CUNHA</span></div>
               <div className="text-[10px] text-slate-400 tracking-[0.2em] uppercase">Transportes & Logística</div>
@@ -367,7 +368,7 @@ export const InstitutionalWebsitePage: React.FC<InstitutionalWebsitePageProps> =
                 </button>
                 <a
                   id="hero-whatsapp"
-                  href={whatsappLink(WHATSAPP_COMERCIAL, 'Olá, Transcunha! Vim pelo site e gostaria de falar com o comercial.')}
+                  href={whatsappLink(WHATSAPP_COMERCIAL, 'Olá, Tríade! Vim pelo site e gostaria de falar com o comercial.')}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold border border-slate-600 hover:border-emerald-400/70 hover:bg-emerald-500/10 transition-all"
@@ -472,7 +473,7 @@ export const InstitutionalWebsitePage: React.FC<InstitutionalWebsitePageProps> =
 
         {/* ================= CLIENT MARQUEE ================= */}
         <section id="clientes-strip" className="relative py-10 border-y border-slate-800/80 bg-[#060c1b]">
-          <p className="text-center text-xs uppercase tracking-[0.3em] text-slate-500 mb-6">Empresas que confiam na Transcunha</p>
+          <p className="text-center text-xs uppercase tracking-[0.3em] text-slate-500 mb-6">Empresas que confiam na Tríade</p>
           <div className="relative overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_12%,black_88%,transparent)]">
             <div className="flex w-max tc-marquee">
               {[...CLIENTS, ...CLIENTS].map((c, i) => (
@@ -493,7 +494,7 @@ export const InstitutionalWebsitePage: React.FC<InstitutionalWebsitePageProps> =
                 Especialistas no modal <span className="text-sky-400">rodoviário</span>
               </h2>
               <p className="text-slate-300 leading-relaxed mb-5">
-                A Transcunha Transportes e Logística está estrategicamente posicionada em <strong className="text-white">Pratápolis - MG</strong>, próxima aos maiores polos de produção e processamento do agronegócio e da indústria brasileira.
+                A Tríade Transportes e Logística está estrategicamente posicionada em <strong className="text-white">Pratápolis - MG</strong>, próxima aos maiores polos de produção e processamento do agronegócio e da indústria brasileira.
               </p>
               <p className="text-slate-300 leading-relaxed mb-8">
                 Com mais de 15 anos de expertise de seus fundadores, conectamos produtores, indústrias e portos com eficiência, transparência fiscal e garantia de pontualidade.
@@ -663,7 +664,7 @@ export const InstitutionalWebsitePage: React.FC<InstitutionalWebsitePageProps> =
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div data-reveal className="text-center max-w-2xl mx-auto mb-14">
               <span className="text-xs font-bold uppercase tracking-[0.25em] text-sky-400">Parcerias estratégicas</span>
-              <h2 className="text-4xl sm:text-5xl font-black tracking-tight mt-3 mb-4">Grandes marcas que confiam na Transcunha</h2>
+              <h2 className="text-4xl sm:text-5xl font-black tracking-tight mt-3 mb-4">Grandes marcas que confiam na Tríade</h2>
               <p className="text-slate-400">Relações de longo prazo, safra após safra, com os maiores grupos do agronegócio e da indústria nacional.</p>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -717,8 +718,8 @@ export const InstitutionalWebsitePage: React.FC<InstitutionalWebsitePageProps> =
               <div className="space-y-3">
                 {[
                   { icon: Mail, label: 'E-mail comercial', value: EMAIL_COMERCIAL, href: `mailto:${EMAIL_COMERCIAL}`, color: 'text-sky-300 bg-blue-600/20 border-blue-500/30' },
-                  { icon: Phone, label: 'WhatsApp comercial', value: '(35) 99103-0469', href: whatsappLink(WHATSAPP_COMERCIAL, 'Olá, Transcunha! Vim pelo site.'), color: 'text-emerald-300 bg-emerald-500/15 border-emerald-500/30' },
-                  { icon: Headphones, label: 'WhatsApp operações', value: '(35) 99872-1970', href: whatsappLink(WHATSAPP_OPERACOES, 'Olá, equipe de operações Transcunha!'), color: 'text-emerald-300 bg-emerald-500/15 border-emerald-500/30' },
+                  { icon: Phone, label: 'WhatsApp comercial', value: '(35) 99103-0469', href: whatsappLink(WHATSAPP_COMERCIAL, 'Olá, Tríade! Vim pelo site.'), color: 'text-emerald-300 bg-emerald-500/15 border-emerald-500/30' },
+                  { icon: Headphones, label: 'WhatsApp operações', value: '(35) 99872-1970', href: whatsappLink(WHATSAPP_OPERACOES, 'Olá, equipe de operações Tríade!'), color: 'text-emerald-300 bg-emerald-500/15 border-emerald-500/30' },
                   { icon: MapPin, label: 'Matriz operacional', value: 'Pratápolis - MG • CEP 37970-000', href: 'https://www.google.com/maps/search/?api=1&query=Prat%C3%A1polis+MG', color: 'text-teal-300 bg-teal-500/15 border-teal-500/30' }
                 ].map(c => (
                   <a
@@ -795,7 +796,7 @@ export const InstitutionalWebsitePage: React.FC<InstitutionalWebsitePageProps> =
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-4">
-              <img src={logoSrc} alt="Transcunha" className="h-11 w-auto object-contain" />
+              <img src={logoSrc} alt="Tríade" className="h-11 w-auto object-contain" />
               <div>
                 <div className="font-extrabold tracking-wide">TRANS<span className="text-sky-400">CUNHA</span></div>
                 <div className="text-[10px] text-slate-500 tracking-[0.2em] uppercase">Transportes & Logística</div>
@@ -803,7 +804,7 @@ export const InstitutionalWebsitePage: React.FC<InstitutionalWebsitePageProps> =
             </div>
             <p className="text-sm text-slate-400 max-w-sm mb-4">Soluções que movem o futuro. Transporte rodoviário de cargas com segurança, pontualidade e tecnologia própria.</p>
             <div className="inline-flex items-center gap-2 text-xs text-slate-500">
-              <Globe className="w-3.5 h-3.5" /> transcunhaoficial.com.br
+              <Globe className="w-3.5 h-3.5" /> triadeoficial.com.br
             </div>
           </div>
           <div>
@@ -828,7 +829,7 @@ export const InstitutionalWebsitePage: React.FC<InstitutionalWebsitePageProps> =
         </div>
         <div className="border-t border-slate-800/80">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
-            <span>© {new Date().getFullYear()} Transcunha Transportes e Logística. Todos os direitos reservados.</span>
+            <span>© {new Date().getFullYear()} Tríade Transportes e Logística. Todos os direitos reservados.</span>
             <span className="flex items-center gap-1.5"><Sparkles className="w-3.5 h-3.5 text-sky-500" /> Soluções que movem o futuro</span>
           </div>
         </div>
@@ -837,7 +838,7 @@ export const InstitutionalWebsitePage: React.FC<InstitutionalWebsitePageProps> =
       {/* Floating WhatsApp */}
       <a
         id="floating-whatsapp"
-        href={whatsappLink(WHATSAPP_COMERCIAL, 'Olá, Transcunha! Vim pelo site e gostaria de uma cotação.')}
+        href={whatsappLink(WHATSAPP_COMERCIAL, 'Olá, Tríade! Vim pelo site e gostaria de uma cotação.')}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Falar no WhatsApp"

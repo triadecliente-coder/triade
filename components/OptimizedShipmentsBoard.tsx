@@ -207,7 +207,7 @@ export const OptimizedShipmentsBoard: React.FC<OptimizedShipmentsBoardProps> = (
   // Auto-recuperação do Modo TV após recarga programada de 15 minutos (para monitores dedicados 24/7)
   useEffect(() => {
     try {
-      const isSavedTv = sessionStorage.getItem('transcunha_auto_tv_mode') === 'true';
+      const isSavedTv = sessionStorage.getItem('triade_auto_tv_mode') === 'true';
       const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
       const hasTvParam = urlParams?.get('tv') === 'true' || urlParams?.get('tv') === '1';
 
@@ -227,7 +227,7 @@ export const OptimizedShipmentsBoard: React.FC<OptimizedShipmentsBoardProps> = (
     setIsTvMode(prev => {
       const next = !prev;
       if (next) {
-        try { sessionStorage.setItem('transcunha_auto_tv_mode', 'true'); } catch {}
+        try { sessionStorage.setItem('triade_auto_tv_mode', 'true'); } catch {}
         // Entering TV Mode: reset filters to ensure all shipments are shown
         setSearchTerm('');
         setSlaFilter('all');
@@ -240,7 +240,7 @@ export const OptimizedShipmentsBoard: React.FC<OptimizedShipmentsBoardProps> = (
           document.documentElement.requestFullscreen().catch(() => {});
         }
       } else {
-        try { sessionStorage.removeItem('transcunha_auto_tv_mode'); } catch {}
+        try { sessionStorage.removeItem('triade_auto_tv_mode'); } catch {}
         if (document.fullscreenElement && document.exitFullscreen) {
           document.exitFullscreen().catch(() => {});
         }
@@ -256,7 +256,7 @@ export const OptimizedShipmentsBoard: React.FC<OptimizedShipmentsBoardProps> = (
         if (prev <= 1) {
           if (isTvMode) {
             // Em monitor dedicado de TV: Hard Refresh para liberar 100% de memória heap, WebGL e conexões
-            try { sessionStorage.setItem('transcunha_auto_tv_mode', 'true'); } catch {}
+            try { sessionStorage.setItem('triade_auto_tv_mode', 'true'); } catch {}
             console.log('[Modo TV] 🔄 Executando recarga de segurança periódica de 15 minutos...');
             window.location.reload();
             return REFRESH_INTERVAL_SECONDS;

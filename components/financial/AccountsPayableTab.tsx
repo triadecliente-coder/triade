@@ -234,7 +234,7 @@ export const AccountsPayableTab: React.FC<AccountsPayableTabProps> = ({
   // Documentos de Liquidação da Folha (Nota Fiscal e Comprovante de Pagamento)
   const [payrollDocs, setPayrollDocs] = useState<Record<string, PayrollSettlementDoc>>(() => {
     try {
-      const raw = localStorage.getItem('transcunha_payroll_docs_v2');
+      const raw = localStorage.getItem('triade_payroll_docs_v2');
       return raw ? JSON.parse(raw) : {};
     } catch {
       return {};
@@ -258,7 +258,7 @@ export const AccountsPayableTab: React.FC<AccountsPayableTabProps> = ({
         updatedAt: new Date().toISOString()
       };
       const next = { ...prev, [key]: nextDoc };
-      try { localStorage.setItem('transcunha_payroll_docs_v2', JSON.stringify(next)); } catch {}
+      try { localStorage.setItem('triade_payroll_docs_v2', JSON.stringify(next)); } catch {}
       return next;
     });
   };
@@ -269,7 +269,7 @@ export const AccountsPayableTab: React.FC<AccountsPayableTabProps> = ({
   // Estado de Regimes, Salários Fixos, Tributos CLT e Adiantamentos (Persistidos localmente)
   const [userRegimes, setUserRegimes] = useState<Record<string, 'CLT' | 'PJ' | 'Gestor AG'>>(() => {
     try {
-      const raw = localStorage.getItem('transcunha_payroll_regimes');
+      const raw = localStorage.getItem('triade_payroll_regimes');
       return raw ? JSON.parse(raw) : {};
     } catch {
       return {};
@@ -278,7 +278,7 @@ export const AccountsPayableTab: React.FC<AccountsPayableTabProps> = ({
 
   const [userSalaries, setUserSalaries] = useState<Record<string, number>>(() => {
     try {
-      const raw = localStorage.getItem('transcunha_payroll_salaries');
+      const raw = localStorage.getItem('triade_payroll_salaries');
       return raw ? JSON.parse(raw) : {};
     } catch {
       return {};
@@ -287,7 +287,7 @@ export const AccountsPayableTab: React.FC<AccountsPayableTabProps> = ({
 
   const [userTaxes, setUserTaxes] = useState<Record<string, number>>(() => {
     try {
-      const raw = localStorage.getItem('transcunha_payroll_taxes');
+      const raw = localStorage.getItem('triade_payroll_taxes');
       return raw ? JSON.parse(raw) : {};
     } catch {
       return {};
@@ -296,7 +296,7 @@ export const AccountsPayableTab: React.FC<AccountsPayableTabProps> = ({
 
   const [userCustomAdvances, setUserCustomAdvances] = useState<Record<string, number>>(() => {
     try {
-      const raw = localStorage.getItem('transcunha_payroll_advances');
+      const raw = localStorage.getItem('triade_payroll_advances');
       return raw ? JSON.parse(raw) : {};
     } catch {
       return {};
@@ -305,12 +305,12 @@ export const AccountsPayableTab: React.FC<AccountsPayableTabProps> = ({
 
   const [userCustomCommissions, setUserCustomCommissions] = useState<Record<string, number>>(() => {
     try {
-      const raw = localStorage.getItem('transcunha_payroll_commissions');
+      const raw = localStorage.getItem('triade_payroll_commissions');
       const parsed = raw ? JSON.parse(raw) : {};
       // Se houver resíduo do cálculo incorreto antigo (1272.96 para Maurício), descartar e limpar
       if (parsed['USR-294'] === 1272.96 || parsed['USR-294'] === 1272.95) {
         delete parsed['USR-294'];
-        try { localStorage.setItem('transcunha_payroll_commissions', JSON.stringify(parsed)); } catch {}
+        try { localStorage.setItem('triade_payroll_commissions', JSON.stringify(parsed)); } catch {}
       }
       return parsed;
     } catch {
@@ -321,7 +321,7 @@ export const AccountsPayableTab: React.FC<AccountsPayableTabProps> = ({
   // Adiantamentos Estruturados com Data e Comprovante de Transferência (por userId_monthKey)
   const [payrollAdvances, setPayrollAdvances] = useState<Record<string, PayrollAdvanceRecord>>(() => {
     try {
-      const raw = localStorage.getItem('transcunha_payroll_advances_v2');
+      const raw = localStorage.getItem('triade_payroll_advances_v2');
       return raw ? JSON.parse(raw) : {};
     } catch {
       return {};
@@ -384,7 +384,7 @@ export const AccountsPayableTab: React.FC<AccountsPayableTabProps> = ({
   const handleUpdateUserRegime = (userId: string, regime: 'CLT' | 'PJ' | 'Gestor AG') => {
     setUserRegimes(prev => {
       const next = { ...prev, [userId]: regime };
-      try { localStorage.setItem('transcunha_payroll_regimes', JSON.stringify(next)); } catch {}
+      try { localStorage.setItem('triade_payroll_regimes', JSON.stringify(next)); } catch {}
       return next;
     });
   };
@@ -392,7 +392,7 @@ export const AccountsPayableTab: React.FC<AccountsPayableTabProps> = ({
   // Lista de IDs de Colaboradores Excluídos da Folha de Pagamento (Persistidos localmente)
   const [excludedPayrollUserIds, setExcludedPayrollUserIds] = useState<string[]>(() => {
     try {
-      const raw = localStorage.getItem('transcunha_payroll_excluded_users');
+      const raw = localStorage.getItem('triade_payroll_excluded_users');
       return raw ? JSON.parse(raw) : [];
     } catch {
       return [];
@@ -412,7 +412,7 @@ export const AccountsPayableTab: React.FC<AccountsPayableTabProps> = ({
       if (prev.includes(targetUser.id)) return prev;
       const next = [...prev, targetUser.id];
       try {
-        localStorage.setItem('transcunha_payroll_excluded_users', JSON.stringify(next));
+        localStorage.setItem('triade_payroll_excluded_users', JSON.stringify(next));
       } catch {}
       return next;
     });
@@ -425,7 +425,7 @@ export const AccountsPayableTab: React.FC<AccountsPayableTabProps> = ({
     setExcludedPayrollUserIds(prev => {
       const next = prev.filter(id => id !== userId);
       try {
-        localStorage.setItem('transcunha_payroll_excluded_users', JSON.stringify(next));
+        localStorage.setItem('triade_payroll_excluded_users', JSON.stringify(next));
       } catch {}
       return next;
     });
@@ -438,7 +438,7 @@ export const AccountsPayableTab: React.FC<AccountsPayableTabProps> = ({
   const handleRestoreAllUsersToPayroll = () => {
     setExcludedPayrollUserIds([]);
     try {
-      localStorage.removeItem('transcunha_payroll_excluded_users');
+      localStorage.removeItem('triade_payroll_excluded_users');
     } catch {}
     showToast('Todos os colaboradores foram restaurados para a Folha de Pagamento.', 'success');
     setIsExcludedUsersModalOpen(false);
@@ -506,7 +506,7 @@ export const AccountsPayableTab: React.FC<AccountsPayableTabProps> = ({
       // Excluir expressamente o "Agenciador Embarque" (esse é pago diretamente pelo "Agenciador Líder" dele)
       if (u.agencyRole === 'embarque') return;
 
-      // Considerar todos os perfis internos do sistema Transcunha
+      // Considerar todos os perfis internos do sistema Tríade
       const isInternal = INTERNAL_PROFILES.includes(u.profile as UserProfile) || 
         ['Admin', 'Administrador do Sistema', 'Diretor', 'Supervisor', 'Gerente Comercial', 'Comercial', 'Financeiro', 'Fiscal', 'Gerenciadora de Risco', 'Embarcador', 'Agenciador', 'Demonstração'].includes(prof);
 
@@ -588,13 +588,13 @@ export const AccountsPayableTab: React.FC<AccountsPayableTabProps> = ({
 
     setUserRegimes(prev => {
       const next = { ...prev, [uid]: editRegime };
-      try { localStorage.setItem('transcunha_payroll_regimes', JSON.stringify(next)); } catch {}
+      try { localStorage.setItem('triade_payroll_regimes', JSON.stringify(next)); } catch {}
       return next;
     });
 
     setUserSalaries(prev => {
       const next = { ...prev, [uid]: parsedSal };
-      try { localStorage.setItem('transcunha_payroll_salaries', JSON.stringify(next)); } catch {}
+      try { localStorage.setItem('triade_payroll_salaries', JSON.stringify(next)); } catch {}
       return next;
     });
 
@@ -605,13 +605,13 @@ export const AccountsPayableTab: React.FC<AccountsPayableTabProps> = ({
       } else {
         next[uid] = parsedComm;
       }
-      try { localStorage.setItem('transcunha_payroll_commissions', JSON.stringify(next)); } catch {}
+      try { localStorage.setItem('triade_payroll_commissions', JSON.stringify(next)); } catch {}
       return next;
     });
 
     setUserTaxes(prev => {
       const next = { ...prev, [uid]: parsedTax };
-      try { localStorage.setItem('transcunha_payroll_taxes', JSON.stringify(next)); } catch {}
+      try { localStorage.setItem('triade_payroll_taxes', JSON.stringify(next)); } catch {}
       return next;
     });
 
@@ -629,13 +629,13 @@ export const AccountsPayableTab: React.FC<AccountsPayableTabProps> = ({
           updatedAt: new Date().toISOString(),
         }
       };
-      try { localStorage.setItem('transcunha_payroll_advances_v2', JSON.stringify(next)); } catch {}
+      try { localStorage.setItem('triade_payroll_advances_v2', JSON.stringify(next)); } catch {}
       return next;
     });
 
     setUserCustomAdvances(prev => {
       const next = { ...prev, [uid]: parsedAdv };
-      try { localStorage.setItem('transcunha_payroll_advances', JSON.stringify(next)); } catch {}
+      try { localStorage.setItem('triade_payroll_advances', JSON.stringify(next)); } catch {}
       return next;
     });
 

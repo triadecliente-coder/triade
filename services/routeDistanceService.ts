@@ -24,8 +24,8 @@ export interface RouteCalculationResult {
 const unshortenMemoryCache = new Map<string, string>();
 const routeCalculationMemoryCache = new Map<string, RouteCalculationResult>();
 
-const UNSHORTEN_STORAGE_KEY = 'transcunha_unshorten_cache_v1';
-const ROUTE_STORAGE_KEY = 'transcunha_route_dist_cache_v1';
+const UNSHORTEN_STORAGE_KEY = 'triade_unshorten_cache_v1';
+const ROUTE_STORAGE_KEY = 'triade_route_dist_cache_v1';
 
 function getLocalStorageMap(key: string): Record<string, any> {
   if (typeof window === 'undefined') return {};

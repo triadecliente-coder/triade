@@ -130,7 +130,7 @@ export default async function handler(req: any, res: any) {
     // 3. Resposta de Sucesso conforme documentação (200 OK)
     return res.status(200).json({
       success: true,
-      message: 'Parecer recebido e processado com sucesso pelo sistema Transcunha',
+      message: 'Parecer recebido e processado com sucesso pelo sistema Tríade',
       idSolicitacao,
       status: statusStr
     });

@@ -35,14 +35,14 @@ services:
       DATABASE_ENABLED: "true"
       DATABASE_PROVIDER: postgresql
       DATABASE_CONNECTION_URI: "postgresql://evolution:evolution_secret_2026@evolution-postgres:5432/evolution?schema=public"
-      DATABASE_CONNECTION_CLIENT_NAME: "transcunha_evolution"
+      DATABASE_CONNECTION_CLIENT_NAME: "triade_evolution"
       
       # Configurações de Sessão e Cache
       CACHE_REDIS_ENABLED: "false"
       CACHE_LOCAL_ENABLED: "true"
       
       # WhatsApp Baileys
-      CONFIG_SESSION_PHONE_CLIENT: "Transcunha Logística"
+      CONFIG_SESSION_PHONE_CLIENT: "Tríade Logística"
       CONFIG_SESSION_PHONE_NAME: "Chrome"
       
       # Webhooks e Eventos

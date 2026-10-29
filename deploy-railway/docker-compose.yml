@@ -7,7 +7,7 @@ services:
     restart: always
     environment:
       POSTGRES_USER: ${DATABASE_USER:-evolution}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-evolution_secret_2026_transcunha}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-evolution_secret_2026_triade}
       POSTGRES_DB: ${DATABASE_NAME:-evolution}
     volumes:
       - evolution_pg_data:/var/lib/postgresql/data
@@ -48,7 +48,7 @@ services:
       SERVER_PORT: 8080
       SERVER_TYPE: http
       SERVER_URL: ${SERVER_URL:-http://localhost:8080}
-      AUTHENTICATION_API_KEY: ${AUTHENTICATION_API_KEY:-transcunha_secure_api_key_2026_x9}
+      AUTHENTICATION_API_KEY: ${AUTHENTICATION_API_KEY:-triade_secure_api_key_2026_x9}
       
       # CORS
       CORS_ORIGIN: "*"
@@ -58,8 +58,8 @@ services:
       # Banco de dados Postgres
       DATABASE_ENABLED: "true"
       DATABASE_PROVIDER: postgresql
-      DATABASE_CONNECTION_URI: "postgresql://${DATABASE_USER:-evolution}:${DATABASE_PASSWORD:-evolution_secret_2026_transcunha}@evolution-postgres:5432/${DATABASE_NAME:-evolution}?schema=public"
-      DATABASE_CONNECTION_CLIENT_NAME: "transcunha_evolution"
+      DATABASE_CONNECTION_URI: "postgresql://${DATABASE_USER:-evolution}:${DATABASE_PASSWORD:-evolution_secret_2026_triade}@evolution-postgres:5432/${DATABASE_NAME:-evolution}?schema=public"
+      DATABASE_CONNECTION_CLIENT_NAME: "triade_evolution"
       DATABASE_SAVE_DATA_INSTANCE: "true"
       DATABASE_SAVE_DATA_NEW_MESSAGE: "true"
       DATABASE_SAVE_MESSAGE_UPDATE: "true"
@@ -74,7 +74,7 @@ services:
       CACHE_LOCAL_ENABLED: "false"
       
       # Identificação da Sessão WhatsApp
-      CONFIG_SESSION_PHONE_CLIENT: "Transcunha Logística"
+      CONFIG_SESSION_PHONE_CLIENT: "Tríade Logística"
       CONFIG_SESSION_PHONE_NAME: "Chrome"
       
       # Webhooks globais

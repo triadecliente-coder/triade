@@ -57,7 +57,7 @@ export const RdoNacionalModal: React.FC<RdoNacionalModalProps> = ({
     apiToken: '',
     callbackToken: '',
     apiUrl: 'https://painel.mrbsolucoes.com.br',
-    clientName: 'TRANSCUNHA TRANSPORTES',
+    clientName: 'TRÍADE TRANSPORTES',
     enabled: true,
     autoApproveInRisk: true,
   });
@@ -75,7 +75,7 @@ export const RdoNacionalModal: React.FC<RdoNacionalModalProps> = ({
   const [selectedDriverId, setSelectedDriverId] = useState<string>(initialDriverId || '');
   
   const [formData, setFormData] = useState({
-    nomeDoCliente: 'TRANSCUNHA TRANSPORTES',
+    nomeDoCliente: 'TRÍADE TRANSPORTES',
     cpf: '',
     nome: '',
     nomeDaMae: '',
@@ -102,7 +102,7 @@ export const RdoNacionalModal: React.FC<RdoNacionalModalProps> = ({
         setConfig(loadedConfig);
         setFormData(prev => ({
           ...prev,
-          nomeDoCliente: loadedConfig.clientName || 'TRANSCUNHA TRANSPORTES'
+          nomeDoCliente: loadedConfig.clientName || 'TRÍADE TRANSPORTES'
         }));
 
         const list = await fetchRdoRequests();
@@ -121,9 +121,9 @@ export const RdoNacionalModal: React.FC<RdoNacionalModalProps> = ({
       fetchRdoRequests().then(setRdoRequests);
     };
 
-    window.addEventListener('transcunha:rdo_changed', handleRdoChanged);
+    window.addEventListener('triade:rdo_changed', handleRdoChanged);
     return () => {
-      window.removeEventListener('transcunha:rdo_changed', handleRdoChanged);
+      window.removeEventListener('triade:rdo_changed', handleRdoChanged);
     };
   }, [isOpen]);
 
@@ -141,7 +141,7 @@ export const RdoNacionalModal: React.FC<RdoNacionalModalProps> = ({
         );
 
         setFormData({
-          nomeDoCliente: config.clientName || 'TRANSCUNHA TRANSPORTES',
+          nomeDoCliente: config.clientName || 'TRÍADE TRANSPORTES',
           cpf: s.driverCpf || matchedDriver?.cpf || '',
           nome: s.driverName || matchedDriver?.name || '',
           nomeDaMae: '',
@@ -467,7 +467,7 @@ export const RdoNacionalModal: React.FC<RdoNacionalModalProps> = ({
                     type="text"
                     value={formData.nomeDoCliente}
                     onChange={e => setFormData({ ...formData, nomeDoCliente: e.target.value })}
-                    placeholder="Ex: TRANSCUNHA TRANSPORTES"
+                    placeholder="Ex: TRÍADE TRANSPORTES"
                     className="w-full p-2.5 text-xs rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>

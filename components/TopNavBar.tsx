@@ -24,6 +24,7 @@ import { InfoIcon } from './icons/InfoIcon';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu as MenuIcon, X as XIcon, Activity, ShieldCheck, Sun, Moon, Sparkles, MessageSquare, ArrowDownCircle, ArrowUpCircle, FileSpreadsheet, PieChart, Layers, TrendingUp, Building2, Landmark, Send, FileText, MapPin, Presentation, Globe, Headphones, Scale } from 'lucide-react';
 import DriverLocationTracker from './DriverLocationTracker';
+import { resolveBrandLogo } from '../utils/brandLogo';
 
 import type { User, Page, ProfilePermissions, Ticket, Shipment, FreightOffer, Cargo, Driver, Client, Product, Vehicle } from '../types';
 import { UserProfile, TicketStatus } from '../types';
@@ -256,10 +257,10 @@ const TopNavBar: React.FC<TopNavBarProps> = ({
   return (
     <header 
       style={{ zoom: 0.9 }}
-      className="bg-white/95 dark:bg-[#0b1328]/90 shadow-lg shadow-blue-950/20 backdrop-blur-xl sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-700/60 relative"
+      className="bg-white/95 dark:bg-[#06162B]/95 shadow-lg shadow-slate-950/25 backdrop-blur-xl sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-700/60 relative"
     >
       {/* Top Border Glow (Same as Login Card) */}
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-sky-400 to-transparent opacity-80 pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#FF4D00] to-transparent opacity-90 pointer-events-none" />
 
       <div className="w-full max-w-[1920px] mx-auto px-3 sm:px-5 lg:px-6">
         <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20 gap-4">
@@ -267,8 +268,8 @@ const TopNavBar: React.FC<TopNavBarProps> = ({
           {/* Logo e Nome da Empresa + Status Online (Lado Esquerdo) */}
           <div className="flex items-center gap-2.5 lg:gap-3 shrink-0">
             <a href="#" onClick={(e) => { e.preventDefault(); handlePageSelect('dashboard')}} className="flex items-center py-1">
-                {companyLogo ? (
-                    <img src={companyLogo} alt="Logo" className="h-9 sm:h-11 md:h-12 w-auto object-contain max-w-[140px] sm:max-w-[180px] transition-all filter drop-shadow-[0_2px_10px_rgba(11,102,228,0.3)]" />
+                {true ? (
+                    <img src={resolveBrandLogo(companyLogo, themeMode === 'dark' ? 'dark' : 'light')} alt="Logo Tríade" className="h-10 sm:h-12 md:h-13 w-auto object-contain max-w-[150px] sm:max-w-[190px] transition-all filter drop-shadow-[0_2px_10px_rgba(236,41,7,0.22)]" />
                 ) : (
                     <h1 className="text-lg md:text-xl xl:text-2xl font-black text-primary dark:text-white tracking-tighter uppercase whitespace-nowrap">
                       TRANS<span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-500">CUNHA</span>
@@ -297,7 +298,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({
                                 onClick={() => handleDropdownToggle(item.id)}
                                 className={`flex items-center px-3 xl:px-4 py-2 text-xs xl:text-sm font-bold rounded-xl transition-all duration-200 whitespace-nowrap cursor-pointer ${
                                     isActive 
-                                      ? 'bg-gradient-to-r from-blue-600 via-primary to-blue-700 text-white shadow-md shadow-blue-900/40 scale-[1.02]' 
+                                      ? 'bg-gradient-to-r from-[#C41C00] via-primary to-[#FF4D00] text-white shadow-md shadow-[#EC2907]/30 scale-[1.02]' 
                                       : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 hover:text-slate-900 dark:hover:text-white'
                                 }`}
                             >
@@ -305,7 +306,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({
                                 <ChevronDownIcon className={`w-3.5 h-3.5 xl:w-4 xl:h-4 ml-1 transition-transform ${openDropdown === item.id ? 'rotate-180' : ''}`} />
                             </button>
                             {openDropdown === item.id && (
-                                <div className="absolute mt-2 w-60 origin-top-left bg-white/95 dark:bg-[#0b1328]/95 border border-slate-200 dark:border-slate-700/80 rounded-2xl shadow-2xl backdrop-blur-2xl py-1.5 z-50">
+                                <div className="absolute mt-2 w-60 origin-top-left bg-white/95 dark:bg-[#07182E]/95 border border-slate-200 dark:border-slate-700/80 rounded-2xl shadow-2xl backdrop-blur-2xl py-1.5 z-50">
                                     {item.children.map(child => {
                                       if (child.children) {
                                         return (
@@ -314,7 +315,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({
                                             <div className="mt-1 normal-case font-normal text-sm space-y-0.5">
                                               {child.children.map(grandChild => (
                                                 <a key={grandChild.id} href="#" onClick={(e) => { e.preventDefault(); handlePageSelect(grandChild.id as Page); }}
-                                                   className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all ${currentPage === grandChild.id ? 'text-white bg-blue-600 shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80'}`}
+                                                   className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all ${currentPage === grandChild.id ? 'text-white bg-primary shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80'}`}
                                                 >
                                                    <grandChild.icon className="w-4 h-4" />
                                                    {grandChild.label}
@@ -326,7 +327,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({
                                       }
                                       return (
                                         <a key={child.id} href="#" onClick={(e) => { e.preventDefault(); handlePageSelect(child.id as Page); }}
-                                           className={`flex items-center gap-3 px-3.5 py-2 mx-1 rounded-xl text-sm font-medium transition-all ${currentPage === child.id ? 'text-white bg-blue-600 shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80'}`}
+                                           className={`flex items-center gap-3 px-3.5 py-2 mx-1 rounded-xl text-sm font-medium transition-all ${currentPage === child.id ? 'text-white bg-primary shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80'}`}
                                         >
                                            <child.icon className="w-4 h-4" />
                                            {child.label}
@@ -342,7 +343,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({
                     <a href="#" key={item.id} onClick={(e) => { e.preventDefault(); handlePageSelect(item.id as Page); }}
                        className={`px-3 xl:px-4 py-2 text-xs xl:text-sm font-bold rounded-xl transition-all duration-200 whitespace-nowrap cursor-pointer ${
                            isActive 
-                             ? 'bg-gradient-to-r from-blue-600 via-primary to-blue-700 text-white shadow-md shadow-blue-900/40 scale-[1.02]' 
+                             ? 'bg-gradient-to-r from-[#C41C00] via-primary to-[#FF4D00] text-white shadow-md shadow-[#EC2907]/30 scale-[1.02]' 
                              : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 hover:text-slate-900 dark:hover:text-white'
                        }`}
                     >{item.label}</a>
@@ -364,7 +365,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({
                  onClick={() => onThemeModeChange && onThemeModeChange('light')}
                  className={`p-1.5 xl:px-2 xl:py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                    themeMode === 'light'
-                     ? 'bg-white text-blue-600 shadow-sm'
+                     ? 'bg-white text-primary shadow-sm'
                      : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
                  }`}
                >
@@ -377,11 +378,11 @@ const TopNavBar: React.FC<TopNavBarProps> = ({
                  onClick={() => onThemeModeChange && onThemeModeChange('dark')}
                  className={`p-1.5 xl:px-2 xl:py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                    themeMode === 'dark'
-                     ? 'bg-gradient-to-r from-blue-600 to-sky-600 text-white shadow-md shadow-blue-900/40'
+                     ? 'bg-gradient-to-r from-[#EC2907] to-[#FF4D00] text-white shadow-md shadow-[#EC2907]/35'
                      : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
                  }`}
                >
-                 <Moon className="w-3.5 h-3.5 text-sky-300 shrink-0" />
+                 <Moon className="w-3.5 h-3.5 text-orange-200 shrink-0" />
                  <span className="hidden 2xl:inline text-[11px]">Escuro</span>
                </button>
              </div>
@@ -442,7 +443,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({
 
             <div className="relative shrink-0" ref={openDropdown === 'user' ? dropdownRef : null}>
               <button onClick={() => handleDropdownToggle('user')} className="flex items-center gap-1.5 xl:gap-2 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-all shrink-0 cursor-pointer">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-sky-400 text-white flex items-center justify-center font-bold shadow-md text-xs shrink-0">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#C41C00] via-primary to-[#FF4D00] text-white flex items-center justify-center font-bold shadow-md text-xs shrink-0">
                   {user.name.charAt(0)}
                 </div>
                 <div className="hidden lg:block text-left min-w-0">
@@ -452,7 +453,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({
                  <ChevronDownIcon className={`hidden lg:block w-3.5 h-3.5 xl:w-4 xl:h-4 text-slate-500 shrink-0 transition-transform ${openDropdown === 'user' ? 'rotate-180' : ''}`} />
               </button>
               {openDropdown === 'user' && (
-                <div className="absolute mt-2 w-56 right-0 origin-top-right bg-white/95 dark:bg-[#0b1328]/95 border border-slate-200 dark:border-slate-700/80 rounded-2xl shadow-2xl backdrop-blur-2xl py-1.5 z-50">
+                <div className="absolute mt-2 w-56 right-0 origin-top-right bg-white/95 dark:bg-[#07182E]/95 border border-slate-200 dark:border-slate-700/80 rounded-2xl shadow-2xl backdrop-blur-2xl py-1.5 z-50">
                     {user.profile !== UserProfile.Cliente && (
                       <>
                         <button 
@@ -567,7 +568,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({
                          <button
                             onClick={() => handleDropdownToggle(item.id)}
                             className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium ${
-                                isActive ? 'text-primary dark:text-blue-400 bg-blue-50 dark:bg-blue-900/50' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                                isActive ? 'text-primary dark:text-orange-400 bg-orange-50 dark:bg-orange-950/40' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                             }`}
                          >
                             <div className="flex items-center">
@@ -586,7 +587,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({
                                               <div className="space-y-1">
                                                 {child.children.map(grandchild => (
                                                     <a key={grandchild.id} href="#" onClick={(e) => { e.preventDefault(); handlePageSelect(grandchild.id as Page); }}
-                                                       className={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${currentPage === grandchild.id ? 'text-primary dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
+                                                       className={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${currentPage === grandchild.id ? 'text-primary dark:text-orange-400 bg-orange-50 dark:bg-orange-950/30' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
                                                     >
                                                         <grandchild.icon className="w-4 h-4 mr-3" />
                                                         {grandchild.label}
@@ -598,7 +599,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({
                                   }
                                   return (
                                       <a key={child.id} href="#" onClick={(e) => { e.preventDefault(); handlePageSelect(child.id as Page); }}
-                                         className={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${currentPage === child.id ? 'text-primary dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
+                                         className={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${currentPage === child.id ? 'text-primary dark:text-orange-400 bg-orange-50 dark:bg-orange-950/30' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
                                       >
                                           <child.icon className="w-4 h-4 mr-3" />
                                           {child.label}
@@ -613,7 +614,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({
                 return (
                     <a key={item.id} href="#" onClick={(e) => { e.preventDefault(); handlePageSelect(item.id as Page); }}
                        className={`flex items-center px-3 py-2 rounded-md text-base font-medium ${
-                           isActive ? 'text-primary dark:text-blue-400 bg-blue-50 dark:bg-blue-900/50' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                           isActive ? 'text-primary dark:text-orange-400 bg-orange-50 dark:bg-orange-950/40' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                        }`}
                     >
                         <item.icon className="w-5 h-5 mr-3" />
@@ -624,7 +625,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({
           </div>
           <div className="pt-4 pb-3 border-t border-gray-200 dark:border-gray-700">
              <div className="flex items-center px-5 space-x-3">
-                <div className="w-10 h-10 rounded-full bg-blue-200 text-primary flex items-center justify-center font-bold text-lg">
+                <div className="w-10 h-10 rounded-full bg-orange-100 text-primary flex items-center justify-center font-bold text-lg">
                    {user.name.charAt(0)}
                 </div>
                 <div>

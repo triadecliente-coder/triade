@@ -433,7 +433,7 @@ const AttachmentModal: React.FC<AttachmentModalProps> = ({
       return propRiskQueryOptions;
     }
     try {
-      const saved = localStorage.getItem('transcunha_risk_query_options');
+      const saved = localStorage.getItem('triade_risk_query_options');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -5343,7 +5343,7 @@ const AttachmentModal: React.FC<AttachmentModalProps> = ({
             <div className="mt-8 flex justify-between items-center">
               <div>
                 {(shipment.status === ShipmentStatus.AguardandoNota || shipment.status === ShipmentStatus.AguardandoFiscal) && (
-                  <button onClick={() => window.open('https://transcunha.atua.com.br/adm/fil_ctrc_emissao.php', '_blank')} className="px-4 py-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 flex items-center gap-2 font-bold shadow-md shadow-emerald-200 dark:shadow-none">
+                  <button onClick={() => window.open('https://triade.atua.com.br/adm/fil_ctrc_emissao.php', '_blank')} className="px-4 py-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 flex items-center gap-2 font-bold shadow-md shadow-emerald-200 dark:shadow-none">
                     <ExternalLinkIcon className="w-4 h-4" /> Emitir Documentos
                   </button>
                 )}

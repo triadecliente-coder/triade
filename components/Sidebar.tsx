@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import type { Page, User, ProfilePermissions } from '../types';
 import { UserProfile } from '../types';
 import { can } from '../auth';
+import { isDefaultBrandLogo, DEFAULT_LOGO_LIGHT, DEFAULT_LOGO_DARK } from '../utils/brandLogo';
 import { DashboardIcon } from './icons/DashboardIcon';
 import { ClientsIcon } from './icons/ClientsIcon';
 import { TruckIcon } from './icons/TruckIcon';
@@ -144,7 +145,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onLogout, currentPage, setCurre
         title={isCollapsed ? label : undefined}
         className={`flex items-center px-4 py-2 mt-1 text-gray-600 dark:text-gray-400 transition-colors duration-300 transform rounded-lg ${marginLeft} ${
           isActive
-            ? 'bg-blue-200 dark:bg-blue-900 text-gray-700 dark:text-gray-200'
+            ? 'bg-orange-100 dark:bg-orange-950/50 text-gray-700 dark:text-gray-200'
             : 'hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-gray-200'
         } ${isCollapsed ? 'justify-center' : ''}`}
       >
@@ -167,11 +168,16 @@ const Sidebar: React.FC<SidebarProps> = ({ user, onLogout, currentPage, setCurre
         onMouseLeave={() => setIsCollapsed(true)}
     >
       <div className="h-20 flex items-center justify-center">
-        {companyLogo ? (
+        {isDefaultBrandLogo(companyLogo) ? (
+            <>
+              <img src={DEFAULT_LOGO_LIGHT} alt="Logo Tríade" className={`dark:hidden transition-all duration-300 mx-auto object-contain ${isCollapsed ? 'h-12 max-w-[60px]' : 'h-16 max-w-[190px]'}`} />
+              <img src={DEFAULT_LOGO_DARK} alt="Logo Tríade" className={`hidden dark:block transition-all duration-300 mx-auto object-contain ${isCollapsed ? 'h-12 max-w-[60px]' : 'h-16 max-w-[190px]'}`} />
+            </>
+        ) : companyLogo ? (
             <img src={companyLogo} alt="Logo da Empresa" className={`transition-all duration-300 mx-auto object-contain ${isCollapsed ? 'h-12 max-w-[60px]' : 'h-16 max-w-[190px]'}`} />
         ) : (
             <h2 className="text-3xl font-semibold text-center text-primary dark:text-white">
-            {isCollapsed ? 'Transcunha' : 'Transcunha Logística'}
+            {isCollapsed ? 'Tríade' : 'Tríade Logística'}
             </h2>
         )}
       </div>

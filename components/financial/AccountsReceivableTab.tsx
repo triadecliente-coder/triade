@@ -74,8 +74,8 @@ interface AccountsReceivableTabProps {
   currentUser?: User | null;
 }
 
-const STORAGE_CTE_RECEIVABLES_STATUS_KEY = 'transcunha_cte_receivables_status_v1';
-const STORAGE_CTE_INVOICES_KEY = 'transcunha_cte_invoices_v1';
+const STORAGE_CTE_RECEIVABLES_STATUS_KEY = 'triade_cte_receivables_status_v1';
+const STORAGE_CTE_INVOICES_KEY = 'triade_cte_invoices_v1';
 
 export const AccountsReceivableTab: React.FC<AccountsReceivableTabProps> = ({
   transactions,
@@ -1428,7 +1428,7 @@ export const AccountsReceivableTab: React.FC<AccountsReceivableTabProps> = ({
                     Fatura de Transporte • {selectedInvoiceToView.invoiceNumber}
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Transcunha Transportes e Logística LTDA • CNPJ: 10.638.283/0001-38
+                    Tríade Transportes e Logística LTDA • CNPJ: 10.638.283/0001-38
                   </p>
                 </div>
               </div>

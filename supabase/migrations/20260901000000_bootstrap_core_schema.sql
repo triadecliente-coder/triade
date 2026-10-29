@@ -1,5 +1,5 @@
 -- =====================================================================
--- MIGRAÇÃO BASE: SCHEMA CORE DO SISTEMA TRIADE / TRANSCUNHA LOGÍSTICA
+-- MIGRAÇÃO BASE: SCHEMA CORE DO SISTEMA TRIADE / TRÍADE LOGÍSTICA
 -- Criação das tabelas operacionais centrais, índices, RLS, RPCs e Storage
 -- =====================================================================
 

@@ -278,7 +278,7 @@ export const InvoicesManagementTab: React.FC<InvoicesManagementTabProps> = ({
       console.error('Erro ao carregar dados de notas fiscais:', err);
       // Fallback defensivo de emergência
       try {
-        const local = localStorage.getItem('transcunha_financial_invoices');
+        const local = localStorage.getItem('triade_financial_invoices');
         if (local) {
           const parsed = JSON.parse(local);
           if (Array.isArray(parsed) && parsed.length > 0) {
@@ -1139,7 +1139,7 @@ export const InvoicesManagementTab: React.FC<InvoicesManagementTabProps> = ({
                 Sincronização Realtime Ativa
               </span>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-semibold border border-emerald-300 dark:border-emerald-800">
-                Em Nuvem Transcunha
+                Em Nuvem Tríade
               </span>
             </div>
             <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">

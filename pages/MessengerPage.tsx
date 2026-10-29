@@ -295,7 +295,7 @@ export const MessengerPage: React.FC<MessengerPageProps> = ({
             <div>
               <div className="flex items-center gap-2.5">
                 <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-                  Mensageiro Transcunha
+                  Mensageiro Tríade
                 </h1>
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
                   OFICIAL
@@ -411,7 +411,7 @@ export const MessengerPage: React.FC<MessengerPageProps> = ({
                   Novo Disparo Operacional
                 </h2>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  A mensagem será enviada em nome da Transcunha via WhatsApp oficial.
+                  A mensagem será enviada em nome da Tríade via WhatsApp oficial.
                 </p>
               </div>
 
@@ -597,7 +597,7 @@ export const MessengerPage: React.FC<MessengerPageProps> = ({
                 </div>
 
                 <div className="text-[10px] text-slate-500 text-center mt-3 pt-2 border-t border-slate-200/60 dark:border-slate-800">
-                  Enviado via Transcunha Logística Oficial
+                  Enviado via Tríade Logística Oficial
                 </div>
               </div>
             </div>
