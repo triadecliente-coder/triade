@@ -16,7 +16,9 @@ import {
   toShipment, toCargo, toTicket, toFreightOffer, toClient, toOwner, toDriver,
   toVehicle, toProduct, toUser, toBranch, toRiskQueryOption,
   backfillShipmentFiscalNumbers,
-  backfillAdvanceAndBalanceCalculations
+  backfillAdvanceAndBalanceCalculations,
+  isSchemaMissing,
+  resetSchemaMissing
 } from '../lib/db';
 import { OPERATIONS_REALTIME_CHANNEL } from '../services/realtimeOperationsHub';
 import { getAllToolStays, StayRecord } from '../utils/toolStorage';
@@ -158,6 +160,7 @@ export function useDatabase(currentUser: User | null) {
         return;
       }
 
+      resetSchemaMissing();
       console.log('[DB] Carregando dados para:', currentUser.email);
 
       const isMotorista = currentUser.profile === 'Motorista';
@@ -256,7 +259,10 @@ export function useDatabase(currentUser: User | null) {
               }).eq('id', c.id).then(() => {});
             });
         }
-        setUsers(dbUsers);
+        const mergedUsers = currentUser && currentUser.profile !== 'Motorista' && !dbUsers.some(u => u.id === currentUser.id)
+          ? [currentUser, ...dbUsers]
+          : dbUsers;
+        setUsers(mergedUsers);
         setTickets(dbTickets);
         setFreightOffers(dbFreightOffers);
         setStays(dbStays);
@@ -273,7 +279,7 @@ export function useDatabase(currentUser: User | null) {
 
         setNextIds(calculateNextIds(
           dbClients, cleanOwners, dbDrivers, cleanVehicles,
-          dbProducts, dbShipments, dbCargos, dbUsers, dbTickets, dbBranches, dbFreightOffers
+          dbProducts, dbShipments, dbCargos, mergedUsers, dbTickets, dbBranches, dbFreightOffers
         ));
 
       }
@@ -698,6 +704,10 @@ export function useDatabase(currentUser: User | null) {
           setRealtimeStatus('connected');
           setLastSyncTime(new Date());
         } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+          if (isSchemaMissing()) {
+            setRealtimeStatus('disconnected');
+            return;
+          }
           console.warn(`[Realtime] ⚠️ Canal ${status} — reconectando em 3s...`);
           setRealtimeStatus('connecting');
           if (isSubscribed) {
@@ -757,7 +767,7 @@ export function useDatabase(currentUser: User | null) {
 
     // ── Heartbeat inteligente ultraleve e sincronização no foco da janela ──
     const checkTimestampAndSync = async () => {
-      if (!isSubscribed || (typeof document !== 'undefined' && document.visibilityState === 'hidden') || isAnyModalActiveRef.current) {
+      if (isSchemaMissing() || !isSubscribed || (typeof document !== 'undefined' && document.visibilityState === 'hidden') || isAnyModalActiveRef.current) {
         return;
       }
 

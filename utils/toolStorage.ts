@@ -224,7 +224,7 @@ export async function getAllToolStays(): Promise<StayRecord[]> {
     .order('created_at', { ascending: false });
 
   if (error) {
-    console.error('Erro ao buscar todas as estadias:', error);
+    if (error.code !== 'PGRST205' && error.code !== '42P01') console.error('Erro ao buscar todas as estadias:', error);
     return [];
   }
 

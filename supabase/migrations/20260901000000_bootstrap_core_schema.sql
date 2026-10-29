@@ -503,3 +503,4 @@ BEGIN
         USING (bucket_id = 'shipment_attachments')
         WITH CHECK (bucket_id = 'shipment_attachments');
 END $$;
+

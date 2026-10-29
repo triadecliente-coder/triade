@@ -771,7 +771,7 @@ const App: React.FC = () => {
             setCurrentUser(null);
           }
         } else {
-          if (dbError) console.error('[Auth] Erro ao recuperar perfil:', dbError.message);
+          if (dbError && dbError.code !== 'PGRST205' && dbError.code !== '42P01') console.error('[Auth] Erro ao recuperar perfil:', dbError.message);
           const { data: authCheck, error: authCheckErr } = await supabase.auth.getUser();
           if (!authCheckErr && authCheck?.user?.app_metadata?.profile && authCheck.user.app_metadata.active !== false) {
             const restoredAuthUser: User = {

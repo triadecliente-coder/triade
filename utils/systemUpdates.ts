@@ -27,6 +27,30 @@ export interface SystemRelease {
  */
 export const SYSTEM_RELEASES: SystemRelease[] = [
   {
+    id: 'rel_2026_10_29_v2_89_2',
+    version: 'v2.89.2',
+    date: '29/10/2026',
+    title: 'Resiliência de Inicialização no Novo Banco (PGRST205) e Refatoração de Tipagem em Embarques',
+    summary: 'Tratamento resiliente de cache de schema PostgREST (PGRST205 / 42P01) para permitir acesso imediato ao painel antes da aplicação das migrações SQL, preservação do usuário autenticado via Supabase Auth na listagem local e simplificação das guardas de permissão na tabela de embarques.',
+    items: [
+      {
+        category: 'fix',
+        title: 'Inicialização Segura Sem Bloqueio por Tabelas Pendentes (PGRST205)',
+        description: 'Atualizados os carregadores de dados em lib/db.ts, hooks/useDatabase.ts e utils/toolStorage.ts para tratar graciosamente erros PGRST205/42P01 sem exibir tela de erro de conexão nem disparar reconexões Realtime desnecessárias enquanto o schema SQL não é executado.'
+      },
+      {
+        category: 'improvement',
+        title: 'Preservação do Usuário Autenticado via Supabase Auth em Memória',
+        description: 'Garantida a manutenção do usuário ativo na lista local de usuários (useDatabase) mesmo quando public.app_users ainda está vazio ou pendente de sincronização inicial.'
+      },
+      {
+        category: 'fix',
+        title: 'Refatoração de Guardas de Perfil na Tabela de Embarques (ShipmentTable)',
+        description: 'Extraídas constantes booleanas de autorização no nível do componente em components/ShipmentTable.tsx, eliminando estreitamentos de tipo aninhados (TS2367/TS2872) no menu de ações de embarques.'
+      }
+    ]
+  },
+  {
     id: 'rel_2026_10_29_v2_89_1',
     version: 'v2.89.1',
     date: '29/10/2026',

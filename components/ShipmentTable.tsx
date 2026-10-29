@@ -443,6 +443,24 @@ const ShipmentTable: React.FC<ShipmentTableProps> = ({ shipments, drivers, cargo
     Boolean(currentUser.name && (currentUser.name.toLowerCase().includes('samanta') || currentUser.name.toLowerCase().includes('samantha'))) ||
     Boolean(currentUser.email && (currentUser.email.toLowerCase().includes('samanta') || currentUser.email.toLowerCase().includes('samantha')));
   const showActionsColumnForClient = isClient && activeStatus === ShipmentStatus.Finalizado;
+  const canManageCanceledOrRevert =
+    currentUser.profile === UserProfile.Admin ||
+    currentUser.profile === UserProfile.Desenvolvedor ||
+    currentUser.profile === UserProfile.Diretor ||
+    currentUser.profile === UserProfile.GerenciadoraDeRisco ||
+    isGerenciadora;
+  const canEditShipmentPrice =
+    currentUser.profile === UserProfile.Admin ||
+    currentUser.profile === UserProfile.Desenvolvedor ||
+    currentUser.profile === UserProfile.GerenciadoraDeRisco ||
+    isGerenciadora ||
+    (currentUser.profile as string) === 'Administrador do Sistema' ||
+    currentUser.profile === UserProfile.Embarcador ||
+    currentUser.profile === UserProfile.Agenciador ||
+    currentUser.profile === UserProfile.Comercial;
+  const canDeleteShipment =
+    currentUser.profile === UserProfile.Admin ||
+    currentUser.profile === UserProfile.Desenvolvedor;
 
   const ActionMenuItem: React.FC<{
     icon: React.ElementType;
@@ -1153,6 +1171,8 @@ const ShipmentTable: React.FC<ShipmentTableProps> = ({ shipments, drivers, cargo
                 const canAdvance = advanceStatusCheck.allowed;
                 const disabledReason = advanceStatusCheck.reason;
                 const statusHistoryCount = shipment.statusHistory?.length || 0;
+                const isCanceledLocked = shipment.status === ShipmentStatus.Cancelado && !canManageCanceledOrRevert;
+                const canRevertThisShipment = Boolean(onRevertStatus) && (statusHistoryCount > 1 || shipment.status !== ShipmentStatus.PreCadastro) && canManageCanceledOrRevert;
 
                 let isLate = false;
                 if (shipment.scheduledTime && !shipment.arrivalTime) {
@@ -1746,7 +1766,7 @@ const ShipmentTable: React.FC<ShipmentTableProps> = ({ shipments, drivers, cargo
                                               </a>
                                           )}
           
-                                          {shipment.status === ShipmentStatus.Cancelado && currentUser.profile !== UserProfile.Admin && currentUser.profile !== UserProfile.Desenvolvedor && currentUser.profile !== UserProfile.Diretor && currentUser.profile !== UserProfile.GerenciadoraDeRisco && !isGerenciadora ? (
+                                          {isCanceledLocked ? (
                                               <span className="text-xs text-gray-400 dark:text-gray-500 italic px-2">Cancelado</span>
                                           ) : (
                                               <div className="relative">
@@ -1784,7 +1804,7 @@ const ShipmentTable: React.FC<ShipmentTableProps> = ({ shipments, drivers, cargo
                                                                         />
                                                                       )}
                                                                       {shipment.status === ShipmentStatus.PreCadastro && onOpenCadastroAntt && <ActionMenuItem icon={ExternalLinkIcon} text="Fazer Cadastro" onClick={() => onOpenCadastroAntt(shipment)} />}
-                                                                      {isActionable && onEditPrice && (currentUser.profile === UserProfile.Admin || currentUser.profile === UserProfile.Desenvolvedor || currentUser.profile === UserProfile.GerenciadoraDeRisco || isGerenciadora || (currentUser.profile as string) === 'Administrador do Sistema' || currentUser.profile === UserProfile.Embarcador || currentUser.profile === UserProfile.Agenciador || currentUser.profile === UserProfile.Comercial) && <ActionMenuItem icon={DollarSignIcon} text="Alterar Preço" onClick={() => onEditPrice(shipment)} />}
+                                                                      {isActionable && onEditPrice && canEditShipmentPrice && <ActionMenuItem icon={DollarSignIcon} text="Alterar Preço" onClick={() => onEditPrice(shipment)} />}
                                                                       {isActionable && onTransfer && <ActionMenuItem icon={TransferIcon} text="Transferir Embarque" onClick={() => onTransfer(shipment)} />}
                                                                       {isActionable && (shipment.status === ShipmentStatus.PreCadastro || shipment.status === ShipmentStatus.AguardandoSeguradora || shipment.status === ShipmentStatus.AguardandoCarregamento) && onSwapCargo && <ActionMenuItem icon={Package} text="Trocar Carga" onClick={() => onSwapCargo(shipment)} />}
                                                                       {onOpenEditScheduledDateTime && <ActionMenuItem icon={Clock} text="Alterar Data/Hora" onClick={() => onOpenEditScheduledDateTime(shipment)} />}
@@ -1792,7 +1812,7 @@ const ShipmentTable: React.FC<ShipmentTableProps> = ({ shipments, drivers, cargo
                                                                       {isActionable && onCancel && (currentUser.profile !== UserProfile.Fiscal || shipment.status === ShipmentStatus.AguardandoSeguradora) && <ActionMenuItem icon={XIcon} text="Cancelar Embarque" onClick={() => onCancel(shipment)} isDestructive />}
                                                                   </>
                                                               )}
-                                                              {onRevertStatus && (statusHistoryCount > 1 || shipment.status !== ShipmentStatus.PreCadastro) && (currentUser.profile === UserProfile.Admin || currentUser.profile === UserProfile.Desenvolvedor || currentUser.profile === UserProfile.Diretor || currentUser.profile === UserProfile.GerenciadoraDeRisco || isGerenciadora) && (
+                                                              {onRevertStatus && canRevertThisShipment && (
                                                                   <ActionMenuItem 
                                                                       icon={RotateCcw} 
                                                                       text="Voltar Status Anterior" 
@@ -1803,7 +1823,7 @@ const ShipmentTable: React.FC<ShipmentTableProps> = ({ shipments, drivers, cargo
                                                                       }} 
                                                                   />
                                                               )}
-                                                              {onDelete && (currentUser.profile === UserProfile.Admin || currentUser.profile === UserProfile.Desenvolvedor) && <ActionMenuItem icon={Trash2} text="Excluir Embarque" onClick={() => onDelete(shipment.id)} isDestructive />}
+                                                              {onDelete && canDeleteShipment && <ActionMenuItem icon={Trash2} text="Excluir Embarque" onClick={() => onDelete(shipment.id)} isDestructive />}
                                                           </div>
                                                       </div>,
                                                       document.body

@@ -112,7 +112,8 @@ export const fetchFreightOffers = async (): Promise<FreightOffer[]> => {
 
     return formattedOffers.reverse();
   } catch (error: any) {
-    if (error.code === '42P01') {
+    if (isMissingTableError(error)) {
+      schemaMissingDetected = true;
       console.warn('Table freight_offers does not exist yet. Returning empty array.');
       return [];
     }
@@ -1328,7 +1329,25 @@ export const fromRiskQueryOption = (opt: RiskQueryOption | Omit<RiskQueryOption,
 // FETCH HELPERS: Handle Auth Errors
 // ─────────────────────────────────────────────
 
+let schemaMissingDetected = false;
+export const isSchemaMissing = () => schemaMissingDetected;
+export const resetSchemaMissing = () => { schemaMissingDetected = false; };
+export const isMissingTableError = (error: any): boolean => Boolean(
+  error && (
+    error.code === 'PGRST205' ||
+    error.code === '42P01' ||
+    (typeof error.message === 'string' && (error.message.includes('schema cache') || error.message.includes('does not exist')))
+  )
+);
+
 const handleAuthError = (error: any, defaultValue: any) => {
+  if (isMissingTableError(error)) {
+    if (!schemaMissingDetected) {
+      console.warn('[DB] Tabelas do schema public ainda não inicializadas no Supabase (PGRST205). Operando com estado inicial vazio até que a migração SQL seja executada.');
+    }
+    schemaMissingDetected = true;
+    return defaultValue;
+  }
   if (error.code === 'PGRST116' || error.status === 406 || error.status === 401) {
     console.warn('[DB] Auth/RLS error or no data found:', error.message);
     return defaultValue;
@@ -1640,7 +1659,7 @@ export async function fetchTickets(): Promise<Ticket[]> {
       localStorage.setItem('transcunha_tickets_cache', JSON.stringify(dbTickets));
     } catch {}
   } catch (error) {
-    console.warn('[fetchTickets] Falha ao consultar Supabase, recuperando do cache local:', error);
+    if (!isMissingTableError(error)) console.warn('[fetchTickets] Falha ao consultar Supabase, recuperando do cache local:', error);
     try {
       const cached = localStorage.getItem('transcunha_tickets_cache');
       if (cached) {
