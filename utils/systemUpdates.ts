@@ -27,6 +27,25 @@ export interface SystemRelease {
  */
 export const SYSTEM_RELEASES: SystemRelease[] = [
   {
+    id: 'rel_2026_10_29_v2_90_1',
+    version: 'v2.90.1',
+    date: '29/10/2026',
+    title: 'Publicação Oficial do Repositório Tríade e Padronização de Formatação',
+    summary: 'Sincronização e publicação da base oficial do projeto Tríade no repositório GitHub corporativo, acompanhada de padronização de formatação no Histórico de Ferramentas e configuração Vite.',
+    items: [
+      {
+        category: 'improvement',
+        title: 'Sincronização com Repositório Oficial GitHub (triadecliente-coder/triade)',
+        description: 'Publicação completa da branch principal (main) com toda a nova identidade visual Tríade, integrações Supabase/Prisma e histórico de entregas consolidado.'
+      },
+      {
+        category: 'improvement',
+        title: 'Padronização de Formatação em Histórico de Ferramentas e Build',
+        description: 'Normalizada a indentação e formatação de código em pages/ToolsHistoryPage.tsx e vite.config.ts.'
+      }
+    ]
+  },
+  {
     id: 'rel_2026_10_29_v2_90_0',
     version: 'v2.90.0',
     date: '29/10/2026',
