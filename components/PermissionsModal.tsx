@@ -62,8 +62,8 @@ const CATEGORIES = [
 ];
 
 const READ_ONLY_PAGES = [
-  'dashboard', 'reports', 'appearance', 'ai-assistant', 
-  'operational-map', 'shipment-history', 'load-history', 
+  'dashboard', 'reports', 'appearance', 'ai-assistant',
+  'operational-map', 'shipment-history', 'load-history',
   'tools-history', 'freight-offers-history', 'system-monitor'
 ] as Page[];
 
@@ -74,11 +74,11 @@ const PERMISSION_NAMES: Record<keyof CrudPermissions, string> = {
   delete: 'Excluir',
 };
 
-const PermissionsModal: React.FC<PermissionsModalProps> = ({ 
-  isOpen, onClose, onSaveProfilePermissions, onSaveUserPermissions, permissions, users 
+const PermissionsModal: React.FC<PermissionsModalProps> = ({
+  isOpen, onClose, onSaveProfilePermissions, onSaveUserPermissions, permissions, users
 }) => {
   const [mode, setMode] = useState<'profile' | 'user'>('profile');
-  
+
   const [editableProfilePermissions, setEditableProfilePermissions] = useState<ProfilePermissions>({});
   const [selectedProfile, setSelectedProfile] = useState<UserProfile>(UserProfile.Comercial);
 
@@ -113,7 +113,7 @@ const PermissionsModal: React.FC<PermissionsModalProps> = ({
       const newPermissions = { ...prev };
       const currentProfile = { ...(newPermissions[selectedProfile] || {}) };
       const newPageState = { ...(currentProfile[page] || { read: false, create: false, update: false, delete: false }) };
-      
+
       newPageState[action] = !newPageState[action];
 
       if (action === 'read' && !newPageState.read) {
@@ -121,7 +121,7 @@ const PermissionsModal: React.FC<PermissionsModalProps> = ({
         newPageState.update = false;
         newPageState.delete = false;
       }
-      
+
       if (action !== 'read' && newPageState[action]) {
         newPageState.read = true;
       }
@@ -136,7 +136,7 @@ const PermissionsModal: React.FC<PermissionsModalProps> = ({
     setEditableUserPermissions(prev => {
       const newPermissions = { ...prev };
       const newPageState = { ...(newPermissions[page] || { read: false, create: false, update: false, delete: false }) };
-      
+
       newPageState[action] = !newPageState[action];
 
       if (action === 'read' && !newPageState.read) {
@@ -144,7 +144,7 @@ const PermissionsModal: React.FC<PermissionsModalProps> = ({
         newPageState.update = false;
         newPageState.delete = false;
       }
-      
+
       if (action !== 'read' && newPageState[action]) {
         newPageState.read = true;
       }
@@ -159,7 +159,7 @@ const PermissionsModal: React.FC<PermissionsModalProps> = ({
       setEditableProfilePermissions(prev => {
         const newPermissions = { ...prev };
         const currentProfile = { ...(newPermissions[selectedProfile] || {}) };
-        
+
         categoryPages.forEach(page => {
           const isReadOnly = READ_ONLY_PAGES.includes(page);
           currentProfile[page] = {
@@ -169,7 +169,7 @@ const PermissionsModal: React.FC<PermissionsModalProps> = ({
             delete: isReadOnly ? false : value
           };
         });
-        
+
         newPermissions[selectedProfile] = currentProfile;
         return newPermissions;
       });
@@ -222,11 +222,11 @@ const PermissionsModal: React.FC<PermissionsModalProps> = ({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-5xl w-full h-[90vh] flex flex-col overflow-hidden">
-        
+
         {/* Header */}
         <div className="px-6 py-4 border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-800 flex justify-between items-center">
           <h2 className="text-xl font-bold text-gray-800 dark:text-white">Gerenciar Permissões</h2>
-          
+
           <div className="flex bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
             <button
               onClick={() => setMode('profile')}
@@ -242,7 +242,7 @@ const PermissionsModal: React.FC<PermissionsModalProps> = ({
             </button>
           </div>
         </div>
-        
+
         {/* Selector */}
         <div className="p-6 bg-white dark:bg-gray-800 border-b dark:border-gray-700">
           {mode === 'profile' ? (
@@ -308,7 +308,7 @@ const PermissionsModal: React.FC<PermissionsModalProps> = ({
         <div className="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-gray-900 space-y-6">
           {CATEGORIES.map(category => (
             <div key={category.name} className="bg-white dark:bg-gray-800 rounded-lg shadow border dark:border-gray-700 overflow-hidden">
-              
+
               <div className="bg-gray-100 dark:bg-gray-700 px-4 py-3 flex justify-between items-center border-b dark:border-gray-600">
                 <h3 className="font-bold text-gray-800 dark:text-white">{category.name}</h3>
                 <div className="space-x-2">
@@ -336,12 +336,12 @@ const PermissionsModal: React.FC<PermissionsModalProps> = ({
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                   {category.pages.map(page => {
                     const isReadOnly = READ_ONLY_PAGES.includes(page);
-                    
+
                     let pagePerms = { read: false, create: false, update: false, delete: false };
                     if (mode === 'profile') {
-                       pagePerms = editableProfilePermissions[selectedProfile]?.[page] || pagePerms;
+                      pagePerms = editableProfilePermissions[selectedProfile]?.[page] || pagePerms;
                     } else {
-                       pagePerms = editableUserPermissions[page] || pagePerms;
+                      pagePerms = editableUserPermissions[page] || pagePerms;
                     }
 
                     return (
@@ -372,7 +372,7 @@ const PermissionsModal: React.FC<PermissionsModalProps> = ({
             </div>
           ))}
         </div>
-        
+
         {/* Footer */}
         <div className="p-4 border-t dark:border-gray-700 bg-white dark:bg-gray-800 flex justify-end space-x-3">
           <button type="button" onClick={onClose} className="px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">

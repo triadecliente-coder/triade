@@ -3,9 +3,9 @@ import { supabase } from '../supabase';
 import { User, UserProfile, DriverClassification, VehicleSetType, VehicleBodyType } from '../types';
 import type { ProfilePermissions } from '../types';
 import { formatCPF, formatPhone } from '../utils/formatters';
-import { 
-  UserPlus, ArrowLeft, Eye, EyeOff, CheckCircle2, 
-  ShieldCheck, Activity, Clock, Smartphone, Mail, Lock, 
+import {
+  UserPlus, ArrowLeft, Eye, EyeOff, CheckCircle2,
+  ShieldCheck, Activity, Clock, Smartphone, Mail, Lock,
   Check, Sparkles, Building2, Truck, HelpCircle, Download,
   X, Share2, Monitor, ArrowRight, ExternalLink
 } from 'lucide-react';
@@ -56,12 +56,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
   React.useEffect(() => {
     const isPwaEnabled = profilePermissions?.system_settings?.pwa_enabled !== false;
     if (!isPwaEnabled) return;
-    
+
     const handler = (e: any) => {
       e.preventDefault();
       setDeferredPrompt(e);
     };
-    
+
     window.addEventListener('beforeinstallprompt', handler);
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, [profilePermissions]);
@@ -106,9 +106,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
 
     if (loginType === 'motorista') {
       if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(() => {}, () => {});
+        navigator.geolocation.getCurrentPosition(() => { }, () => { });
       }
-      
+
       if (deferredPrompt) {
         try {
           deferredPrompt.prompt();
@@ -117,7 +117,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
               setDeferredPrompt(null);
             }
           });
-        } catch(err) {
+        } catch (err) {
           console.error('Erro ao chamar o prompt de instalação:', err);
         }
       }
@@ -168,7 +168,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
           setIsLoading(false);
           return;
         }
-        
+
         // Verifica se o motorista já tem uma senha configurada em app_users
         const { data: appUser } = await supabase
           .from('app_users')
@@ -180,20 +180,20 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
         let requirePasswordChange = false;
 
         if (appUser) {
-           if (!password) {
-             setError('Senha obrigatória para acessar.');
-             setIsLoading(false);
-             return;
-           }
-           if (appUser.password !== password) {
-             setError('Senha incorreta.');
-             setIsLoading(false);
-             return;
-           }
-           requirePasswordChange = appUser.require_password_change;
+          if (!password) {
+            setError('Senha obrigatória para acessar.');
+            setIsLoading(false);
+            return;
+          }
+          if (appUser.password !== password) {
+            setError('Senha incorreta.');
+            setIsLoading(false);
+            return;
+          }
+          requirePasswordChange = appUser.require_password_change;
         } else {
-           isFirstSetup = true;
-           requirePasswordChange = true;
+          isFirstSetup = true;
+          requirePasswordChange = true;
         }
 
         const userProfile: User = {
@@ -212,7 +212,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
         try {
           localStorage.removeItem('trancunha_user_email');
           localStorage.removeItem('trancunha_currentUser');
-        } catch {}
+        } catch { }
         onLogin(userProfile);
 
       } else {
@@ -223,7 +223,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
         const formattedCpf = cleanDigits.length === 11 ? formatCPF(cleanDigits) : '';
 
         console.log('[LoginPage] Iniciando login para:', inputLogin);
-        
+
         let query = supabase.from('app_users').select('*').eq('password', cleanPassword);
         if (formattedCpf) {
           query = query.or(`email.ilike.${cleanEmail},email.eq.${inputLogin},email.eq.${formattedCpf},email.eq.${cleanDigits}`);
@@ -272,14 +272,14 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
               password: cleanPassword,
               require_password_change: false,
               auth_id: authUser.id,
-            }).then(() => {}, () => {});
+            }).then(() => { }, () => { });
 
             sessionStorage.setItem('trancunha_user_email', authProfile.email);
             sessionStorage.setItem('trancunha_currentUser', JSON.stringify(authProfile));
             try {
               localStorage.removeItem('trancunha_user_email');
               localStorage.removeItem('trancunha_currentUser');
-            } catch {}
+            } catch { }
             onLogin(authProfile);
             return;
           }
@@ -316,7 +316,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
         try {
           localStorage.removeItem('trancunha_user_email');
           localStorage.removeItem('trancunha_currentUser');
-        } catch {}
+        } catch { }
         onLogin(userProfile);
       }
     } catch (err: any) {
@@ -545,8 +545,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
       try {
         localStorage.removeItem('trancunha_user_email');
         localStorage.removeItem('trancunha_currentUser');
-      } catch {}
-      
+      } catch { }
+
       setTimeout(() => {
         onLogin(userProfile);
       }, 600);
@@ -560,12 +560,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
   };
 
   return (
-    <div 
+    <div
       className="relative min-h-screen w-full bg-[#070c18] text-slate-100 flex flex-col justify-between overflow-x-hidden font-sans"
       style={{ zoom: 0.81 }}
     >
       {/* Background Grid Pattern & Ambient Glows */}
-      <div 
+      <div
         className="absolute inset-0 pointer-events-none z-0"
         style={{
           backgroundImage: `
@@ -575,7 +575,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
           backgroundSize: '48px 48px'
         }}
       />
-      
+
       {/* Soft Radial Ambient Lighting */}
       <div className="absolute top-0 left-1/4 w-[600px] h-[500px] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none z-0" />
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-sky-500/10 rounded-full blur-[140px] pointer-events-none z-0" />
@@ -583,15 +583,15 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
 
       {/* Main Container */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-8 lg:py-12 flex-1 flex flex-col justify-center">
-        
+
         {/* Top Header Row (Logo + Status Badge) */}
         <div className="flex items-center justify-between pb-8 lg:pb-12">
           <div className="flex items-center gap-3">
             {companyLogo ? (
-              <img 
-                src={companyLogo} 
-                alt="Logo TransCunha" 
-                className="h-24 sm:h-28 lg:h-32 max-w-[320px] sm:max-w-[380px] object-contain filter drop-shadow-[0_4px_20px_rgba(11,102,228,0.45)] transition-all" 
+              <img
+                src={companyLogo}
+                alt="Logo TransCunha"
+                className="h-24 sm:h-28 lg:h-32 max-w-[320px] sm:max-w-[380px] object-contain filter drop-shadow-[0_4px_20px_rgba(11,102,228,0.45)] transition-all"
               />
             ) : (
               <div className="flex items-center gap-3">
@@ -618,13 +618,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
 
         {/* Content Layout Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-          
+
           {/* ========================================================= */}
           {/* LEFT SECTION: Portal de Acesso (Auth Card)               */}
           {/* ========================================================= */}
           <div className="lg:col-span-5 flex justify-center w-full">
             <div className={`w-full ${isRegisteringDriver ? 'max-w-xl' : 'max-w-md'} p-6 sm:p-8 rounded-3xl bg-[#0b1328]/85 border border-slate-700/60 shadow-2xl shadow-blue-950/50 backdrop-blur-2xl transition-all duration-300 relative overflow-hidden`}>
-              
+
               {/* Card Top Border Glow */}
               <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-sky-400 to-transparent opacity-80" />
 
@@ -634,8 +634,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                   {isRegisteringDriver ? 'Cadastro de Motorista' : 'Portal de Acesso'}
                 </h2>
                 <p className="text-xs text-slate-400 mt-1">
-                  {isRegisteringDriver 
-                    ? 'Preencha seus dados para criar sua conta no aplicativo' 
+                  {isRegisteringDriver
+                    ? 'Preencha seus dados para criar sua conta no aplicativo'
                     : 'Entre com suas credenciais corporativas ou CPF'}
                 </p>
               </div>
@@ -645,11 +645,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                 <div className="flex p-1 mb-6 rounded-xl bg-slate-950/70 border border-slate-800">
                   <button
                     type="button"
-                    className={`flex-1 py-2.5 px-3 text-xs sm:text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${
-                      loginType === 'interno'
-                        ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md shadow-blue-900/40'
-                        : 'text-slate-400 hover:text-slate-200'
-                    }`}
+                    className={`flex-1 py-2.5 px-3 text-xs sm:text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${loginType === 'interno'
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md shadow-blue-900/40'
+                      : 'text-slate-400 hover:text-slate-200'
+                      }`}
                     onClick={() => { setLoginType('interno'); setError(''); }}
                   >
                     <Building2 className="w-4 h-4" />
@@ -657,11 +656,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
                   </button>
                   <button
                     type="button"
-                    className={`flex-1 py-2.5 px-3 text-xs sm:text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${
-                      loginType === 'motorista'
-                        ? 'bg-gradient-to-r from-sky-600 to-blue-600 text-white shadow-md shadow-blue-900/40'
-                        : 'text-slate-400 hover:text-slate-200'
-                    }`}
+                    className={`flex-1 py-2.5 px-3 text-xs sm:text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${loginType === 'motorista'
+                      ? 'bg-gradient-to-r from-sky-600 to-blue-600 text-white shadow-md shadow-blue-900/40'
+                      : 'text-slate-400 hover:text-slate-200'
+                      }`}
                     onClick={() => { setLoginType('motorista'); setError(''); }}
                   >
                     <Truck className="w-4 h-4" />
@@ -1112,7 +1110,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
           {/* RIGHT HERO SECTION: TransCunha Presentation & Features    */}
           {/* ========================================================= */}
           <div className="lg:col-span-7 flex flex-col space-y-6 lg:space-y-8 text-left">
-            
+
             {/* Tag Pill */}
             <div className="inline-flex items-center gap-2 self-start px-3 py-1.5 rounded-full bg-blue-950/60 border border-blue-500/30 text-sky-400 text-xs font-bold tracking-wide shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-sky-400" />
@@ -1134,7 +1132,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
 
             {/* 2x2 Feature Cards Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4 pt-2">
-              
+
               {/* Card 1: Operações ao Vivo */}
               <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 hover:border-slate-700 transition-all flex items-start gap-3.5 backdrop-blur-md group hover:-translate-y-0.5 shadow-sm">
                 <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 group-hover:bg-blue-500/20 transition-colors">
@@ -1169,7 +1167,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
               </div>
 
               {/* Card 4: App para Celular / Motoristas (Super Destacado) */}
-              <div 
+              <div
                 onClick={handlePwaInstall}
                 className="relative p-4 rounded-2xl bg-gradient-to-br from-indigo-950/80 via-slate-900/90 to-purple-950/60 border-2 border-indigo-500/50 hover:border-indigo-400 transition-all flex flex-col justify-between gap-3 backdrop-blur-md group hover:-translate-y-1 shadow-lg shadow-indigo-950/50 cursor-pointer overflow-hidden"
               >
@@ -1240,7 +1238,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
       {showAppInstallModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
           <div className="relative w-full max-w-lg bg-slate-900 border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden text-left text-white">
-            
+
             {/* Modal Header */}
             <div className="p-5 sm:p-6 bg-gradient-to-r from-blue-900/60 via-indigo-900/40 to-slate-900 border-b border-slate-800 flex items-start justify-between gap-4">
               <div className="flex items-center gap-3.5">

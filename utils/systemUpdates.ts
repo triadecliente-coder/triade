@@ -27,6 +27,25 @@ export interface SystemRelease {
  */
 export const SYSTEM_RELEASES: SystemRelease[] = [
   {
+    id: 'rel_2026_10_29_v2_89_3',
+    version: 'v2.89.3',
+    date: '29/10/2026',
+    title: 'Correção de Exportação Padrão na Tela de Login e Padronização de Fim de Linha',
+    summary: 'Remoção de exportação padrão duplicada em LoginPage.tsx (erro TS2528) e padronização de quebras de linha CRLF nos módulos atualizados, validando build completo de produção.',
+    items: [
+      {
+        category: 'fix',
+        title: 'Correção de Export Default Duplicado em LoginPage (TS2528)',
+        description: 'Removida a linha duplicada export default LoginPage no encerramento de pages/LoginPage.tsx que impedia a compilação do bundle de produção e gerava alerta TS2528 no editor.'
+      },
+      {
+        category: 'improvement',
+        title: 'Padronização de Quebras de Linha e Validação de Build',
+        description: 'Normalizadas as quebras de linha dos arquivos TypeScript modificados e validados tsc --noEmit e vite build sem erros.'
+      }
+    ]
+  },
+  {
     id: 'rel_2026_10_29_v2_89_2',
     version: 'v2.89.2',
     date: '29/10/2026',
