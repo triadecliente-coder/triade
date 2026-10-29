@@ -27,6 +27,20 @@ export interface SystemRelease {
  */
 export const SYSTEM_RELEASES: SystemRelease[] = [
   {
+    id: 'rel_2026_10_29_v2_90_4',
+    version: 'v2.90.4',
+    date: '29/10/2026',
+    title: 'Comando de Inicialização do Banco Supabase (db:setup)',
+    summary: 'Adicionado comando único para criar todas as tabelas do Tríade no Supabase, resolvendo a causa raiz do erro ao salvar usuários.',
+    items: [
+      {
+        category: 'improvement',
+        title: 'Novo comando npm run db:setup',
+        description: 'Executa o script supabase/setup_complete_triade_db.sql (28 tabelas, RLS e usuários iniciais) diretamente no banco Supabase usando a DIRECT_URL configurada no .env.'
+      }
+    ]
+  },
+  {
     id: 'rel_2026_10_29_v2_90_3',
     version: 'v2.90.3',
     date: '29/10/2026',
