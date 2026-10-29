@@ -75,7 +75,7 @@ import {
   deleteShipmentAttachmentFromStorage, upsertBranch, deleteBranch, deleteTicket,
   upsertFreightOffer, deleteFreightOffer, fetchFreightOffers,
   upsertRiskQueryOption, deleteRiskQueryOption, saveAllRiskQueryOptions,
-  mergeClients, fetchClients, fetchCargos
+  mergeClients, fetchClients, fetchCargos, isMissingTableError
 } from './lib/db';
 
 const PageLoadingFallback: React.FC = () => (
@@ -3537,7 +3537,6 @@ const App: React.FC = () => {
       showToast('Usuário em modo demonstração possui acesso apenas de visualização.', 'warning');
       return;
     }
-    if (!window.confirm("Tem certeza que deseja excluir permanentemente esta informação?")) return;
     if (!currentUser || (currentUser.profile !== UserProfile.Admin && currentUser.profile !== UserProfile.Desenvolvedor)) return;
     
     const relatedShipments = shipments.filter(s => s.cargoId === cargoId);
@@ -3563,7 +3562,6 @@ const App: React.FC = () => {
       showToast('Usuário em modo demonstração possui acesso apenas de visualização.', 'warning');
       return;
     }
-    if (!window.confirm("Tem certeza que deseja excluir permanentemente esta informação?")) return;
     if (!currentUser || (currentUser.profile !== UserProfile.Admin && currentUser.profile !== UserProfile.Desenvolvedor)) return;
     
     const shipmentToDelete = shipments.find(s => s.id === shipmentId);
@@ -3611,7 +3609,17 @@ const App: React.FC = () => {
       setOwners(prev => [saved, ...prev]);
       setNextIds((prev: any) => ({ ...prev, owner: prev.owner + 1 }));
     }
-    try { await upsertOwner(saved); } catch(err) { console.error('Erro ao salvar proprietário:', err); }
+    try { 
+      await upsertOwner(saved); 
+      showToast('Proprietário salvo com sucesso!', 'success');
+    } catch(err: any) { 
+      console.error('Erro ao salvar proprietário:', err); 
+      if (isMissingTableError(err)) {
+        showToast('Proprietário salvo localmente! O banco Supabase precisa da execução das tabelas.', 'warning');
+      } else {
+        showToast('Erro ao salvar proprietário: ' + (err?.message || ''), 'error');
+      }
+    }
   };
 
   const handleSaveDriver = async (driverData: Driver | Omit<Driver, 'id'>) => {
@@ -4233,9 +4241,14 @@ const App: React.FC = () => {
     try { 
       await upsertUser(saved); 
       showToast('Configurações do usuário salvas com sucesso no banco de dados!', 'success');
-    } catch(err) { 
+    } catch(err: any) { 
       console.error('Erro ao salvar usuário no Supabase:', err); 
-      showToast('Erro ao salvar usuário no banco de dados.', 'error');
+      if (err?.isSchemaMissing || isMissingTableError(err)) {
+        showToast('Usuário salvo localmente! As tabelas do banco Supabase ainda não foram criadas. Execute a migração SQL no painel.', 'warning');
+      } else {
+        const errorMsg = err?.message || 'Erro desconhecido ao salvar no banco.';
+        showToast(`Erro ao salvar usuário: ${errorMsg}`, 'error');
+      }
     }
   };
   
@@ -4244,7 +4257,6 @@ const App: React.FC = () => {
       showToast('Usuário em modo demonstração possui acesso apenas de visualização.', 'warning');
       return;
     }
-    if (!window.confirm("Tem certeza que deseja excluir permanentemente esta informação?")) return;
     if (!currentUser || (currentUser.profile !== UserProfile.Admin && currentUser.profile !== UserProfile.Desenvolvedor)) return;
     if (userId === currentUser.id) {
         showToast("Você não pode excluir seu próprio usuário.", 'warning');
@@ -4278,8 +4290,17 @@ const App: React.FC = () => {
       setBranches(prev => [saved, ...prev]);
       setNextIds((prev: any) => ({ ...prev, branch: prev.branch + 1 }));
     }
-    try { await upsertBranch(saved); } catch(err) { console.error('Erro ao salvar filial:', err); }
-    showToast('Filial salva com sucesso!', 'success');
+    try { 
+      await upsertBranch(saved); 
+      showToast('Filial salva com sucesso!', 'success');
+    } catch(err: any) { 
+      console.error('Erro ao salvar filial:', err); 
+      if (isMissingTableError(err)) {
+        showToast('Filial salva localmente! O banco Supabase precisa da execução das tabelas.', 'warning');
+      } else {
+        showToast('Erro ao salvar filial: ' + (err?.message || ''), 'error');
+      }
+    }
   };
 
   const handleDeleteBranch = async (branchId: string) => {
@@ -4287,7 +4308,6 @@ const App: React.FC = () => {
       showToast('Usuário em modo demonstração possui acesso apenas de visualização.', 'warning');
       return;
     }
-    if (!window.confirm("Tem certeza que deseja excluir permanentemente esta informação?")) return;
     if (!currentUser || (currentUser.profile !== UserProfile.Admin && currentUser.profile !== UserProfile.Desenvolvedor)) return;
     if (confirm('Tem certeza que deseja excluir esta filial?')) {
       try {

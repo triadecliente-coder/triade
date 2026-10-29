@@ -27,6 +27,35 @@ export interface SystemRelease {
  */
 export const SYSTEM_RELEASES: SystemRelease[] = [
   {
+    id: 'rel_2026_10_29_v2_90_3',
+    version: 'v2.90.3',
+    date: '29/10/2026',
+    title: 'Resiliência no Salvamento de Usuários, Correção de Diálogos Duplos e Guia de Migração Supabase',
+    summary: 'Implementada persistência resiliente com cache local para cadastro e edição de usuários, sanitização de chaves estrangeiras e identificadores auth_id, eliminação de duplo confirm em ações de exclusão e consolidação do script SQL de migração para o Supabase.',
+    items: [
+      {
+        category: 'fix',
+        title: 'Tratamento Resiliente e Cache Local de Usuários',
+        description: 'Adicionada persistência imediata em cache local para usuários criados ou editados no App.tsx e lib/db.ts, garantindo que nenhum dado seja perdido e fornecendo alertas claros caso o schema do banco Supabase ainda precise ser executado.'
+      },
+      {
+        category: 'fix',
+        title: 'Sanitização de Filial e UUID no Payload de Usuários',
+        description: 'Normalizado o envio do campo branch_id (tratando valores nulos ou "Todas" para não violar integridade referencial) e auth_id (evitando erro de sintaxe UUID com strings vazias).'
+      },
+      {
+        category: 'fix',
+        title: 'Eliminação de Confirmações Duplas em Exclusões',
+        description: 'Removidos diálogos de confirmação duplicados consecutivos ao excluir cargas, embarques, usuários e filiais.'
+      },
+      {
+        category: 'improvement',
+        title: 'Consolidação e Seed no Script SQL Oficial',
+        description: 'Atualizado o script de migração scratch/setup_triade_db_and_dev_user.sql incluindo as 28 tabelas e seed automático para DEV e Chales (admin@triade.com).'
+      }
+    ]
+  },
+  {
     id: 'rel_2026_10_29_v2_90_2',
     version: 'v2.90.2',
     date: '29/10/2026',

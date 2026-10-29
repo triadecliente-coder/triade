@@ -1083,7 +1083,10 @@ export const toUser = (row: any): User => {
 export const fromUser = (u: User | Omit<User, 'id'>) => {
   const currentPerms = typeof (u as any).customPermissions === 'object' && (u as any).customPermissions ? (u as any).customPermissions : {};
   const hasComm = u.hasCommercialCommission ?? false;
-  const resolvedBranchId = u.branchId || (u as any).filialId || null;
+  const rawBranchId = u.branchId || (u as any).filialId || null;
+  const resolvedBranchId = (rawBranchId && typeof rawBranchId === 'string' && rawBranchId.trim() !== '' && rawBranchId.toLowerCase() !== 'todas' && rawBranchId.toLowerCase() !== 'all') 
+    ? rawBranchId.trim() 
+    : null;
 
   const permissionsPayload = {
     ...currentPerms,
@@ -1103,19 +1106,24 @@ export const fromUser = (u: User | Omit<User, 'id'>) => {
     agencyLeaderId: u.agencyLeaderId,
   };
 
+  const rawAuthId = (u as User).authId;
+  const cleanAuthId = (rawAuthId && typeof rawAuthId === 'string' && rawAuthId.trim().length > 10)
+    ? rawAuthId.trim()
+    : null;
+
   return {
     id: (u as User).id,
     name: u.name,
     email: u.email,
     profile: u.profile,
-    active: u.active,
-    phone: u.phone,
-    password: u.password,
+    active: u.active !== false,
+    phone: u.phone || null,
+    password: u.password || null,
     client_id: u.clientId || null,
-    require_password_change: u.requirePasswordChange,
-    auth_id: u.authId,
-    password_updated_at: u.passwordUpdatedAt,
-    branch_id: resolvedBranchId || null,
+    require_password_change: Boolean(u.requirePasswordChange),
+    auth_id: cleanAuthId,
+    password_updated_at: u.passwordUpdatedAt || null,
+    branch_id: resolvedBranchId,
     permissions: permissionsPayload,
   };
 };
@@ -1643,8 +1651,21 @@ export async function fetchPaginatedShipments(page: number, limit: number, filte
 export async function fetchUsers(): Promise<User[]> {
   try {
     const data = await fetchAllRows('app_users', 'name');
-    return data.map(toUser);
+    const users = data.map(toUser);
+    if (users.length > 0) {
+      try { localStorage.setItem('triade_users_cache', JSON.stringify(users)); } catch {}
+    }
+    return users;
   } catch (error) {
+    if (isMissingTableError(error)) {
+      try {
+        const cached = localStorage.getItem('triade_users_cache');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch {}
+    }
     return handleAuthError(error, []);
   }
 }
@@ -2238,8 +2259,26 @@ export async function backfillAdvanceAndBalanceCalculations(): Promise<{ updated
 
 
 export async function upsertUser(user: User): Promise<void> {
-  const { error } = await supabase.from('app_users').upsert(fromUser(user));
-  if (error) throw error;
+  // Salva no cache local de emergência para resiliência contínua
+  try {
+    const raw = localStorage.getItem('triade_users_cache');
+    const list: User[] = raw ? JSON.parse(raw) : [];
+    const updated = [user, ...list.filter(u => u.id !== user.id)];
+    localStorage.setItem('triade_users_cache', JSON.stringify(updated));
+  } catch {}
+
+  const payload = fromUser(user);
+  const { error } = await supabase.from('app_users').upsert(payload);
+  if (error) {
+    if (isMissingTableError(error)) {
+      console.warn('[DB] Tabela public.app_users inexistente no Supabase. Usuário salvo com segurança no cache local.');
+      const customErr: any = new Error("Tabela 'app_users' ainda não foi criada no banco de dados.");
+      customErr.code = error.code || 'PGRST205';
+      customErr.isSchemaMissing = true;
+      throw customErr;
+    }
+    throw error;
+  }
 }
 
 export async function upsertBranch(branch: Branch): Promise<void> {
@@ -2585,8 +2624,15 @@ export async function deleteShipment(id: string): Promise<void> {
 }
 
 export async function deleteUser(id: string): Promise<void> {
+  try {
+    const raw = localStorage.getItem('triade_users_cache');
+    if (raw) {
+      const list: User[] = JSON.parse(raw);
+      localStorage.setItem('triade_users_cache', JSON.stringify(list.filter(u => u.id !== id)));
+    }
+  } catch {}
   const { error } = await supabase.from('app_users').delete().eq('id', id);
-  if (error) throw error;
+  if (error && !isMissingTableError(error)) throw error;
 }
 
 export async function deleteBranch(id: string): Promise<void> {
