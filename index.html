@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" translate="no" class="notranslate">
+<html lang="pt-BR" translate="no" class="notranslate dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
@@ -19,14 +19,8 @@
       (function() {
         function applyTheme() {
           const saved = localStorage.getItem('triade_theme_mode');
-          let isDark = true;
-          if (saved === 'light') {
-            isDark = false;
-          } else if (saved === 'dark') {
-            isDark = true;
-          } else if (window.matchMedia) {
-            isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          }
+          // Tríade tem como padrão oficial o tema escuro Navy
+          let isDark = saved ? saved === 'dark' : true;
           if (isDark) {
             document.documentElement.classList.add('dark');
           } else {
@@ -34,40 +28,81 @@
           }
         }
         applyTheme();
-        if (window.matchMedia) {
-          window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
-            if (!localStorage.getItem('triade_theme_mode')) {
-              applyTheme();
+
+        // Autocorreção: se houver erro ao carregar chunks atualizados pelo Vite, recarrega limpo
+        window.addEventListener('vite:preloadError', function(event) {
+          console.warn('[Tríade] Nova versão detectada. Recarregando a página...');
+          window.location.reload();
+        });
+
+        // Limpeza de Service Workers antigos em ambiente de desenvolvimento local
+        if ('serviceWorker' in navigator && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+          navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for (var i = 0; i < registrations.length; i++) {
+              registrations[i].unregister();
             }
-          });
+          }).catch(function(e) { console.debug(e); });
         }
       })();
+
       if (window.tailwind) {
         tailwind.config = {
           darkMode: 'class',
           theme: {
-          extend: {
-            colors: {
-              'primary': '#EC2907',       // Tríade Vermelho-Laranja Vibrante
-              'primary-dark': '#C41C00',   // Carmesim Profundo (Dobras do Símbolo)
-              'accent': '#FF4D00',        // Laranja Chama Luminoso
-              'accent-dark': '#D93B00',    // Laranja Queimado (Hover)
-              'brand-navy': '#011B35',    // Azul Marinho Meia-Noite (Tipografia TRÍADE)
-              'secondary': '#64748B',     // Slate Gray
-              'light-bg': '#F8FAFC',      // Superfície Clara
-              'light-card': '#FFFFFF',
-              'dark-bg': '#041020',       // Fundo Escuro Navy Tríade
-              'dark-card': '#0A1C34',     // Card Escuro Navy Tríade
+            extend: {
+              colors: {
+                'primary': '#EC2907',       // Tríade Vermelho-Laranja Vibrante
+                'primary-dark': '#C41C00',   // Carmesim Profundo (Dobras do Símbolo)
+                'accent': '#FF4D00',        // Laranja Chama Luminoso
+                'accent-dark': '#D93B00',    // Laranja Queimado (Hover)
+                'brand-navy': '#011B35',    // Azul Marinho Meia-Noite (Tipografia TRÍADE)
+                'secondary': '#64748B',     // Slate Gray
+                'light-bg': '#F8FAFC',      // Superfície Clara
+                'light-card': '#FFFFFF',
+                'dark-bg': '#041020',       // Fundo Escuro Navy Tríade
+                'dark-card': '#0A1C34',     // Card Escuro Navy Tríade
+              },
             },
           },
-        },
+        };
       }
-    }
     </script>
     <link rel="stylesheet" href="/index.css">
-</head>
-  <body class="bg-light-bg dark:bg-dark-bg">
-    <div id="root"></div>
+    <style>
+      body {
+        background-color: #041020;
+        color: #f8fafc;
+        margin: 0;
+        padding: 0;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      @keyframes pulseSlow { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.85; transform: scale(0.98); } }
+    </style>
+  </head>
+  <body class="bg-[#041020] text-slate-100 antialiased">
+    <div id="root">
+      <!-- Loader Inicial Tríade (evita tela branca antes da montagem do React) -->
+      <div id="triade-initial-splash" style="position: fixed; inset: 0; background: #041020; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; z-index: 99999;">
+        <img src="/logo-dark.png" alt="Tríade Logística" style="max-width: 220px; height: auto; object-fit: contain; animation: pulseSlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;" onerror="this.style.display='none'" />
+        <div style="display: flex; align-items: center; gap: 12px; color: #94a3b8; font-size: 14px; font-weight: 500;">
+          <div style="width: 22px; height: 22px; border: 2.5px solid #1e293b; border-top-color: #EC2907; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+          <span>Carregando Tríade Logística...</span>
+        </div>
+        <div id="triade-recovery-action" style="display: none; flex-direction: column; align-items: center; gap: 10px; margin-top: 8px;">
+          <p style="color: #64748b; font-size: 12px; margin: 0;">O carregamento está demorando mais do que o esperado?</p>
+          <button onclick="localStorage.clear(); sessionStorage.clear(); if('serviceWorker' in navigator){ navigator.serviceWorker.getRegistrations().then(function(regs){ for(var r of regs) r.unregister(); window.location.reload(true); }); } else { window.location.reload(true); }" style="background: #EC2907; color: white; border: none; border-radius: 8px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer;">
+            Limpar Cache Local e Recarregar
+          </button>
+        </div>
+      </div>
+      <script>
+        // Se o React demorar mais de 6 segundos, exibe botão de recuperação amigável
+        setTimeout(function() {
+          var rec = document.getElementById('triade-recovery-action');
+          if (rec) rec.style.display = 'flex';
+        }, 6000);
+      </script>
+    </div>
     <script type="module" src="/index.tsx"></script>
   </body>
 </html>

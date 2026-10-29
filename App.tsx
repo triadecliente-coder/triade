@@ -15,7 +15,7 @@ import { DEFAULT_LOGO_LIGHT, DEFAULT_FAVICON, isDefaultBrandLogo } from './utils
 
 // Lazy-loaded Page Imports (Code Splitting for Optimal Performance)
 const DashboardPage = React.lazy(() => import('./pages/DashboardPage'));
-const LoginPage = React.lazy(() => import('./pages/LoginPage'));
+import LoginPage from './pages/LoginPage';
 const ClientsPage = React.lazy(() => import('./pages/ClientsPage'));
 const OwnersPage = React.lazy(() => import('./pages/OwnersPage'));
 const DriversPage = React.lazy(() => import('./pages/DriversPage'));
@@ -192,6 +192,14 @@ const App: React.FC = () => {
     }
   });
   const [isAuthChecking, setIsAuthChecking] = useState(true);
+
+  // Safety net: auth check should never hang indefinitely
+  useEffect(() => {
+    const safetyTimer = setTimeout(() => {
+      setIsAuthChecking(false);
+    }, 3500);
+    return () => clearTimeout(safetyTimer);
+  }, []);
   const location = useLocation();
   const navigate = useNavigate();
   const currentPage = (location.pathname === '/' ? 'dashboard' : location.pathname.substring(1)) as Page;
@@ -4587,12 +4595,15 @@ const App: React.FC = () => {
     );
   };
 
-  // Only show the full-screen loader if it's the initial load (no data yet) or checking auth
-  if (isAuthChecking || isLoading) {
+  // Only show the loader if checking initial auth or if logged in and data is still loading
+  if (isAuthChecking || (currentUser && isLoading)) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', gap: '16px', background: '#f9fafb' }}>
-        <div style={{ width: '48px', height: '48px', border: '4px solid #e5e7eb', borderTopColor: '#3b82f6', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-        <p style={{ color: '#6b7280', fontSize: '18px', fontWeight: 500 }}>Carregando Tríade Logística...</p>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', gap: '20px', background: '#041020', color: '#f8fafc' }}>
+        <img src="/logo-dark.png" alt="Tríade" style={{ maxWidth: '200px', height: 'auto', objectFit: 'contain' }} onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ width: '32px', height: '32px', border: '3px solid #1e293b', borderTopColor: '#EC2907', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+          <p style={{ color: '#94a3b8', fontSize: '15px', fontWeight: 500, margin: 0 }}>Carregando Tríade Logística...</p>
+        </div>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
@@ -4641,9 +4652,7 @@ const App: React.FC = () => {
 
   if (!currentUser) {
     return (
-      <React.Suspense fallback={<PageLoadingFallback />}>
-        <LoginPage onLogin={handleLogin} users={users} companyLogo={companyLogo} profilePermissions={profilePermissions} />
-      </React.Suspense>
+      <LoginPage onLogin={handleLogin} users={users} companyLogo={companyLogo} profilePermissions={profilePermissions} />
     );
   }
 

@@ -27,6 +27,35 @@ export interface SystemRelease {
  */
 export const SYSTEM_RELEASES: SystemRelease[] = [
   {
+    id: 'rel_2026_10_29_v2_90_2',
+    version: 'v2.90.2',
+    date: '29/10/2026',
+    title: 'Correção de Inicialização do Frontend e Prevenção de Tela Branca',
+    summary: 'Correção estrutural na montagem do aplicativo, desativação de Service Worker de desenvolvimento que gerava conflitos de cache, importação direta e síncrona da tela de login e inclusão de splash screen nativa Tríade.',
+    items: [
+      {
+        category: 'fix',
+        title: 'Eliminação da Tela Branca na Carga Inicial',
+        description: 'Corrigido o fluxo de checagem de autenticação no App.tsx para que usuários deslogados não fiquem bloqueados pelo estado de carregamento do banco de dados, com adição de timeout de segurança de 3.5 segundos.'
+      },
+      {
+        category: 'fix',
+        title: 'Desativação do Service Worker em Modo Dev no Vite',
+        description: 'Desativado devOptions no VitePWA e adicionada limpeza automática de Service Workers legados em localhost para evitar bloqueios de importação de módulos ES.'
+      },
+      {
+        category: 'improvement',
+        title: 'Splash Screen Nativo Tríade e Importação Direta do Login',
+        description: 'Adicionada tela de carregamento inicial com a logo Tríade e cores oficiais Midnight Navy e Laranja Vibrante diretamente no index.html e App.tsx, além de importação síncrona de LoginPage para renderização instantânea.'
+      },
+      {
+        category: 'improvement',
+        title: 'Autocorreção de Chunks (vite:preloadError)',
+        description: 'Implementado listener automático para recarregar a aplicação de forma transparente caso uma nova versão com hashes de arquivos diferentes seja detectada pelo navegador.'
+      }
+    ]
+  },
+  {
     id: 'rel_2026_10_29_v2_90_1',
     version: 'v2.90.1',
     date: '29/10/2026',
