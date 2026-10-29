@@ -234,7 +234,7 @@ const UserAccessViewerModal: React.FC<UserAccessViewerModalProps> = ({
       return shipments.filter(s => s.embarcadorId === simulatedUser.id || s.createdById === simulatedUser.id || (simulatedUser.branchId && s.branchId === simulatedUser.branchId));
     }
     if (
-      simulatedUser.profile === UserProfile.Admin ||
+      simulatedUser.profile === UserProfile.Admin || simulatedUser.profile === UserProfile.Desenvolvedor ||
       simulatedUser.profile === UserProfile.GerenciadoraDeRisco ||
       (simulatedUser.profile as string) === 'Gerenciadora de Risco' ||
       simulatedUser.profile === UserProfile.Financeiro ||
@@ -249,7 +249,7 @@ const UserAccessViewerModal: React.FC<UserAccessViewerModalProps> = ({
     if (simulatedUser.profile === UserProfile.Cliente && simulatedUser.clientId) {
       return shipments.filter(s => visibleCargoIds.has(s.cargoId));
     }
-    if (simulatedUser.branchId && ![UserProfile.Admin, UserProfile.Diretor, UserProfile.Fiscal, UserProfile.Financeiro].includes(simulatedUser.profile as UserProfile)) {
+    if (simulatedUser.branchId && ![UserProfile.Admin, UserProfile.Desenvolvedor, UserProfile.Diretor, UserProfile.Fiscal, UserProfile.Financeiro].includes(simulatedUser.profile as UserProfile)) {
       return shipments.filter(s => visibleCargoIds.has(s.cargoId) && (s.branchId === simulatedUser.branchId || !s.branchId));
     }
     return shipments.filter(s => visibleCargoIds.has(s.cargoId));

@@ -256,7 +256,7 @@ const LoadFormModal: React.FC<LoadFormModalProps> = ({
   };
 
   const commercialUsers = useMemo(() => {
-    return users.filter(u => u.profile === UserProfile.Comercial || u.profile === UserProfile.Admin);
+    return users.filter(u => u.profile === UserProfile.Comercial || u.profile === UserProfile.Admin || u.profile === UserProfile.Desenvolvedor);
   }, [users]);
 
   const internalUsers = useMemo(() => {

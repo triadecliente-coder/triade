@@ -27,6 +27,30 @@ export interface SystemRelease {
  */
 export const SYSTEM_RELEASES: SystemRelease[] = [
   {
+    id: 'rel_2026_10_29_v2_89_1',
+    version: 'v2.89.1',
+    date: '29/10/2026',
+    title: 'Novo Perfil Desenvolvedor, Autenticação Integrada e Migração Base do Banco',
+    summary: 'Criação do perfil interno Desenvolvedor com acesso irrestrito a todos os módulos, provisionamento do usuário inicial DEV no Supabase Auth com sincronização automática para app_users e consolidação da migração estrutural completa do banco de dados.',
+    items: [
+      {
+        category: 'feature',
+        title: 'Perfil Desenvolvedor com Privilégios Globais',
+        description: 'Adicionado o perfil Desenvolvedor (UserProfile.Desenvolvedor) integrado à governança de permissões, painéis executivos, gestão de usuários, espelhamento de acessos, relatórios financeiros e controles de suporte.'
+      },
+      {
+        category: 'security',
+        title: 'Autenticação Supabase Auth com Metadados Protegidos (app_metadata)',
+        description: 'Implementado suporte nativo a autenticação via Supabase Auth (signInWithPassword e validação JWT server-side com getUser) utilizando app_metadata para o perfil de autorização e sincronização automática em public.app_users.'
+      },
+      {
+        category: 'improvement',
+        title: 'Migração Estrutural Completa do Schema Core (Bootstrap SQL)',
+        description: 'Adicionada a migração base das tabelas operacionais centrais, índices de chaves estrangeiras, políticas RLS, RPC de bloqueio de embarque (acquire_shipment_lock) e bucket de anexos.'
+      }
+    ]
+  },
+  {
     id: 'rel_2026_10_29_v2_89_0',
     version: 'v2.89.0',
     date: '29/10/2026',

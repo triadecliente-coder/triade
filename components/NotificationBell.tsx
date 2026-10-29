@@ -121,12 +121,12 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
     const isFiscal = user.profile === UserProfile.Fiscal;
     const isSeguradora = user.profile === UserProfile.GerenciadoraDeRisco;
     const isFinanceiro = user.profile === UserProfile.Financeiro;
-    const isAdminOrDiretor = !isDemo && (user.profile === UserProfile.Admin || user.profile === UserProfile.Diretor || user.profile === UserProfile.GerenciadoraDeRisco);
+    const isAdminOrDiretor = !isDemo && (user.profile === UserProfile.Admin || user.profile === UserProfile.Desenvolvedor || user.profile === UserProfile.Diretor || user.profile === UserProfile.GerenciadoraDeRisco);
     const isCommercialOrSupervisor = !isDemo && [
       UserProfile.Comercial,
       UserProfile.GerenteComercial,
       UserProfile.Supervisor,
-      UserProfile.Admin,
+      UserProfile.Admin, UserProfile.Desenvolvedor,
       UserProfile.Diretor
     ].includes(user.profile);
     const isMotorista = user.profile === UserProfile.Motorista;
@@ -357,7 +357,7 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
     const isEligibleForNewCargoAlert = !isDemo && [
       UserProfile.Comercial,
       UserProfile.GerenteComercial,
-      UserProfile.Admin,
+      UserProfile.Admin, UserProfile.Desenvolvedor,
       UserProfile.GerenciadoraDeRisco,
       UserProfile.Diretor,
       UserProfile.Agenciador,

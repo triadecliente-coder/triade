@@ -891,7 +891,7 @@ const FreightOffersList: React.FC<FreightOffersListProps> = ({
                       <HistoryIcon className="w-4 h-4" />
                     </button>
                     {/* Botão de Excluir (Apenas Admin) */}
-                    {onDelete && currentUser?.profile === UserProfile.Admin && !isDemo && (
+                    {onDelete && (currentUser?.profile === UserProfile.Admin || currentUser?.profile === UserProfile.Desenvolvedor) && !isDemo && (
                       <button onClick={() => onDelete(offer)} title="Excluir Oferta" className="p-1.5 text-red-600 bg-red-50 hover:bg-red-200 rounded-lg transition-colors">
                         <TrashIcon className="w-4 h-4" />
                       </button>

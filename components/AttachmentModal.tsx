@@ -2707,7 +2707,7 @@ const AttachmentModal: React.FC<AttachmentModalProps> = ({
 
                         {/* CT-e cancelado NÃO pode ser excluído do sistema (regra explícita) */}
                         {!isCancelled && onDeleteAttachment && !isDemo && (
-                          currentUser?.profile === UserProfile.Admin ||
+                          currentUser?.profile === UserProfile.Admin || currentUser?.profile === UserProfile.Desenvolvedor ||
                           currentUser?.profile === UserProfile.Diretor ||
                           currentUser?.profile === UserProfile.Supervisor ||
                           currentUser?.profile === UserProfile.Fiscal ||

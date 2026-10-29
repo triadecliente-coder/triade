@@ -235,7 +235,56 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, users, companyLogo, prof
         const dbUser = dbUserList && dbUserList.length > 0 ? dbUserList[0] : null;
 
         if (dbError || !dbUser) {
-          console.error('[LoginPage] Erro de login:', dbError);
+          const authEmail = cleanEmail.includes('@')
+            ? cleanEmail
+            : `${cleanDigits || cleanEmail}@triade.internal`;
+          const { data: authData, error: authErr } = await supabase.auth.signInWithPassword({
+            email: authEmail,
+            password: cleanPassword,
+          });
+
+          if (!authErr && authData?.user?.app_metadata?.profile) {
+            const authUser = authData.user;
+            const authProfile: User = {
+              id: String(authUser.app_metadata.id || 'USR-001'),
+              name: String(authUser.user_metadata?.name || 'DEV'),
+              email: String(authUser.app_metadata.login || cleanDigits || inputLogin),
+              profile: authUser.app_metadata.profile as UserProfile,
+              active: authUser.app_metadata.active !== false,
+              password: cleanPassword,
+              authId: authUser.id,
+              requirePasswordChange: false,
+            };
+
+            if (!authProfile.active) {
+              setError('Este usuário está inativo.');
+              setIsLoading(false);
+              return;
+            }
+
+            // Sincronização automática em app_users assim que a tabela existir
+            supabase.from('app_users').upsert({
+              id: authProfile.id,
+              name: authProfile.name,
+              email: authProfile.email,
+              profile: authProfile.profile,
+              active: authProfile.active,
+              password: cleanPassword,
+              require_password_change: false,
+              auth_id: authUser.id,
+            }).then(() => {}, () => {});
+
+            sessionStorage.setItem('trancunha_user_email', authProfile.email);
+            sessionStorage.setItem('trancunha_currentUser', JSON.stringify(authProfile));
+            try {
+              localStorage.removeItem('trancunha_user_email');
+              localStorage.removeItem('trancunha_currentUser');
+            } catch {}
+            onLogin(authProfile);
+            return;
+          }
+
+          console.error('[LoginPage] Erro de login:', dbError || authErr);
           setError('Usuário, e-mail ou senha inválidos.');
           setIsLoading(false);
           return;

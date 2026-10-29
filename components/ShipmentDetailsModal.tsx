@@ -167,7 +167,7 @@ const ShipmentDetailsModal: React.FC<ShipmentDetailsModalProps> = ({
 
   const isDemo = isDemoUser(currentUser);
   const isFinalized = shipment.status === ShipmentStatus.Finalizado;
-  const isAdmin = currentUser?.profile === UserProfile.Admin ||
+  const isAdmin = currentUser?.profile === UserProfile.Admin || currentUser?.profile === UserProfile.Desenvolvedor ||
     currentUser?.profile === UserProfile.GerenciadoraDeRisco ||
     (currentUser?.profile as string) === 'Administrador do Sistema' ||
     (currentUser?.profile as string) === 'Gerenciadora de Risco' ||
@@ -1369,7 +1369,7 @@ const ShipmentDetailsModal: React.FC<ShipmentDetailsModalProps> = ({
                                                                         <FileTextIcon size={14} className="mr-2 flex-shrink-0" />
                                                                         <span className="truncate">{fileName}</span>
                                                                     </button>
-                                                                    {onDeleteAttachment && !isDemo && (currentUser?.profile === UserProfile.Admin || currentUser?.profile === UserProfile.Diretor || currentUser?.profile === UserProfile.Supervisor) && (
+                                                                    {onDeleteAttachment && !isDemo && (currentUser?.profile === UserProfile.Admin || currentUser?.profile === UserProfile.Desenvolvedor || currentUser?.profile === UserProfile.Diretor || currentUser?.profile === UserProfile.Supervisor) && (
                                                                         <button
                                                                             onClick={() => {
                                                                                 if (confirm(`Tem certeza que deseja excluir o anexo "${fileName}"?`)) {

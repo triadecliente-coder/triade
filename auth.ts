@@ -82,7 +82,8 @@ export const can = (
   }
 
   // Admin can do everything, always.
-  if (user.profile === UserProfile.Admin) return true;
+  // Admin and Desenvolvedor can do everything, always.
+  if (user.profile === UserProfile.Admin || user.profile === UserProfile.Desenvolvedor || (user.profile as string) === 'Desenvolvedor') return true;
 
   // Gerenciadora de Risco: same functions and permissions as Admin,
   // EXCEPT: access to 'financial' and 'reports', and any 'delete' commands.

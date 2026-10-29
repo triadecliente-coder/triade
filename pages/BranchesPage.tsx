@@ -22,8 +22,8 @@ const BranchesPage: React.FC<BranchesPageProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [branchToEdit, setBranchToEdit] = useState<Branch | null>(null);
 
-  const canManage = currentUser?.profile === UserProfile.Admin || currentUser?.profile === UserProfile.GerenciadoraDeRisco;
-  const canDelete = currentUser?.profile === UserProfile.Admin;
+  const canManage = currentUser?.profile === UserProfile.Admin || currentUser?.profile === UserProfile.Desenvolvedor || currentUser?.profile === UserProfile.GerenciadoraDeRisco;
+  const canDelete = currentUser?.profile === UserProfile.Admin || currentUser?.profile === UserProfile.Desenvolvedor;
 
   const handleEdit = (branch: Branch) => {
     setBranchToEdit(branch);

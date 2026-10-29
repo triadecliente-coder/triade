@@ -96,7 +96,7 @@ const ShipperReport: React.FC<ShipperReportProps> = ({ shipments, cargos, client
 
     const canViewCommission = useMemo(() => {
         if (!currentUser) return false;
-        return [UserProfile.Diretor, UserProfile.Comercial, UserProfile.Admin, UserProfile.Demonstracao, UserProfile.Supervisor, UserProfile.GerenteComercial].includes(currentUser.profile);
+        return [UserProfile.Diretor, UserProfile.Comercial, UserProfile.Admin, UserProfile.Desenvolvedor, UserProfile.Demonstracao, UserProfile.Supervisor, UserProfile.GerenteComercial].includes(currentUser.profile);
     }, [currentUser]);
 
     const cargoMap = useMemo(() => new Map(cargos.map(c => [c.id, c])), [cargos]);

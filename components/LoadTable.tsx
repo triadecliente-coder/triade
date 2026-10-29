@@ -761,7 +761,7 @@ const LoadTable: React.FC<LoadTableProps> = ({ loads, clients, products, shipmen
                               Fechar Carga
                             </button>
                           )}
-                          {onDelete && currentUser.profile === UserProfile.Admin && (
+                          {onDelete && (currentUser.profile === UserProfile.Admin || currentUser.profile === UserProfile.Desenvolvedor) && (
                             <button onClick={() => { onDelete(load.id); setOpenActionMenu(null); }} className="w-full text-left px-4 py-2 text-sm text-red-700 dark:text-red-500 font-bold hover:bg-red-50 dark:hover:bg-red-900/50 flex items-center gap-2">
                               <Trash2 className="h-4 w-4" /> Excluir Carga
                             </button>

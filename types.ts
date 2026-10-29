@@ -73,12 +73,14 @@ export enum UserProfile {
   Financeiro = "Financeiro",
   Cliente = "Cliente",
   Admin = "Administrador do Sistema",
+  Desenvolvedor = "Desenvolvedor",
   Motorista = "Motorista",
   Demonstracao = "Demonstração",
   GerenciadoraDeRisco = "Gerenciadora de Risco",
 }
 
 export const INTERNAL_PROFILES: UserProfile[] = [
+  UserProfile.Desenvolvedor,
   UserProfile.Admin,
   UserProfile.Diretor,
   UserProfile.Supervisor,

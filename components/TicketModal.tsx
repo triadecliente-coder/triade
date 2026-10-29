@@ -1477,7 +1477,7 @@ const TicketModal: React.FC<TicketModalProps> = ({
 
                             {/* Botões de Ação do Card */}
                             <div className="flex items-center justify-between gap-1.5 pt-1">
-                              {!isDemo && currentUser.profile === UserProfile.Admin && (
+                              {!isDemo && (currentUser.profile === UserProfile.Admin || currentUser.profile === UserProfile.Desenvolvedor) && (
                                 <button
                                   type="button"
                                   onClick={() => onDelete(ticket.id)}
@@ -1646,7 +1646,7 @@ const TicketModal: React.FC<TicketModalProps> = ({
                             </div>
 
                             <div className="flex items-center gap-2 shrink-0">
-                              {!isDemo && currentUser.profile === UserProfile.Admin && (
+                              {!isDemo && (currentUser.profile === UserProfile.Admin || currentUser.profile === UserProfile.Desenvolvedor) && (
                                 <button 
                                   onClick={(e) => { e.stopPropagation(); onDelete(ticket.id); }} 
                                   className="text-gray-400 hover:text-red-500 p-1.5 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" 

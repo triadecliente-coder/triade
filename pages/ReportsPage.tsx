@@ -357,6 +357,7 @@ const ReportsPage: React.FC<ReportsPageProps> = ({ shipments, embarcadores, carg
       UserProfile.Comercial, 
       UserProfile.GerenteComercial, 
       UserProfile.Admin, 
+      UserProfile.Desenvolvedor, 
       UserProfile.Supervisor, 
       UserProfile.Diretor, 
       UserProfile.Agenciador

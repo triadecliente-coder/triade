@@ -579,7 +579,7 @@ const App: React.FC = () => {
     }
 
     const isAllowedProfile = 
-      currentUser.profile === UserProfile.Admin ||
+      currentUser.profile === UserProfile.Admin || currentUser.profile === UserProfile.Desenvolvedor ||
       currentUser.profile === UserProfile.GerenciadoraDeRisco ||
       currentUser.profile === UserProfile.Diretor ||
       currentUser.profile === UserProfile.Comercial ||
@@ -772,6 +772,21 @@ const App: React.FC = () => {
           }
         } else {
           if (dbError) console.error('[Auth] Erro ao recuperar perfil:', dbError.message);
+          const { data: authCheck, error: authCheckErr } = await supabase.auth.getUser();
+          if (!authCheckErr && authCheck?.user?.app_metadata?.profile && authCheck.user.app_metadata.active !== false) {
+            const restoredAuthUser: User = {
+              id: String(authCheck.user.app_metadata.id || savedUser?.id || 'USR-001'),
+              name: String(authCheck.user.user_metadata?.name || savedUser?.name || 'DEV'),
+              email: String(authCheck.user.app_metadata.login || savedUserEmail),
+              profile: authCheck.user.app_metadata.profile as UserProfile,
+              active: true,
+              authId: authCheck.user.id,
+              requirePasswordChange: false,
+            };
+            setCurrentUser(restoredAuthUser);
+            setUsers(prev => prev.some(u => u.id === restoredAuthUser.id) ? prev : [restoredAuthUser, ...prev]);
+            return;
+          }
           setCurrentUser(null);
         }
       } else {
@@ -832,6 +847,9 @@ const App: React.FC = () => {
     localStorage.removeItem('trancunha_user_email');
     localStorage.removeItem('trancunha_currentUser');
     setCurrentUser(user);
+    if (user.profile !== UserProfile.Motorista) {
+      setUsers(prev => prev.some(u => u.id === user.id) ? prev : [user, ...prev]);
+    }
     if (user.profile === UserProfile.Motorista) {
       setCurrentPage('operational-loads');
     } else {
@@ -840,6 +858,7 @@ const App: React.FC = () => {
   };
 
   const handleLogout = () => {
+    supabase.auth.signOut().catch(() => {});
     sessionStorage.removeItem('trancunha_user_email');
     sessionStorage.removeItem('trancunha_currentUser');
     localStorage.removeItem('trancunha_user_email');
@@ -1120,7 +1139,7 @@ const App: React.FC = () => {
     return cargos.filter(c => {
       // 1. Admin, Gerenciadora de Risco and Demo always see all loads
       if (
-        currentUser.profile === UserProfile.Admin ||
+        currentUser.profile === UserProfile.Admin || currentUser.profile === UserProfile.Desenvolvedor ||
         currentUser.profile === UserProfile.GerenciadoraDeRisco ||
         (currentUser.profile as string) === 'Gerenciadora de Risco' ||
         currentUser.profile === UserProfile.Demonstracao ||
@@ -1150,11 +1169,11 @@ const App: React.FC = () => {
 
       // 4. Filter by allowed user IDs if defined on cargo (Admin, Diretor, Fiscal & Financeiro have global access)
       if (c.allowedUserIds && c.allowedUserIds.length > 0) {
-        if (!c.allowedUserIds.includes(currentUser.id) && ![UserProfile.Admin, UserProfile.GerenciadoraDeRisco, UserProfile.Diretor, UserProfile.Fiscal, UserProfile.Financeiro, UserProfile.Demonstracao].includes(currentUser.profile as UserProfile)) {
+        if (!c.allowedUserIds.includes(currentUser.id) && ![UserProfile.Admin, UserProfile.Desenvolvedor, UserProfile.GerenciadoraDeRisco, UserProfile.Diretor, UserProfile.Fiscal, UserProfile.Financeiro, UserProfile.Demonstracao].includes(currentUser.profile as UserProfile)) {
           return false;
         }
       } else if (c.allowedProfiles && c.allowedProfiles.length > 0) {
-        if (!c.allowedProfiles.includes(currentUser.profile) && ![UserProfile.Admin, UserProfile.GerenciadoraDeRisco, UserProfile.Diretor, UserProfile.Fiscal, UserProfile.Financeiro, UserProfile.Demonstracao].includes(currentUser.profile as UserProfile)) {
+        if (!c.allowedProfiles.includes(currentUser.profile) && ![UserProfile.Admin, UserProfile.Desenvolvedor, UserProfile.GerenciadoraDeRisco, UserProfile.Diretor, UserProfile.Fiscal, UserProfile.Financeiro, UserProfile.Demonstracao].includes(currentUser.profile as UserProfile)) {
           return false;
         }
       }
@@ -1194,7 +1213,7 @@ const App: React.FC = () => {
 
     // Admin, Gerenciadora de Risco, Demo & Financeiro see all shipments
     if (
-      currentUser.profile === UserProfile.Admin ||
+      currentUser.profile === UserProfile.Admin || currentUser.profile === UserProfile.Desenvolvedor ||
       currentUser.profile === UserProfile.GerenciadoraDeRisco ||
       (currentUser.profile as string) === 'Gerenciadora de Risco' ||
       currentUser.profile === UserProfile.Demonstracao ||
@@ -2276,19 +2295,19 @@ const App: React.FC = () => {
 
     // Check permissions based on the current status
     if (currentStatus === ShipmentStatus.PreCadastro) {
-        isUserAllowed = [UserProfile.Fiscal, UserProfile.Diretor, UserProfile.Supervisor, UserProfile.Embarcador, UserProfile.Comercial, UserProfile.Admin, UserProfile.Agenciador, UserProfile.GerenciadoraDeRisco].includes(currentUser.profile);
+        isUserAllowed = [UserProfile.Fiscal, UserProfile.Diretor, UserProfile.Supervisor, UserProfile.Embarcador, UserProfile.Comercial, UserProfile.Admin, UserProfile.Desenvolvedor, UserProfile.Agenciador, UserProfile.GerenciadoraDeRisco].includes(currentUser.profile);
         alertMessage = 'Apenas os perfis Gerenciadora de Risco, Comercial, Fiscal, Diretor, Supervisor, Embarcador, Agenciador ou Administrador podem realizar esta ação.';
     } else if (currentStatus === ShipmentStatus.AguardandoSeguradora) {
-        isUserAllowed = [UserProfile.GerenciadoraDeRisco, UserProfile.Admin, UserProfile.Diretor, UserProfile.Supervisor, UserProfile.Embarcador, UserProfile.Fiscal, UserProfile.Comercial, UserProfile.Financeiro].includes(currentUser.profile);
+        isUserAllowed = [UserProfile.GerenciadoraDeRisco, UserProfile.Admin, UserProfile.Desenvolvedor, UserProfile.Diretor, UserProfile.Supervisor, UserProfile.Embarcador, UserProfile.Fiscal, UserProfile.Comercial, UserProfile.Financeiro].includes(currentUser.profile);
         alertMessage = 'Apenas o perfil Gerenciadora de Risco, Embarcador ou Administrador do Sistema pode avançar embarques neste status.';
     } else if (currentStatus === ShipmentStatus.AguardandoDescarga) {
-        isUserAllowed = [UserProfile.Embarcador, UserProfile.Fiscal, UserProfile.Diretor, UserProfile.Supervisor, UserProfile.Comercial, UserProfile.Admin, UserProfile.Financeiro, UserProfile.Agenciador, UserProfile.Motorista, UserProfile.GerenciadoraDeRisco].includes(currentUser.profile);
+        isUserAllowed = [UserProfile.Embarcador, UserProfile.Fiscal, UserProfile.Diretor, UserProfile.Supervisor, UserProfile.Comercial, UserProfile.Admin, UserProfile.Desenvolvedor, UserProfile.Financeiro, UserProfile.Agenciador, UserProfile.Motorista, UserProfile.GerenciadoraDeRisco].includes(currentUser.profile);
         alertMessage = 'Você não tem permissão para anexar o comprovante de descarga.';
     } else if (currentStatus === ShipmentStatus.ValidacaoTicket) {
-        isUserAllowed = [UserProfile.Fiscal, UserProfile.Diretor, UserProfile.Supervisor, UserProfile.Comercial, UserProfile.Admin, UserProfile.Financeiro, UserProfile.GerenciadoraDeRisco].includes(currentUser.profile);
+        isUserAllowed = [UserProfile.Fiscal, UserProfile.Diretor, UserProfile.Supervisor, UserProfile.Comercial, UserProfile.Admin, UserProfile.Desenvolvedor, UserProfile.Financeiro, UserProfile.GerenciadoraDeRisco].includes(currentUser.profile);
         alertMessage = 'Apenas os perfis Fiscal, Supervisor, Diretor, Comercial, Financeiro, Gerenciadora de Risco ou Administrador do Sistema podem validar o ticket do embarque (bloqueado para Embarcador).';
     } else if (currentStatus === ShipmentStatus.AguardandoAdiantamento || currentStatus === ShipmentStatus.AguardandoPagamentoSaldo || currentStatus === ShipmentStatus.Finalizado) {
-        isUserAllowed = [UserProfile.Financeiro, UserProfile.Diretor, UserProfile.Supervisor, UserProfile.Admin, UserProfile.Fiscal, UserProfile.Comercial, UserProfile.GerenciadoraDeRisco].includes(currentUser.profile);
+        isUserAllowed = [UserProfile.Financeiro, UserProfile.Diretor, UserProfile.Supervisor, UserProfile.Admin, UserProfile.Desenvolvedor, UserProfile.Fiscal, UserProfile.Comercial, UserProfile.GerenciadoraDeRisco].includes(currentUser.profile);
         alertMessage = 'Apenas os perfis Financeiro, Diretor, Supervisor, Fiscal, Comercial, Gerenciadora de Risco ou Administrador do Sistema podem realizar esta ação.';
     }
 
@@ -3090,7 +3109,7 @@ const App: React.FC = () => {
       showToast('Usuário em modo demonstração possui acesso apenas de visualização.', 'warning');
       return;
     }
-    const isAdmin = currentUser.profile === UserProfile.Admin ||
+    const isAdmin = currentUser.profile === UserProfile.Admin || currentUser.profile === UserProfile.Desenvolvedor ||
       currentUser.profile === UserProfile.GerenciadoraDeRisco ||
       (currentUser.profile as string) === 'Administrador do Sistema' ||
       (currentUser.profile as string) === 'Gerenciadora de Risco' ||
@@ -3510,7 +3529,7 @@ const App: React.FC = () => {
       return;
     }
     if (!window.confirm("Tem certeza que deseja excluir permanentemente esta informação?")) return;
-    if (!currentUser || currentUser.profile !== UserProfile.Admin) return;
+    if (!currentUser || (currentUser.profile !== UserProfile.Admin && currentUser.profile !== UserProfile.Desenvolvedor)) return;
     
     const relatedShipments = shipments.filter(s => s.cargoId === cargoId);
     const confirmMsg = relatedShipments.length > 0
@@ -3536,7 +3555,7 @@ const App: React.FC = () => {
       return;
     }
     if (!window.confirm("Tem certeza que deseja excluir permanentemente esta informação?")) return;
-    if (!currentUser || currentUser.profile !== UserProfile.Admin) return;
+    if (!currentUser || (currentUser.profile !== UserProfile.Admin && currentUser.profile !== UserProfile.Desenvolvedor)) return;
     
     const shipmentToDelete = shipments.find(s => s.id === shipmentId);
     if (!shipmentToDelete) return;
@@ -4217,7 +4236,7 @@ const App: React.FC = () => {
       return;
     }
     if (!window.confirm("Tem certeza que deseja excluir permanentemente esta informação?")) return;
-    if (!currentUser || currentUser.profile !== UserProfile.Admin) return;
+    if (!currentUser || (currentUser.profile !== UserProfile.Admin && currentUser.profile !== UserProfile.Desenvolvedor)) return;
     if (userId === currentUser.id) {
         showToast("Você não pode excluir seu próprio usuário.", 'warning');
         return;
@@ -4260,7 +4279,7 @@ const App: React.FC = () => {
       return;
     }
     if (!window.confirm("Tem certeza que deseja excluir permanentemente esta informação?")) return;
-    if (!currentUser || currentUser.profile !== UserProfile.Admin) return;
+    if (!currentUser || (currentUser.profile !== UserProfile.Admin && currentUser.profile !== UserProfile.Desenvolvedor)) return;
     if (confirm('Tem certeza que deseja excluir esta filial?')) {
       try {
         await deleteBranch(branchId);
@@ -4281,7 +4300,7 @@ const App: React.FC = () => {
     const shipment = shipments.find(s => s.id === shipmentId);
     if (!shipment || !currentUser) return;
     
-    const canRevert = [UserProfile.Admin, UserProfile.Diretor, UserProfile.GerenciadoraDeRisco].includes(currentUser.profile) ||
+    const canRevert = [UserProfile.Admin, UserProfile.Desenvolvedor, UserProfile.Diretor, UserProfile.GerenciadoraDeRisco].includes(currentUser.profile) ||
       (currentUser.profile as string) === 'Gerenciadora de Risco' ||
       Boolean(currentUser.name && (currentUser.name.toLowerCase().includes('samanta') || currentUser.name.toLowerCase().includes('samantha'))) ||
       Boolean(currentUser.email && (currentUser.email.toLowerCase().includes('samanta') || currentUser.email.toLowerCase().includes('samantha')));

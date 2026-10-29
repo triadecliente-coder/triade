@@ -392,6 +392,7 @@ class CorporateEmailService {
   mapProfileToDepartment(profile?: string): CorporateEmailDepartment {
     if (!profile) return 'Geral';
     const p = String(profile).toLowerCase();
+    if (p.includes('desenvolv') || p.includes('dev')) return 'TI / Suporte';
     if (p.includes('diretor') || p.includes('admin')) return 'Diretoria';
     if (p.includes('finan') || p.includes('fiscal')) return 'Financeiro';
     if (p.includes('comercial')) return 'Comercial';

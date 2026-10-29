@@ -291,7 +291,7 @@ export const RealProfitReport: React.FC<RealProfitReportProps> = ({
     return [
       UserProfile.Comercial,
       UserProfile.GerenteComercial,
-      UserProfile.Admin,
+      UserProfile.Admin, UserProfile.Desenvolvedor,
       UserProfile.Diretor,
       UserProfile.Financeiro,
       UserProfile.Demonstracao

@@ -88,7 +88,7 @@ const PermissionsModal: React.FC<PermissionsModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       setEditableProfilePermissions(JSON.parse(JSON.stringify(permissions)));
-      const firstNonAdminUser = users.find(u => u.profile !== UserProfile.Admin);
+      const firstNonAdminUser = users.find(u => u.profile !== UserProfile.Admin && u.profile !== UserProfile.Desenvolvedor);
       if (firstNonAdminUser) setSelectedUserId(firstNonAdminUser.id);
     }
   }, [permissions, isOpen, users]);
@@ -216,8 +216,8 @@ const PermissionsModal: React.FC<PermissionsModalProps> = ({
 
   if (!isOpen) return null;
 
-  const availableProfiles = Object.values(UserProfile).filter(p => p !== UserProfile.Admin);
-  const availableUsers = users.filter(u => u.profile !== UserProfile.Admin);
+  const availableProfiles = Object.values(UserProfile).filter(p => p !== UserProfile.Admin && p !== UserProfile.Desenvolvedor);
+  const availableUsers = users.filter(u => u.profile !== UserProfile.Admin && u.profile !== UserProfile.Desenvolvedor);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">

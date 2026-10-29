@@ -133,11 +133,11 @@ const ShipmentsPage: React.FC<ShipmentsPageProps> = ({
     Boolean(currentUser?.name && (currentUser.name.toLowerCase().includes('samanta') || currentUser.name.toLowerCase().includes('samantha'))) ||
     Boolean(currentUser?.email && (currentUser.email.toLowerCase().includes('samanta') || currentUser.email.toLowerCase().includes('samantha')));
 
-  const allowedProfilesForActions = [UserProfile.Comercial, UserProfile.Supervisor, UserProfile.Admin, UserProfile.Diretor, UserProfile.Fiscal, UserProfile.GerenciadoraDeRisco];
+  const allowedProfilesForActions = [UserProfile.Comercial, UserProfile.Supervisor, UserProfile.Admin, UserProfile.Desenvolvedor, UserProfile.Diretor, UserProfile.Fiscal, UserProfile.GerenciadoraDeRisco];
   const canPerformSpecialActions = !isDemo && currentUser && (allowedProfilesForActions.includes(currentUser.profile) || isGerenciadora);
   
   const isOperationalPriceEditor = currentUser?.profile ? [UserProfile.Embarcador, UserProfile.Agenciador, UserProfile.Comercial].includes(currentUser.profile) : false;
-  const canEditPrice = !isDemo && currentUser && (currentUser.profile === UserProfile.Admin || isGerenciadora || (currentUser.profile as string) === 'Administrador do Sistema' || isOperationalPriceEditor);
+  const canEditPrice = !isDemo && currentUser && (currentUser.profile === UserProfile.Admin || currentUser.profile === UserProfile.Desenvolvedor || isGerenciadora || (currentUser.profile as string) === 'Administrador do Sistema' || isOperationalPriceEditor);
   const canCancelShipment = canPerformSpecialActions && (canDelete || currentUser.profile === UserProfile.Fiscal || currentUser.profile === UserProfile.Supervisor);
   const canTransferShipment = (canUpdate || currentUser.profile === UserProfile.Supervisor) && canPerformSpecialActions;
   const isClient = currentUser.profile === UserProfile.Cliente;
@@ -271,7 +271,7 @@ const ShipmentsPage: React.FC<ShipmentsPageProps> = ({
     const currentStatus = shipment.status;
     const userProfile = currentUser.profile;
 
-    if (userProfile === UserProfile.Admin || userProfile === UserProfile.GerenciadoraDeRisco || isGerenciadora) return defaultResponse;
+    if (userProfile === UserProfile.Admin || userProfile === UserProfile.Desenvolvedor || userProfile === UserProfile.GerenciadoraDeRisco || isGerenciadora) return defaultResponse;
 
     if (currentStatus === ShipmentStatus.PreCadastro) {
         if ([UserProfile.Fiscal, UserProfile.Diretor, UserProfile.Supervisor, UserProfile.Embarcador, UserProfile.Comercial, UserProfile.Agenciador].includes(userProfile)) return defaultResponse;
